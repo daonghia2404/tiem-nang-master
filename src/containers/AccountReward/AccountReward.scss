@@ -1,0 +1,160 @@
+@import '@/assets/styles/_global.scss';
+
+.AccountReward {
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: $common-shadow;
+
+  &-header {
+    position: relative;
+    padding: 1.6rem 1.4rem 2.4rem;
+
+    &-bg {
+      @include fullAbsolute;
+      @include centerScaleImage;
+
+      img {
+        object-position: bottom;
+      }
+    }
+
+    &-info {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 1.6rem;
+
+      &-item {
+        &:last-child {
+          text-align: right;
+        }
+
+        &-subtitle {
+          font-size: 1.4rem;
+          color: $white;
+        }
+
+        &-title {
+          font-size: 2rem;
+          font-weight: 700;
+          color: $white;
+        }
+
+        &-name {
+          margin-top: 0.4rem;
+          font-weight: 500;
+          font-size: 1.6rem;
+          text-transform: uppercase;
+          color: $white;
+        }
+      }
+    }
+
+    &-progress {
+      position: relative;
+      height: 2px;
+      border-radius: 5px;
+      margin-bottom: 0.8rem;
+      background: $white;
+
+      &-line {
+        @include fullAbsolute;
+        border-radius: 5px;
+        background-color: $brown;
+      }
+
+      &-wrapper {
+        position: relative;
+        z-index: 2;
+      }
+
+      &-description {
+        &-label {
+          color: $white;
+          font-size: 1.2rem;
+
+          .Icon {
+            flex: 0 0 1.2rem;
+            max-width: 1.2rem;
+            height: 1.2rem;
+            margin-right: 1rem;
+          }
+        }
+
+        &-value {
+          font-size: 1.4rem;
+          color: $white;
+        }
+      }
+    }
+  }
+
+  &-list {
+    &-item {
+      &:not(:last-child) {
+        margin-bottom: .5rem;
+      }
+
+      &-label {
+        font-size: 1.4rem;
+
+        strong {
+          color: $orange-peel;
+          font-weight: 500;
+        }
+      }
+
+      &-icon {
+        flex: 0 0 2.4rem;
+        max-width: 2.4rem;
+        height: 2.4rem;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .ant-collapse {
+    border: none;
+    background: transparent;
+
+    .ant-collapse-item {
+      border: none;
+      border-radius: 0;
+      background: $white;
+      padding: 0 1.4rem;
+      box-shadow: $common-shadow;
+
+      &:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+
+      .ant-collapse-header {
+        padding: 1.2rem 0;
+        font-size: 1.6rem;
+        font-weight: 600;
+        user-select: none;
+      }
+
+      .ant-collapse-content {
+        background: transparent;
+        border-color: $mercury;
+
+        .ant-collapse-content-box {
+          padding: 1rem 0 1.5rem;
+        }
+      }
+    }
+
+    .ant-collapse-arrow {
+      top: calc(50% - 0.3rem) !important;
+      right: 0 !important;
+
+      .Icon {
+        width: 0.8rem;
+        height: 0.8rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import '@/assets/styles/_global.scss';
+
+.Rate {
+  .ant-rate {
+    color: $amber;
+  }
+
+  .ant-rate-star-first,
+  .ant-rate-star-second {
+    color: $scorpion;
+  }
+
+  .ant-rate-star-half .ant-rate-star-first,
+  .ant-rate-star-full .ant-rate-star-second {
+    color: inherit !important
+  }
+}

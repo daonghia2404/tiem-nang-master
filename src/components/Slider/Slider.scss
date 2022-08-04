@@ -1,0 +1,55 @@
+@import '@/assets/styles/_global.scss';
+
+.Slider {
+  position: relative;
+
+  &.bordered {
+    padding: 1.8rem 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid $mercury;
+
+    .Slider-value {
+      top: 1.8rem;
+      right: 1.5rem;
+    }
+  }
+
+  &-value {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: $orange-peel;
+    font-weight: 500;
+  }
+
+  &-label {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .ant-slider {
+    margin-bottom: 0;
+  }
+
+  .ant-slider-dot-active {
+    border-color: $orange-peel;
+  }
+
+  .ant-slider-handle {
+    border-color: $orange-peel;
+    background: $orange-peel;
+  }
+
+  .ant-slider-handle:focus {
+    box-shadow: 0 0 0 5px rgba($orange-peel, 0.12);
+  }
+
+  .ant-slider:hover .ant-slider-handle:not(.ant-tooltip-open) {
+    border-color: $orange-peel;
+  }
+
+  .ant-slider:hover .ant-slider-track,
+  .ant-slider-track {
+    background: $orange-peel;
+  }
+}

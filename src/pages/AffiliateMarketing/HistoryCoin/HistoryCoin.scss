@@ -1,0 +1,29 @@
+@import '../../../assets/styles/global';
+
+.HistoryCoin {
+  &-item {
+    border: 1px solid $mercury;
+
+    &-image {
+      flex: 0 0 11.5rem;
+      max-width: 11.5rem;
+      height: 8.5rem;
+      background: #D7EBFF;
+      @include centerScaleImage;
+    }
+
+    &-info {
+      padding: .8rem 2.4rem;
+
+      &-title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+      }
+
+      &-description {
+        font-size: 1.4rem;
+      }
+    }
+  }
+}

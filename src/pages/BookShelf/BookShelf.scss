@@ -1,0 +1,47 @@
+@import '../../assets/styles/global';
+
+.BookShelf {
+  &-wrapper {
+    padding: 5rem 0;
+  }
+
+  &-tabs {
+    &-header {
+      margin-bottom: 2rem;
+
+      .ant-col {
+        &:first-child .BookShelf-tabs-header-item {
+          border-left: none;
+        }
+
+        &:last-child .BookShelf-tabs-header-item {
+          border-right: none;
+        }
+      }
+
+      &-item {
+        color: $boulder;
+        padding: .8rem;
+        transition: $common-transition;
+        cursor: pointer;
+        background: $white;
+        border: 1px solid $mercury;
+        border-top: none;
+        text-align: center;
+        font-size: 1.6rem;
+        font-weight: 400;
+
+        &:not(.active):hover {
+          color: $orange-peel;
+        }
+
+        &.active {
+          font-weight: 600;
+          color: $white;
+          background: $orange-peel;
+          border-bottom-color: $flamingo;
+        }
+      }
+    }
+  }
+}

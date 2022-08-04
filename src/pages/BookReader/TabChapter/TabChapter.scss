@@ -1,0 +1,53 @@
+@import '../../../assets/styles/global';
+
+.TabChapter {
+  padding-top: 1.5rem;
+  border-left: 1px solid $mercury;
+  border-right: 1px solid $mercury;
+
+  &-chapter {
+    padding: 0 1.5rem;
+    max-height: 53rem;
+    overflow: auto;
+
+    &-item {
+      border: 1px solid $nobel;
+      border-radius: 1rem;
+      padding: 1rem;
+      transition: $common-transition;
+
+      &:hover {
+        border-color: $orange-peel;
+        cursor: pointer;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 1.6rem;
+      }
+
+      &-title {
+        font-size: 1.6rem;
+        @include ellipsis(1);
+      }
+
+      &-icon {
+        margin-left: 1.2rem;
+
+        .Icon {
+          width: 1.6rem;
+          height: 1.6rem;
+        }
+      }
+    }
+  }
+
+  &-btn {
+    padding-top: 1.5rem;
+
+    .Button {
+      .ant-btn {
+        border-radius: 0;
+      }
+    }
+  }
+}

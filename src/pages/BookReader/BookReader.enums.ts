@@ -1,0 +1,5 @@
+export enum EKeyBookReaderTab {
+  CHAPTERS = 'CHAPTERS',
+  QUESTIONS = 'QUESTIONS',
+  DOCUMENTS = 'DOCUMENTS',
+}

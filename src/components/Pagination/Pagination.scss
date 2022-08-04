@@ -1,0 +1,77 @@
+@import '../../assets/styles/global';
+
+.Pagination {
+  .ant-pagination {
+    display: flex;
+    align-items: center;
+
+    .ant-pagination-jump-prev .ant-pagination-item-container .ant-pagination-item-link-icon,
+    .ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-link-icon {
+      color: $orange-peel;
+    }
+
+    .ant-pagination-total-text {
+      font-weight: 500;
+      font-size: 18px;
+      margin-right: 24px; 
+      height: auto;
+      line-height: 1;
+    }
+
+    .ant-pagination-prev,
+    .ant-pagination-jump-prev,
+    .ant-pagination-jump-next {
+      margin-right: 15px;
+    }
+
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: $mercury;
+      display: flex;
+      min-height: auto;
+      min-width: auto;
+
+      .Icon {
+        margin: auto;
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    .ant-pagination-prev .Icon {
+      transform: translateX(-2px);
+    }
+
+    .ant-pagination-next .Icon {
+      transform: translateX(2px);
+    }
+
+    .ant-pagination-item {
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 50%;
+      border: none;
+      min-height: auto;
+      min-width: auto;
+
+      a {
+        color: $black;
+        display: block;
+        height: 100%;
+      }
+
+      &.ant-pagination-item-active {
+        background: $orange-peel;
+      }
+
+      &:not(.ant-pagination-item-active):hover {
+        background: $mercury;
+      }
+    }
+  }
+}

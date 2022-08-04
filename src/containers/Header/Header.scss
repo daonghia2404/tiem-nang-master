@@ -1,0 +1,144 @@
+@import '@/assets/styles/_global.scss';
+
+.Header {
+  &-top {
+    background: $ebony-clay;
+    padding: 8px 0;
+
+    &-contact {
+      color: $white;
+      font-size: 1.6rem;
+      font-weight: 500;
+
+      .Icon {
+        flex: 0 0 1.6rem;
+        max-width: 1.6rem;
+        height: 1.6rem;
+        margin-right: 4px;
+      }
+    }
+  }
+
+  &-middle {
+    border-bottom: 1px solid $wild-sand;
+    background: $white;
+
+    &-logo {
+      max-width: 25.5rem;
+      display: block;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    &-search {
+      max-width: 70rem;
+      margin: 0 auto;
+
+      .ant-input-affix-wrapper {
+        height: 50px;
+        padding: 4px 32px;
+        background: $wild-sand;
+        border-radius: 5rem;
+
+        .ant-input {
+          font-size: 1.8rem;
+          font-weight: 500;
+          background: transparent;
+
+          &::placeholder {
+            color: $scorpion;
+          }
+        }
+      }
+
+      .Icon {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+      }
+    }
+
+    &-account {
+      cursor: pointer;
+
+      &-dropdown {
+        min-width: 41.4rem !important;
+
+        &.ant-dropdown-placement-bottomRight>.ant-dropdown-arrow {
+          right: 5rem;
+        }
+
+        .ant-dropdown-arrow {
+          background: #fe8742;
+
+          &::before {
+            background: none;
+          }
+        }
+      }
+
+      &-name {
+        margin-right: 1.8rem;
+        font-size: 1.6rem;
+        font-weight: 500;
+
+        span {
+          transition: $common-transition;
+          padding: 0 .2rem;
+          cursor: pointer;
+
+          &:hover {
+            color: $orange-peel;
+          }
+        }
+      }
+    }
+  }
+
+  &-bottom {
+    background: $orange-peel;
+
+    &-list {
+      max-width: 89.5rem;
+      margin: 0 auto;
+
+      &-item {
+        position: relative;
+        color: $white !important;
+        font-size: 2rem;
+        font-weight: 500;
+        padding: 1.2rem 0;
+        display: block;
+
+        &:hover {
+          &::before {
+            transform: translateX(-50%) scaleX(1);
+          }
+        }
+
+        &.active {
+          text-transform: uppercase;
+
+          &::before {
+            transform: translateX(-50%) scaleX(1);
+          }
+        }
+
+        &::before {
+          position: absolute;
+          content: '';
+          transition: $common-transition;
+          width: 3rem;
+          border-radius: .4rem;
+          height: .2rem;
+          background: $white;
+          left: 50%;
+          transform: translateX(-50%) scaleX(0);
+          bottom: 1rem;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,271 @@
+@import '@/assets/styles/_global.scss';
+
+.AccountDropdown {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: $common-shadow;
+
+  &-header {
+    position: relative;
+    padding: 3rem 1.5rem;
+
+    &-bg {
+      @include fullAbsolute;
+      @include centerScaleImage;
+    }
+
+    &-info {
+      position: relative;
+      z-index: 2;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid $orange-peel;
+
+      &-avatar {
+        margin-right: 1.8rem;
+
+        .ant-avatar {
+          width: 6rem;
+          height: 6rem;
+        }
+      }
+
+      &-content {
+        &-name {
+          font-size: 1.8rem;
+          font-weight: 600;
+          color: $white;
+        }
+
+        &-rank {
+          display: block;
+          background: linear-gradient(92.49deg, #DFAC5E 3.07%, #D18C00 98.39%);
+          box-shadow: $common-shadow;
+          border-radius: 1.25rem;
+          width: fit-content;
+          cursor: pointer;
+          padding: .1rem 1.2rem;
+          transition: $common-transition;
+          border: 1px solid transparent;
+
+          &:hover {
+            border-color: $orange-peel;
+          }
+
+          &-icon {
+            flex: 0 0 2rem;
+            max-width: 2rem;
+            height: 2rem;
+
+            img {
+              width: 100%;
+            }
+          }
+
+          &-label {
+            font-size: 1.2rem;
+            color: $white !important;
+            white-space: nowrap;
+            margin: 0 .4rem;
+            line-height: 1;
+            display: block;
+          }
+
+          &-arrow {
+            flex: 0 0 .6rem;
+            max-width: .6rem;
+            height: .6rem;
+            width: .6rem;
+
+            .Icon {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
+    }
+
+    &-wallet {
+      position: relative;
+      z-index: 2;
+
+      &-item {
+        &-title {
+          font-size: 1.6rem;
+          color: $white;
+          margin-bottom: 0.4rem;
+        }
+
+        &-coin {
+          &-icon {
+            flex: 0 0 1.6rem;
+            max-width: 1.6rem;
+            height: 1.6rem;
+            width: 1.6rem;
+            margin-right: .8rem;
+            @include centerScaleImage;
+          }
+
+          &-value {
+            font-weight: 600;
+            color: $white;
+            font-size: 2.4rem;
+            letter-spacing: -0.1rem;
+
+            span {
+              padding-left: .4rem;
+              font-size: 1.2rem;
+              letter-spacing: .05rem;
+            }
+          }
+        }
+
+        .Button {
+          .ant-btn {
+            height: 40px;
+            border-radius: 1rem;
+            border: 1px solid $white;
+          }
+        }
+      }
+    }
+  }
+
+  &-list {
+    background: $white;
+    border-radius: 1rem;
+
+    &-item {
+      padding: 2.2rem 1.8rem;
+      cursor: pointer;
+
+      &:hover {
+        .AccountDropdown-list-item {
+          &-label {
+            color: $orange-peel;
+          }
+        }
+      }
+
+      &-icon {
+        flex: 0 0 2.4rem;
+        max-width: 2.4rem;
+        height: 2.4rem;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      &-label {
+        font-size: 1.6rem;
+        margin: 0 2rem;
+        flex: 1;
+        transition: $common-transition;
+      }
+
+      &-badge {
+        font-size: 1.6rem;
+        color: $white;
+        padding: .2rem .8rem;
+        border-radius: .5rem;
+        background: $flamingo;
+        margin-right: 1rem;
+      }
+
+      &-arrow {
+        flex: 0 0 1.2rem;
+        max-width: 1.2rem;
+        height: 1.2rem;
+
+        .Icon {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $alto;
+      }
+    }
+  }
+
+  &-notification {
+    &-header {
+      padding: 1rem 0;
+      background: linear-gradient(113.68deg, #FF915E 1.02%, #FF7A5F 97.05%);
+
+      &-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 500;
+        color: $white;
+      }
+    }
+
+    &-body {
+      padding: 0 1.6rem;
+      max-height: 40rem;
+      overflow: auto;
+      background: $white;
+
+      &-item {
+        padding: 1.8rem 0;
+        cursor: pointer;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid $iron;
+        }
+
+        &:hover {
+          .AccountDropdown-notification-body-item-info {
+            &-title {
+              color: $orange-peel;
+            }
+          }
+        }
+
+        &-icon {
+          flex: 0 0 2.4rem;
+          max-width: 2.4rem;
+          height: 2.4rem;
+          margin-top: 0.2rem;
+
+          img {
+            width: 100%;
+          }
+        }
+
+        &-info {
+          margin: 0 .8rem;
+
+          &-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            transition: $common-transition;
+          }
+
+          &-description {
+            font-size: 1.6rem;
+            line-height: 1.2;
+            color: $mine-shaft;
+          }
+        }
+
+        &-arrow {
+          margin-top: .8rem;
+          flex: 0 0 1.2rem;
+          max-width: 1.2rem;
+          height: 1.2rem;
+
+          .Icon {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
+}

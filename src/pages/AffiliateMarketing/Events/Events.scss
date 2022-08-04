@@ -1,0 +1,40 @@
+@import '../../../assets/styles/global';
+
+.Events {
+  &-item {
+    padding: 1.6rem 1.2rem;
+    background: $white;
+    box-shadow: $common-shadow;
+
+    &-row {
+      padding: .4rem 0;
+
+      &-text {
+        font-size: 1.8rem;
+
+        &.small {
+          font-size: 1.4rem;
+        }
+
+        strong {
+          font-weight: 700;
+        }
+
+        &.hightlight {
+          font-weight: 500;
+          color: $flamingo;
+        }
+
+        &.gray {
+          color: $dusty-gray;
+        }
+      }
+    }
+
+    .line {
+      margin: .4rem -1.2rem;
+      height: 1px;
+      background: $alto;
+    }
+  }
+}

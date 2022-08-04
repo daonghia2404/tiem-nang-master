@@ -1,0 +1,70 @@
+@import '@/assets/styles/_global.scss';
+
+.BooksList {
+  padding: 2.4rem 0 4.8rem;
+
+  &-empty {
+    text-align: center;
+
+    img {
+      max-width: 40.4rem;
+      width: 100%;
+    }
+
+    span {
+      font-size: 1.8rem;
+      display: block;
+    }
+  }
+
+  &-title {
+    margin-bottom: 2.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  &-filters {
+    margin-bottom: 2.5rem;
+
+    &-item {
+      font-size: 1.8rem;
+      transition: $common-transition;
+      cursor: pointer;
+
+      &:not(.active):hover {
+        color: $orange-peel;
+      }
+
+      &.active {
+        font-weight: 600;
+      }
+    }
+  }
+
+  &-list {
+    .ant-col {
+      flex: 0 0 calc(100% / 5);
+      max-width: calc(100% / 5);
+    }
+  }
+
+  &-carousel {
+    margin: -8rem 0;
+
+    .slick-list {
+      padding: 8rem 0;
+    }
+
+    &-item {
+      &:hover {
+        .BookBlock {
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+
+  &-pagination {
+    margin-top: 3.6rem;
+  }
+}

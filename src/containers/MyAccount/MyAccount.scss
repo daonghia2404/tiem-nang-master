@@ -1,0 +1,133 @@
+@import '@/assets/styles/_global.scss';
+
+.MyAccount {
+  box-shadow: $common-shadow;
+
+  &-header {
+    font-size: 2rem;
+    font-weight: 500;
+    color: $white;
+    padding: 1rem;
+    background: $orange-peel;
+    text-align: center;
+  }
+
+  &-list {
+    background: $white;
+    border-radius: 1rem;
+
+    &-item {
+      position: relative;
+      padding: 2.2rem 1.8rem;
+      cursor: pointer;
+      transition: $common-transition;
+
+      &.active,
+      &:hover {
+        z-index: 2;
+        transform: scale(1.05);
+        background: $alto;
+        border: 1px solid $white;
+        box-shadow: 0px .4rem 2rem rgba(255, 159, 0, 0.25);
+        border-radius: 5px;
+      }
+
+      &-icon {
+        flex: 0 0 2.4rem;
+        max-width: 2.4rem;
+        height: 2.4rem;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      &-label {
+        font-size: 1.6rem;
+        margin: 0 2rem;
+        flex: 1;
+      }
+
+      &-badge {
+        font-size: 1.6rem;
+        color: $white;
+        padding: .2rem .8rem;
+        border-radius: .5rem;
+        background: $flamingo;
+        margin-right: 1rem;
+      }
+
+      &-arrow {
+        flex: 0 0 1.2rem;
+        max-width: 1.2rem;
+        height: 1.2rem;
+
+        .Icon {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $alto;
+      }
+    }
+  }
+
+  &-wallet {
+    position: relative;
+    padding: 1.2rem;
+
+    &-bg {
+      @include fullAbsolute;
+      @include centerScaleImage;
+
+      img {
+        object-position: bottom;
+      }
+    }
+
+    &-item {
+      position: relative;
+      z-index: 2;
+
+      &-title {
+        font-size: 1.6rem;
+        color: $white;
+        margin-bottom: 0.4rem;
+      }
+
+      &-coin {
+        &-icon {
+          flex: 0 0 1.6rem;
+          max-width: 1.6rem;
+          height: 1.6rem;
+          width: 1.6rem;
+          margin-right: .8rem;
+          @include centerScaleImage;
+        }
+
+        &-value {
+          font-weight: 600;
+          color: $white;
+          font-size: 2.4rem;
+          letter-spacing: -0.1rem;
+
+          span {
+            padding-left: .4rem;
+            font-size: 1.2rem;
+            letter-spacing: .05rem;
+          }
+        }
+      }
+
+      .Button {
+        .ant-btn {
+          height: 40px;
+          border-radius: 1rem;
+          border: 1px solid $white;
+        }
+      }
+    }
+  }
+}

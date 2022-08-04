@@ -1,0 +1,74 @@
+@import '../../assets/styles/global';
+
+.Event {
+  padding-bottom: 6rem;
+
+  &-badge {
+    padding: 1rem 1.5rem;
+    font-size: 1.6rem;
+    color: $white;
+
+    &.error {
+      background: $pomegranate;
+    }
+
+    &.success {
+      background: $green-haze;
+    }
+  }
+
+  &-wrapper {
+    text-align: center;
+  }
+
+  &-image {
+    max-width: 28rem;
+    margin: 1.5rem auto;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+
+  &-description {
+    font-size: 1.6rem;
+
+    strong {
+      font-weight: 600;
+      margin-right: .4rem;
+    }
+  }
+
+  &-claim-btn {
+    max-width: 38.4rem;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 1.6rem;
+    height: 5.4rem;
+    cursor: pointer;
+    border: 1px dashed $orange-peel;
+    background: $white;
+    box-shadow: $common-shadow;
+
+    strong {
+      font-size: 2.4rem;
+      font-weight: 600;
+
+      small {
+        font-size: 1.2rem;
+      }
+    }
+
+    img {
+      flex: 0 0 1.6rem;
+      max-width: 1.6rem;
+      height: 1.6rem;
+      margin: 0 1rem;
+    }
+  }
+}

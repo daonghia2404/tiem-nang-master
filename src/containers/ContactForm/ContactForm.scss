@@ -1,0 +1,21 @@
+@import '@/assets/styles/_global.scss';
+
+.ContactForm {
+  padding: 2.5rem 0 5.5rem;
+
+  &-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+  }
+
+  &-form {
+    &-submit {
+      .Button {
+        max-width: 38.4rem;
+        width: 100%;
+      }
+    }
+  }
+}

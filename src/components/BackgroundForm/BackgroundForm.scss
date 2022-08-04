@@ -1,0 +1,30 @@
+@import '@/assets/styles/_global.scss';
+
+.BackgroundForm {
+  &-label {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  &-item {
+    position: relative;
+    width: 5.5rem;
+    height: 6.5rem;
+    border-radius: 1rem;
+    border: .2rem solid $alto;
+    cursor: pointer;
+
+    &-check {
+      @include fullAbsolute;
+      background: rgba($black, 0.05);
+      display: flex;
+
+      .Icon {
+        margin: auto;
+        width: 2.4rem;
+        height: 2.4rem;
+        transform: translateX(-0.2rem);
+      }
+    }
+  }
+}

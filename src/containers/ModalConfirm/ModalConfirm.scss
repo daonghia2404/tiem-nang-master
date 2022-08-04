@@ -1,0 +1,50 @@
+@import '@/assets/styles/_global.scss';
+
+.ModalConfirm {
+  .ant-modal-content {
+    overflow: hidden;
+
+    .ant-modal-body {
+      padding: 0 0 2.4rem 0;
+    }
+  }
+
+  &-header {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $white;
+    padding: 1rem;
+    background: $orange-peel;
+  }
+
+  &-body {
+    padding: 2.4rem 2.4rem 3.2rem;
+    font-size: 1.8rem;
+    text-align: center;
+
+    strong {
+      font-weight: 600;
+      margin-right: .4rem;
+    }
+
+    big {
+      font-size: 2.4rem;
+      margin-right: .4rem;
+    }
+
+    small {
+      font-size: 1.6rem;
+      margin-right: .4rem;
+    }
+
+    span {
+      color: $flamingo;
+      font-weight: 500;
+    }
+  }
+
+  &-footer {
+    padding: 0 2.4rem;
+  }
+}

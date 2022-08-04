@@ -1,0 +1,57 @@
+@import '@/assets/styles/_global.scss';
+
+.CategoriesEmotion {
+  position: relative;
+  z-index: 2;
+  transform: translateY(-10rem);
+  margin-bottom: -10rem;
+
+  &-wrapper {
+    background: $white;
+    border-radius: 1rem;
+    box-shadow: $common-shadow;
+    padding: 1.8rem 2rem;
+  }
+
+  &-filters {
+    &-item {
+      &:not(:last-child) {
+        margin-bottom: 1.5rem;
+      }
+
+      &-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+      }
+
+      &-list {
+        &-item {
+          cursor: pointer;
+          padding: .4rem 1rem;
+          transition: $common-transition;
+          background: $wild-sand;
+          border-radius: .5rem;
+          border: 1px solid $wild-sand;
+
+          &:hover,
+          &.active {
+            border-color: $orange-peel;
+          }
+
+          &-icon {
+            flex: 0 0 1.6rem;
+            max-width: 1.6rem;
+            height: 1.6rem;
+            margin-right: 1rem;
+            @include centerScaleImage;
+          }
+
+          &-label {
+            font-size: 1.6rem;
+          }
+        }
+      }
+    }
+  }
+}

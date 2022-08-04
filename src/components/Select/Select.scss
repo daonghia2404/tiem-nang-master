@@ -1,0 +1,48 @@
+@import '../../assets/styles/global';
+
+.Select {
+  position: relative;
+
+  .ant-select-single.ant-select-show-arrow .ant-select-selection-item,
+  .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+    line-height: 2.2;
+  }
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector,
+  .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+    border-color: $orange-peel;
+  }
+
+  &-label {
+    font-size: 1.8rem;
+    background: $white;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 2rem;
+    transform: translateY(-50%);
+    line-height: 1;
+  }
+
+  .ant-select {
+    .ant-select-selector {
+      padding: .4rem 2rem;
+      height: 4.8rem;
+      border: 1px solid $mercury;
+      border-radius: .5rem;
+      font-size: 1.8rem;
+    }
+  }
+
+  .ant-select-arrow {
+    .Icon {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+
+  &-dropdown {
+    .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+      background: rgba($orange-peel, 0.1);
+    }
+  }
+}

@@ -1,0 +1,39 @@
+@import '../../assets/styles/global';
+
+.NotificationDetail {
+  &-wrapper {
+    padding: 5rem 0;
+  }
+
+  &-header {
+    margin-bottom: 3.5rem;
+  }
+
+  &-title {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+
+  &-date {
+    font-size: 1.4rem;
+    padding-bottom: .5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid $iron;
+    max-width: 38.4rem;
+  }
+
+  &-description {
+    font-size: 1.6rem;
+
+    span {
+      color: $orange-peel;
+    }
+  }
+
+  &-btn {
+    .Button {
+      width: 100%;
+      max-width: 44.6rem;
+    }
+  }
+}

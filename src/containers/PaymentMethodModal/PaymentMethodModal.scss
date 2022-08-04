@@ -1,0 +1,45 @@
+@import '@/assets/styles/_global.scss';
+
+.PaymentMethodModal {
+  &-wrapper {
+    padding: 3rem 4.2rem;
+  }
+
+  &-text {
+    margin-bottom: 2.4rem;
+    font-size: 1.6rem;
+  }
+
+  &-methods {
+    &-item {
+      position: relative;
+      padding: .4rem 2rem;
+      border-radius: .5rem;
+      border: 1px solid $alto;
+      transition: $common-transition;
+      height: 4.2rem;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+
+      &:last-child {
+        margin-bottom: 2.4rem;
+      }
+
+      &-icon {
+        flex: 0 0 3.2rem;
+        max-width: 3.2rem;
+        height: 3.2rem;
+        margin-right: 1rem;
+        @include centerOriginImage;
+      }
+
+      &-label {
+        font-size: 1.6rem;
+      }
+
+      &:hover {
+        border-color: $orange-peel;
+      }
+    }
+  }
+}

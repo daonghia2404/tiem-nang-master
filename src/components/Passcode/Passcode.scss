@@ -1,0 +1,29 @@
+@import '../../assets/styles/global';
+
+.Passcode {
+  &-item {
+    margin: 0 1.6rem;
+
+    &-input {
+      width: 4.9rem;
+      height: 5.3rem;
+      text-align: center;
+      font-size: 3rem;
+      font-weight: 600;
+      border-radius: 1rem;
+      border: 1px solid $alto;
+      transition: $common-transition;
+      outline: none;
+
+      &[disabled] {
+        background: $silver;
+        cursor: not-allowed;
+      }
+
+      &:not([disabled]):hover,
+      &:not([disabled]):focus {
+        border-color: $orange-peel;
+      }
+    }
+  }
+}

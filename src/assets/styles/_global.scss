@@ -1,0 +1,136 @@
+@import '~antd/dist/antd.css';
+@import '~slick-carousel/slick/slick.css';
+@import '~slick-carousel/slick/slick-theme.css';
+
+@import './normalize';
+// @import './bootstrap-grid';
+@import './fonts';
+@import './colors';
+@import './constants';
+@import './mixins';
+
+html {
+  font-size: 10px;
+
+  @media (max-width: 1440px) {
+    font-size: 9px;
+  }
+
+  @media (max-width: 1200px) {
+    font-size: 8px;
+  }
+
+  @media (max-width: 991px) {
+    font-size: 7px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 6px;
+  }
+}
+
+* {
+  font-family: 'Baloo 2', cursive;
+}
+
+body {
+  min-width: 1440px;
+}
+
+.container {
+  padding: 0 1.6rem;
+  max-width: 144rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.col-reverse {
+  flex-direction: column-reverse;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+a {
+  &:hover {
+    color: $orange-peel;
+  }
+}
+
+.style-content {
+  img {
+    max-width: 100%;
+    text-align: center;
+    display: block;
+    margin: 0 auto 1.5rem;
+  }
+
+  p {
+    font-size: 1.8rem;
+    text-align: justify;
+    margin-bottom: 1.5rem;
+  }
+
+  a {
+    font-size: 1.8rem;
+    color: $orange-peel;
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,27 @@
+@import '../../assets/styles/global';
+
+.TextArea {
+  &-label {
+    font-size: 1.8rem;
+    background: $white;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 2rem;
+    transform: translateY(-50%);
+    line-height: 1;
+  }
+
+  .ant-input {
+    padding: 1.2rem 2rem;
+    min-height: 11.6rem;
+    border: 1px solid $mercury;
+    border-radius: .5rem;
+    font-size: 1.8rem;
+    resize: none;
+
+    &:hover {
+      border-color: $orange-peel;
+    }
+  }
+}
