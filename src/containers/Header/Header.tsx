@@ -14,7 +14,7 @@ import { EKeyStateModalAuth } from '@/containers/ModalAuth/ModalAuth.enums';
 import AccountDropdown from '@/containers/AccountDropdown';
 import { Paths } from '@/pages/routers';
 import { TRootState } from '@/redux/reducers';
-import { getProfileAction } from '@/redux/actions';
+import { getMyMembershipAction, getProfileAction } from '@/redux/actions';
 import Helper from '@/services/helpers';
 
 import { dataHeaderMenu } from './Header.data';
@@ -26,7 +26,7 @@ const Header: React.FC<THeaderProps> = () => {
   const { pathname } = useLocation();
   const atk = Helper.getAccessToken();
 
-  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
+  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse?.data);
 
   const [visibleAccountDropdown, setVisibleAccountDropdown] = useState(false);
 
@@ -57,9 +57,17 @@ const Header: React.FC<THeaderProps> = () => {
     if (atk) dispatch(getProfileAction.request({}));
   }, [dispatch, atk]);
 
+  const getMyMembership = useCallback(() => {
+    if (atk) dispatch(getMyMembershipAction.request({}));
+  }, [dispatch, atk]);
+
   useEffect(() => {
     getProfile();
   }, [getProfile]);
+
+  useEffect(() => {
+    getMyMembership();
+  }, [getMyMembership]);
 
   return (
     <div className="Header">

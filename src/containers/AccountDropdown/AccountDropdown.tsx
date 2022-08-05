@@ -26,6 +26,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
   const [visibleModalLogout, setVisibleModalLogout] = useState<boolean>(false);
 
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
+  const myMembershipState = useSelector((state: TRootState) => state.membershipReducer.getMyMembershipResponse?.data);
 
   const handleOpenModalLogout = (): void => {
     onClose?.();
@@ -116,7 +117,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
                   <div className="AccountDropdown-header-info-content-rank-icon">
                     <img src={ImageCrown} alt="" />
                   </div>
-                  <div className="AccountDropdown-header-info-content-rank-label">{profileState?.membership.name}</div>
+                  <div className="AccountDropdown-header-info-content-rank-label">{myMembershipState?.name}</div>
                   <div className="AccountDropdown-header-info-content-rank-arrow">
                     <Icon name={EIconName.AngleRight} color={EIconColor.WHITE} />
                   </div>

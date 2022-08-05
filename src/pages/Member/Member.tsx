@@ -1,32 +1,97 @@
-import React, { useState } from 'react';
+/* eslint-disable no-underscore-dangle */
+import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Collapse, Row } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 
 import MemberCard from '@/pages/Member/MemberCard';
 import Icon, { EIconName } from '@/components/Icon';
 import ImageCrown from '@/assets/images/image-crown.svg';
 import ModalConfirm from '@/containers/ModalConfirm';
+import Button from '@/components/Button';
+import { DEFAULT_PAGE } from '@/common/constants';
+import {
+  EGetMembershipListAction,
+  EUpdradeMyMembershipAction,
+  getMembershipListAction,
+  getMyMembershipAction,
+  updradeMyMembershipAction,
+} from '@/redux/actions';
+import { TRootState } from '@/redux/reducers';
+import { TMembershipList } from '@/services/api';
+import { showNotification } from '@/utils/functions';
+import { ETypeNotification } from '@/common/enums';
 
 import './Member.scss';
-import Button from '@/components/Button';
 
 const { Panel } = Collapse;
 
 const Member: React.FC = () => {
-  const [visibleLevelUpRankModal, setVisibleLevelUpRankModal] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const [levelUpRankModalState, setLevelUpRankModalState] = useState<{
+    visible: boolean;
+    data?: TMembershipList;
+  }>({
+    visible: false,
+  });
 
-  const handleOpenLevelUpRankModal = (): void => {
-    setVisibleLevelUpRankModal(true);
+  const getMembershipListState = useSelector(
+    (state: TRootState) => state.membershipReducer.getMembershipListResponse?.data?.records,
+  );
+  const myMembershipState = useSelector((state: TRootState) => state.membershipReducer.getMyMembershipResponse?.data);
+  const updradeMyMembershipLoading = useSelector(
+    (state: TRootState) => state.loadingReducer[EUpdradeMyMembershipAction.UPDRADE_MY_MEMBERSHIP],
+  );
+  const getMembershipListLoading = useSelector(
+    (state: TRootState) => state.loadingReducer[EGetMembershipListAction.GET_MEMBERSHIP_LIST],
+  );
+  const currentLevel = myMembershipState?.level || 0;
+
+  const handleOpenLevelUpRankModal = (data: TMembershipList): void => {
+    setLevelUpRankModalState({ visible: true, data });
   };
 
   const handleCloseLevelUpRankModal = (): void => {
-    setVisibleLevelUpRankModal(false);
+    setLevelUpRankModalState({ visible: false });
+  };
+
+  const handleClickLeveUpBtn = (): void => {
+    const data = getMembershipListState?.find((item) => item.level === currentLevel + 1);
+    setLevelUpRankModalState({ visible: true, data });
   };
 
   const handleSubmitLevelUpRankModal = (): void => {
+    const body = {
+      mid: levelUpRankModalState.data?._id,
+    };
+    dispatch(updradeMyMembershipAction.request({ body }, handleUpdradeMyMembershipSuccess));
+  };
+
+  const handleUpdradeMyMembershipSuccess = (): void => {
+    showNotification(ETypeNotification.SUCCESS, 'Thăng hạng thành viên thành công');
+    getMyMembership();
+    getMembershipList();
     handleCloseLevelUpRankModal();
   };
 
-  const renderListRewards = (data: React.ReactNode[]): React.ReactElement => {
+  const checkHideBtnLevelupRank = (data: TMembershipList): boolean => {
+    return data.level <= currentLevel || data.level !== currentLevel + 1;
+  };
+
+  const getMembershipList = useCallback(() => {
+    const params = {
+      page: DEFAULT_PAGE,
+      pageSize: 100,
+      keyword: '',
+    };
+
+    dispatch(getMembershipListAction.request({ params }));
+  }, [dispatch]);
+
+  const getMyMembership = useCallback(() => {
+    dispatch(getMyMembershipAction.request({}));
+  }, [dispatch]);
+
+  const renderListRewards = (data: React.ReactNode[], membership: TMembershipList): React.ReactElement => {
     return (
       <div className="Member-list-wrapper">
         {data.map((item, index) => (
@@ -39,60 +104,35 @@ const Member: React.FC = () => {
           </div>
         ))}
 
-        <div className="Member-list-level-up-btn">
-          <Button title="Thăng hạng ngay (99 Bcoin)" onClick={handleOpenLevelUpRankModal} />
-        </div>
+        {!checkHideBtnLevelupRank(membership) && (
+          <div className="Member-list-level-up-btn">
+            <Button
+              title={`Thăng hạng ngay (${membership.bcoin} Bcoin)`}
+              onClick={(): void => handleOpenLevelUpRankModal(membership)}
+            />
+          </div>
+        )}
       </div>
     );
   };
 
-  const dataRewardLevels = [
-    {
-      key: 1,
-      title: 'Danh hiệu Tập đọc',
-      remain: '(còn lại: 2 cuốn sách tự chọn)',
-      description: renderListRewards([
+  const dataRewardLevels = getMembershipListState?.map((item) => ({
+    key: item.level,
+    title: item.name,
+    remain: '',
+    description: renderListRewards(
+      [
         <>
-          Thăng bậc <strong>TẬP ĐỌC</strong> sau khi hoàn tất 20 tâm sách!
+          Thăng bậc <strong>{item.name}</strong> nhận FREE {item.book_for_free} tâm sách!
         </>,
-        'Nhận 50 Bcoin khi đạt được danh hiệu này',
-        'Nhận thưởng 5 Bcoin vào Ví sau khi hoàn tất 1 tâm sách!',
-      ]),
-    },
-    {
-      key: 2,
-      title: 'Danh hiệu Sách thủ',
-      description: renderListRewards([
-        <>
-          Thăng bậc <strong>TẬP ĐỌC</strong> sau khi hoàn tất 20 tâm sách!
-        </>,
-        'Nhận 50 Bcoin khi đạt được danh hiệu này',
-        'Nhận thưởng 5 Bcoin vào Ví sau khi hoàn tất 1 tâm sách!',
-      ]),
-    },
-    {
-      key: 3,
-      title: 'Danh hiệu Mọt sách',
-      description: renderListRewards([
-        <>
-          Thăng bậc <strong>TẬP ĐỌC</strong> sau khi hoàn tất 20 tâm sách!
-        </>,
-        'Nhận 50 Bcoin khi đạt được danh hiệu này',
-        'Nhận thưởng 5 Bcoin vào Ví sau khi hoàn tất 1 tâm sách!',
-      ]),
-    },
-    {
-      key: 4,
-      title: 'Danh hiệu Thông thái',
-      description: renderListRewards([
-        <>
-          Thăng bậc <strong>TẬP ĐỌC</strong> sau khi hoàn tất 20 tâm sách!
-        </>,
-        'Nhận 50 Bcoin khi đạt được danh hiệu này',
-        'Nhận thưởng 5 Bcoin vào Ví sau khi hoàn tất 1 tâm sách!',
-      ]),
-    },
-  ];
+      ],
+      item,
+    ),
+  }));
+
+  useEffect(() => {
+    getMembershipList();
+  }, [getMembershipList]);
 
   return (
     <div className="Member">
@@ -100,34 +140,36 @@ const Member: React.FC = () => {
         <div className="Member-wrapper">
           <Row gutter={40}>
             <Col span={8}>
-              <MemberCard onClickLevelUpBtn={handleOpenLevelUpRankModal} />
+              <MemberCard onClickLevelUpBtn={handleClickLeveUpBtn} />
             </Col>
             <Col span={16}>
-              <div className="Member-body">
-                <Collapse
-                  defaultActiveKey={[1]}
-                  expandIcon={({ isActive }): React.ReactNode => (
-                    <div style={{ transform: `rotate(${isActive ? 90 : 0}deg)` }}>
-                      <Icon name={EIconName.AngleRight} />
-                    </div>
-                  )}
-                  expandIconPosition="right"
-                >
-                  {dataRewardLevels.map((item) => (
-                    <Panel
-                      key={item.key}
-                      header={
-                        <div className="Member-list-item-title flex items-center justify-between">
-                          {item.title}
-                          {item.remain && <span>{item.remain}</span>}
-                        </div>
-                      }
-                    >
-                      {item.description}
-                    </Panel>
-                  ))}
-                </Collapse>
-              </div>
+              {!getMembershipListLoading && (
+                <div className="Member-body">
+                  <Collapse
+                    defaultActiveKey={[currentLevel ? currentLevel + 1 : 1]}
+                    expandIcon={({ isActive }): React.ReactNode => (
+                      <div style={{ transform: `rotate(${isActive ? 90 : 0}deg)` }}>
+                        <Icon name={EIconName.AngleRight} />
+                      </div>
+                    )}
+                    expandIconPosition="right"
+                  >
+                    {dataRewardLevels?.map((item) => (
+                      <Panel
+                        key={item.key}
+                        header={
+                          <div className="Member-list-item-title flex items-center justify-between">
+                            {item.title}
+                            {item.remain && <span>{item.remain}</span>}
+                          </div>
+                        }
+                      >
+                        {item.description}
+                      </Panel>
+                    ))}
+                  </Collapse>
+                </div>
+              )}
             </Col>
           </Row>
         </div>
@@ -135,18 +177,19 @@ const Member: React.FC = () => {
 
       <ModalConfirm
         title="Xác nhận thanh toán"
-        visible={visibleLevelUpRankModal}
+        {...levelUpRankModalState}
         text={
           <>
-            <strong>Thành viên hạng Bạc</strong>
+            <strong>Thành viên {levelUpRankModalState.data?.name}</strong>
             <span>
-              <big>120</big>
+              <big>{levelUpRankModalState.data?.bcoin}</big>
               <small>Bcoin</small>
             </span>
           </>
         }
         onClose={handleCloseLevelUpRankModal}
         onSubmit={handleSubmitLevelUpRankModal}
+        loading={updradeMyMembershipLoading}
       />
     </div>
   );

@@ -44,7 +44,7 @@ const App: React.FC = () => {
           <PublicRoute path={Paths.BookReader()} component={Pages.BookReader} />
 
           <PublicRoute path={Paths.Event()} component={Pages.Event} />
-          <PublicRoute path={Paths.Member} component={Pages.Member} />
+          <ProtectedRoute path={Paths.Member} component={Pages.Member} />
 
           <Redirect noThrow from={Paths.Rest} to={`${LayoutPaths.Guest}${Paths.BooksLibrary}`} />
         </Guest>
