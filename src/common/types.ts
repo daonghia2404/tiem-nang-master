@@ -6,6 +6,5 @@ export type TCommonResponse = {
 export type TCommonPaginate = {
   currentPage: number;
   pageSize: number;
-  statusCode: number;
-  message: string;
+  total: number;
 };

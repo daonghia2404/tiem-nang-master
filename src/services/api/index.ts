@@ -9,3 +9,4 @@ export * from './profile';
 export * from './upload';
 export * from './advisory';
 export * from './membership';
+export * from './notification';

@@ -14,7 +14,7 @@ import { EKeyStateModalAuth } from '@/containers/ModalAuth/ModalAuth.enums';
 import AccountDropdown from '@/containers/AccountDropdown';
 import { Paths } from '@/pages/routers';
 import { TRootState } from '@/redux/reducers';
-import { getMyMembershipAction, getProfileAction } from '@/redux/actions';
+import { getMyMembershipAction, getNotificationsUnreadAction, getProfileAction } from '@/redux/actions';
 import Helper from '@/services/helpers';
 
 import { dataHeaderMenu } from './Header.data';
@@ -61,6 +61,10 @@ const Header: React.FC<THeaderProps> = () => {
     if (atk) dispatch(getMyMembershipAction.request({}));
   }, [dispatch, atk]);
 
+  const getNotificationsUnread = useCallback(() => {
+    if (atk) dispatch(getNotificationsUnreadAction.request({}));
+  }, [dispatch, atk]);
+
   useEffect(() => {
     getProfile();
   }, [getProfile]);
@@ -68,6 +72,10 @@ const Header: React.FC<THeaderProps> = () => {
   useEffect(() => {
     getMyMembership();
   }, [getMyMembership]);
+
+  useEffect(() => {
+    getNotificationsUnread();
+  }, [getNotificationsUnread]);
 
   return (
     <div className="Header">

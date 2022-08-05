@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ImageCrown from '@/assets/images/image-crown.svg';
 import ImageCoin from '@/assets/images/image-coin.svg';
@@ -20,13 +20,33 @@ import ModalLogout from '@/containers/ModalLogout';
 
 import { TAccountDropdownProps } from './AccountDropdown.types.d';
 import './AccountDropdown.scss';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/common/constants';
+import { getNotificationsAction, getNotificationsUnreadAction } from '@/redux/actions';
+import { TGetNotificationsResponse, TNotification } from '@/services/api';
+import WrapperLazyLoad from '@/components/WrapperLazyLoad';
+import { getTotalPage } from '@/utils/functions';
+import { readNotificationAction } from '@/redux/actions/notification/read-notification';
 
 const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) => {
+  const dispatch = useDispatch();
+
   const [visibleNotification, setVisibleNotification] = useState<boolean>(false);
   const [visibleModalLogout, setVisibleModalLogout] = useState<boolean>(false);
 
+  const [getNotificationsParamsRequest, setGetNotificationsParamsRequest] = useState({
+    page: DEFAULT_PAGE,
+    pageSize: DEFAULT_PAGE_SIZE,
+  });
+  const [notifications, setNotifications] = useState<TNotification[]>([]);
+
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
   const myMembershipState = useSelector((state: TRootState) => state.membershipReducer.getMyMembershipResponse?.data);
+  const notificationsTotalState = useSelector(
+    (state: TRootState) => state.notificationReducer.getNotificationsResponse?.data.total,
+  );
+  const getNotificationsUnread = useSelector(
+    (state: TRootState) => state.notificationReducer.getNotificationsUnreadResponse?.data,
+  );
 
   const handleOpenModalLogout = (): void => {
     onClose?.();
@@ -42,28 +62,85 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
     onClose?.();
   };
 
+  const showNotificationTotal = (): string | undefined => {
+    if (getNotificationsUnread) {
+      if (getNotificationsUnread > 99) return `+99`;
+      return `${getNotificationsUnread}`;
+    }
+    return undefined;
+  };
+
   const dataAccountDropdownList = [
     {
       icon: IconUserCircle,
       label: 'Thông tin tài khoản',
       onClick: (): void => handleNavigate(`${LayoutPaths.Admin}${Paths.AccountInformation}`),
     },
-    { icon: IconBell, label: 'Thông báo', badge: '+5', onClick: (): void => setVisibleNotification(true) },
+    {
+      icon: IconBell,
+      label: 'Thông báo',
+      badge: showNotificationTotal(),
+      onClick: (): void => setVisibleNotification(true),
+    },
     { icon: IconRefresh, label: 'Lịch sử giao dịch' },
     { icon: IconShare, label: 'Tiếp thị liên kết' },
     { icon: IconLogout, label: 'Đăng xuất', onClick: handleOpenModalLogout },
   ];
 
-  const handleClickNotifcation = (): void => {
+  const handleClickNotifcation = (data: TNotification): void => {
+    const body = {
+      id: data.id,
+    };
     onClose?.();
-    navigate(Paths.NotificationDetail('1'));
+    dispatch(
+      readNotificationAction.request({ body }, (): void => {
+        dispatch(getNotificationsUnreadAction.request({}));
+      }),
+    );
+    navigate(Paths.NotificationDetail(data.id));
   };
+
+  const handleLoadMoreNotification = (): void => {
+    const isLoadMore =
+      getNotificationsParamsRequest.page <
+      getTotalPage(notificationsTotalState || 0, getNotificationsParamsRequest.pageSize);
+
+    if (isLoadMore) {
+      setGetNotificationsParamsRequest({
+        ...getNotificationsParamsRequest,
+        page: getNotificationsParamsRequest.page + 1,
+      });
+    }
+  };
+
+  useEffect(() => {
+    dispatch(
+      getNotificationsAction.request(
+        { params: getNotificationsParamsRequest },
+        (response: TGetNotificationsResponse): void => {
+          const isFirstFetching = getNotificationsParamsRequest.page === DEFAULT_PAGE;
+          const data = response?.data?.records;
+          setNotifications(isFirstFetching ? data : [...notifications, ...data]);
+        },
+      ),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, getNotificationsParamsRequest]);
 
   useEffect(() => {
     if (visible) {
       setVisibleNotification(false);
     }
   }, [visible]);
+
+  useEffect(() => {
+    if (visibleNotification) {
+      setGetNotificationsParamsRequest({
+        page: DEFAULT_PAGE,
+        pageSize: DEFAULT_PAGE_SIZE,
+      });
+    }
+  }, [visibleNotification]);
 
   return (
     <div className="AccountDropdown">
@@ -74,28 +151,29 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
           </div>
 
           <div className="AccountDropdown-notification-body">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-              <div
-                key={item}
-                className="AccountDropdown-notification-body-item flex items-start"
-                onClick={(): void => handleClickNotifcation()}
-              >
-                <div className="AccountDropdown-notification-body-item-icon">
-                  <img src={Favicon} alt="" />
-                </div>
+            <WrapperLazyLoad maxHeight={400} onEnd={handleLoadMoreNotification}>
+              {notifications.map((item) => (
+                <div
+                  key={item.id}
+                  className="AccountDropdown-notification-body-item flex items-start"
+                  onClick={(): void => handleClickNotifcation(item)}
+                >
+                  <div className="AccountDropdown-notification-body-item-icon">
+                    <img src={Favicon} alt="" />
+                  </div>
+                  {!item.isRead && <div className="AccountDropdown-notification-body-item-unread" />}
 
-                <div className="AccountDropdown-notification-body-item-info">
-                  <div className="AccountDropdown-notification-body-item-info-title">Mừng đại lễ 30/4 - 01/05</div>
-                  <div className="AccountDropdown-notification-body-item-info-description">
-                    Tri ân khách hàng. Chúng tôi xin chúc quý khách kì nghỉ lễ vui vẻ
+                  <div className="AccountDropdown-notification-body-item-info">
+                    <div className="AccountDropdown-notification-body-item-info-title">{item.title}</div>
+                    <div className="AccountDropdown-notification-body-item-info-description">{item.description}</div>
+                  </div>
+
+                  <div className="AccountDropdown-notification-body-item-arrow">
+                    <Icon name={EIconName.AngleRight} />
                   </div>
                 </div>
-
-                <div className="AccountDropdown-notification-body-item-arrow">
-                  <Icon name={EIconName.AngleRight} />
-                </div>
-              </div>
-            ))}
+              ))}
+            </WrapperLazyLoad>
           </div>
         </div>
       ) : (
