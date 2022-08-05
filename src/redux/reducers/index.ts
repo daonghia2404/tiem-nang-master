@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { loadingReducer, errorReducer, successReducer } from './status';
+import advisoryReducer from './advisory';
 import authReducer from './auth';
 import profileReducer from './profile';
 import uiReducer from './ui';
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   loadingReducer,
   errorReducer,
   successReducer,
+  advisoryReducer,
   authReducer,
   profileReducer,
   uiReducer,

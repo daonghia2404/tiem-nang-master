@@ -138,7 +138,7 @@ export const ProtectedRoute: React.FC<IRouteProps> = ({ component: Component, ..
       <Component {...rest} />
     </Suspense>
   ) : (
-    <Redirect noThrow from={Paths.Rest} to={LayoutPaths.Auth} />
+    <Redirect noThrow from={Paths.Rest} to={LayoutPaths.Guest} />
   );
 };
 

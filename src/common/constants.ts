@@ -9,3 +9,6 @@ export const regex = {
   numeric: /^\d+$/i,
   onlySpecialKey: /[$&+,:;=?@#|'<>.^*()%`~_!\-"\]\[\\}{'/]/g,
 };
+
+export const DEFAULT_PAGE = 1;
+export const DEFAULT_PAGE_SIZE = 10;

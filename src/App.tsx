@@ -32,7 +32,7 @@ const App: React.FC = () => {
         <Guest path={LayoutPaths.Guest}>
           <PublicRoute path={Paths.BooksLibrary} component={Pages.BooksLibrary} />
           <PublicRoute path={Paths.Release} component={Pages.Release} />
-          <PublicRoute path={Paths.Contact} component={Pages.Contact} />
+          <ProtectedRoute path={Paths.Contact} component={Pages.Contact} />
           <PublicRoute path={Paths.Courses} component={Pages.Courses} />
           <PublicRoute path={Paths.PrivacyPolicy} component={Pages.PrivacyPolicy} />
           <PublicRoute path={Paths.AboutUs} component={Pages.AboutUs} />

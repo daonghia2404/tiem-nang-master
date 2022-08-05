@@ -368,8 +368,6 @@ const deleteServiceFile = async (args) => {
   console.log(MESSAGES.LOADING.DELETE_SERVICE);
   const { service, rootPath, kebabCaseActionName, group, groupPath, filePath } = common(args, ROOT_PATHS.SERVICES);
 
-  console.log(common(args, ROOT_PATHS.SERVICES));
-
   const filePathExisted = fileOrDirectoryAlreadyExist(filePath);
   if (filePathExisted) {
     filePathExisted && (await deleteFile(filePath));
