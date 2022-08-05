@@ -15,6 +15,10 @@
     color: $black;
     background: $white;
 
+    &:disabled {
+      opacity: 0.6;
+    }
+
     &.ant-btn-primary {
       background: $orange-peel;
       border-color: $orange-peel;

@@ -9,8 +9,6 @@ import BgModalAuth from '@/assets/images/bg-auth-modal.png';
 import Favicon from '@/assets/images/favicon.png';
 import ImageFacebook from '@/assets/images/image-facebook.png';
 import ImageGoogle from '@/assets/images/image-google.png';
-
-import { TSignInFormProps } from './SignInForm.types.d';
 import { TRootState } from '@/redux/reducers';
 import {
   authLoginAction,
@@ -20,6 +18,8 @@ import {
 } from '@/redux/actions';
 import { EResponseCode, ETypeNotification } from '@/common/enums';
 import { TAuthLoginResponse } from '@/services/api';
+
+import { TSignInFormProps } from './SignInForm.types.d';
 
 const SignInForm: React.FC<TSignInFormProps> = ({
   onClickRegister,

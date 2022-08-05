@@ -3,6 +3,7 @@ import { SyntheticEvent } from 'react';
 import { notification } from 'antd';
 import { Rule } from 'antd/lib/form';
 import moment from 'moment';
+import ImageAvatarDefault from '@/assets/images/image-avatar-default.svg';
 
 import { EFormat, ETypeNotification } from '@/common/enums';
 import { regex } from '@/common/constants';
@@ -181,12 +182,13 @@ export const copyText = (text: string): void => {
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
+  showNotification(ETypeNotification.SUCCESS, 'Sao chép vào bộ nhớ tạm thành công');
 };
 
 export const handleErrorImageUrl = (e: SyntheticEvent<HTMLImageElement, Event>): void => {
   const { currentTarget } = e;
   currentTarget.onerror = null; // prevents looping
-  currentTarget.src = 'YOUR URL IMAGE ERROR';
+  currentTarget.src = ImageAvatarDefault;
 };
 
 export const getQueryParam = (param: string): string | null => {

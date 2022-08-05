@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
 import { Link, useLocation } from '@reach/router';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import Logo from '@/assets/images/logo.png';
 import DropdownCustom from '@/components/DropdownCustom';
 import Input from '@/components/Input';
-import ImageAvatar from '@/assets/images/image-avatar.png';
 import Avatar from '@/components/Avatar';
 import ModalAuth from '@/containers/ModalAuth';
 import { EKeyStateModalAuth } from '@/containers/ModalAuth/ModalAuth.enums';
 import AccountDropdown from '@/containers/AccountDropdown';
 import { Paths } from '@/pages/routers';
+import { TRootState } from '@/redux/reducers';
+import { getProfileAction } from '@/redux/actions';
+import Helper from '@/services/helpers';
 
 import { dataHeaderMenu } from './Header.data';
 import { THeaderProps } from './Header.types.d';
 import './Header.scss';
 
 const Header: React.FC<THeaderProps> = () => {
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
+  const atk = Helper.getAccessToken();
+
+  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
 
   const [visibleAccountDropdown, setVisibleAccountDropdown] = useState(false);
 
@@ -45,6 +52,14 @@ const Header: React.FC<THeaderProps> = () => {
   const handleCloseModalAuth = (): void => {
     setModalAuthState({ ...modalAuthState, visible: false });
   };
+
+  const getProfile = useCallback(() => {
+    if (atk) dispatch(getProfileAction.request({}));
+  }, [dispatch, atk]);
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
 
   return (
     <div className="Header">
@@ -85,7 +100,7 @@ const Header: React.FC<THeaderProps> = () => {
                 </div>
               </Col>
               <Col>
-                {true ? (
+                {!profileState ? (
                   <div className="Header-middle-account flex items-center">
                     <div className="Header-middle-account-name">
                       <span onClick={(): void => handleOpenModalAuth(EKeyStateModalAuth.SIGN_IN)}>Đăng nhập</span>/
@@ -105,9 +120,9 @@ const Header: React.FC<THeaderProps> = () => {
                     placement="bottomRight"
                   >
                     <div className="Header-middle-account flex items-center" onClick={handleOpenAccountDropdown}>
-                      <div className="Header-middle-account-name">Nguyen Duy Thành</div>
+                      <div className="Header-middle-account-name">{profileState.name}</div>
                       <div className="Header-middle-account-avatar">
-                        <Avatar image={ImageAvatar} />
+                        <Avatar image={profileState?.avatar} />
                       </div>
                     </div>
                   </DropdownCustom>
@@ -124,7 +139,7 @@ const Header: React.FC<THeaderProps> = () => {
             <div className="Header-bottom-list">
               <Row align="middle" justify="space-around">
                 {dataHeaderMenu.map((item) => (
-                  <Col>
+                  <Col key={item.key}>
                     <Link
                       to={item.link}
                       className={classNames('Header-bottom-list-item', { active: item.activePaths.includes(pathname) })}

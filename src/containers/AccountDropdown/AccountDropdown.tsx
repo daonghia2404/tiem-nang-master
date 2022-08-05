@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
+import { useSelector } from 'react-redux';
 
 import ImageCrown from '@/assets/images/image-crown.svg';
 import ImageCoin from '@/assets/images/image-coin.svg';
@@ -10,17 +11,30 @@ import IconBell from '@/assets/icons/icon-bell.svg';
 import IconRefresh from '@/assets/icons/icon-refresh.svg';
 import IconShare from '@/assets/icons/icon-share.svg';
 import IconLogout from '@/assets/icons/icon-logout.svg';
-
+import { TRootState } from '@/redux/reducers';
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import { LayoutPaths, Paths } from '@/pages/routers';
+import ModalLogout from '@/containers/ModalLogout';
 
 import { TAccountDropdownProps } from './AccountDropdown.types.d';
 import './AccountDropdown.scss';
 
 const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) => {
   const [visibleNotification, setVisibleNotification] = useState<boolean>(false);
+  const [visibleModalLogout, setVisibleModalLogout] = useState<boolean>(false);
+
+  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
+
+  const handleOpenModalLogout = (): void => {
+    onClose?.();
+    setVisibleModalLogout(true);
+  };
+
+  const handleCloseModalLogout = (): void => {
+    setVisibleModalLogout(false);
+  };
 
   const handleNavigate = (link: string): void => {
     navigate(link);
@@ -36,7 +50,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
     { icon: IconBell, label: 'Thông báo', badge: '+5', onClick: (): void => setVisibleNotification(true) },
     { icon: IconRefresh, label: 'Lịch sử giao dịch' },
     { icon: IconShare, label: 'Tiếp thị liên kết' },
-    { icon: IconLogout, label: 'Đăng xuất' },
+    { icon: IconLogout, label: 'Đăng xuất', onClick: handleOpenModalLogout },
   ];
 
   const handleClickNotifcation = (): void => {
@@ -91,10 +105,10 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
             </div>
             <div className="AccountDropdown-header-info flex items-center">
               <div className="AccountDropdown-header-info-avatar">
-                <Avatar />
+                <Avatar image={profileState?.avatar} />
               </div>
               <div className="AccountDropdown-header-info-content">
-                <div className="AccountDropdown-header-info-content-name">Nguyen Duy Thanh</div>
+                <div className="AccountDropdown-header-info-content-name">{profileState?.name}</div>
                 <div
                   className="AccountDropdown-header-info-content-rank flex items-center"
                   onClick={(): void => handleNavigate(Paths.Member)}
@@ -102,7 +116,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
                   <div className="AccountDropdown-header-info-content-rank-icon">
                     <img src={ImageCrown} alt="" />
                   </div>
-                  <div className="AccountDropdown-header-info-content-rank-label">Hạng Đồng</div>
+                  <div className="AccountDropdown-header-info-content-rank-label">{profileState?.membership.name}</div>
                   <div className="AccountDropdown-header-info-content-rank-arrow">
                     <Icon name={EIconName.AngleRight} color={EIconColor.WHITE} />
                   </div>
@@ -118,7 +132,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
                     <img src={ImageCoin} alt="" />
                   </div>
                   <div className="AccountDropdown-header-wallet-item-coin-value">
-                    120
+                    {profileState?.bcoin}
                     <span>BCoin</span>
                   </div>
                 </div>
@@ -150,6 +164,8 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
           </div>
         </div>
       )}
+
+      <ModalLogout visible={visibleModalLogout} onClose={handleCloseModalLogout} />
     </div>
   );
 };

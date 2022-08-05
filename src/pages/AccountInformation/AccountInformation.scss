@@ -16,5 +16,13 @@
     &-body {
       padding: 2.4rem 1.6rem;
     }
+
+    &-form {
+      &-avatar {
+        .ant-form-item-explain {
+          text-align: center;
+        }
+      }
+    }
   }
 }

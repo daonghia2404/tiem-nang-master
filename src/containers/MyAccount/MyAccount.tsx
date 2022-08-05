@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { navigate, useLocation } from '@reach/router';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 import IconUserCircle from '@/assets/icons/icon-user-circle.svg';
 import IconBell from '@/assets/icons/icon-bell.svg';
@@ -13,6 +14,8 @@ import BgAccountDropdown from '@/assets/images/bg-account-dropdown.png';
 import ImageCoin from '@/assets/images/image-coin.svg';
 import Button from '@/components/Button';
 import PaymentMethodModal from '@/containers/PaymentMethodModal';
+import { TRootState } from '@/redux/reducers';
+import ModalLogout from '@/containers/ModalLogout';
 
 import { TMyAccountProps } from './MyAccount.types.d';
 import './MyAccount.scss';
@@ -20,9 +23,20 @@ import './MyAccount.scss';
 const MyAccount: React.FC<TMyAccountProps> = () => {
   const { pathname } = useLocation();
   const [visiblePaymentMethodModal, setVisiblePaymentMethodModal] = useState<boolean>(false);
+  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
 
   const handleNavigate = (link: string): void => {
     navigate(link);
+  };
+
+  const [visibleModalLogout, setVisibleModalLogout] = useState<boolean>(false);
+
+  const handleOpenModalLogout = (): void => {
+    setVisibleModalLogout(true);
+  };
+
+  const handleCloseModalLogout = (): void => {
+    setVisibleModalLogout(false);
   };
 
   const dataMyAccountDropdownList = [
@@ -45,7 +59,7 @@ const MyAccount: React.FC<TMyAccountProps> = () => {
       label: 'Tiếp thị liên kết',
       onClick: (): void => handleNavigate(`${LayoutPaths.Admin}${Paths.AffiliateMarketing}`),
     },
-    { icon: IconLogout, label: 'Đăng xuất' },
+    { icon: IconLogout, label: 'Đăng xuất', onClick: handleOpenModalLogout },
   ];
 
   const handleOpenPaymentMethodModal = (): void => {
@@ -60,10 +74,9 @@ const MyAccount: React.FC<TMyAccountProps> = () => {
       <div className="MyAccount-header">Tài khoản của tôi</div>
       <div className="MyAccount-list">
         {dataMyAccountDropdownList.map((item, index) => (
-          <>
+          // eslint-disable-next-line react/no-array-index-key
+          <div key={index}>
             <div
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
               className={classNames('MyAccount-list-item flex items-center justify-between', {
                 active: item.activePaths?.includes(pathname),
               })}
@@ -90,7 +103,7 @@ const MyAccount: React.FC<TMyAccountProps> = () => {
                       <img src={ImageCoin} alt="" />
                     </div>
                     <div className="MyAccount-wallet-item-coin-value">
-                      120
+                      {profileState?.bcoin}
                       <span>BCoin</span>
                     </div>
                   </div>
@@ -100,11 +113,12 @@ const MyAccount: React.FC<TMyAccountProps> = () => {
                 </div>
               </div>
             )}
-          </>
+          </div>
         ))}
       </div>
 
       <PaymentMethodModal visible={visiblePaymentMethodModal} onClose={handleClosePaymentMethodModal} />
+      <ModalLogout visible={visibleModalLogout} onClose={handleCloseModalLogout} />
     </div>
   );
 };

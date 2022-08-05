@@ -3,6 +3,7 @@ export type TModalConfirmProps = {
   title: string;
   text?: React.ReactNode | string;
   width?: number;
+  loading?: boolean;
   onClose?: () => void;
   onSubmit?: () => void;
 };

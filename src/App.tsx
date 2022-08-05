@@ -55,9 +55,9 @@ const App: React.FC = () => {
         </Auth>
 
         <Admin path={LayoutPaths.Admin}>
-          <PublicRoute path={Paths.AccountInformation} component={Pages.AccountInformation} />
-          <PublicRoute path={Paths.HistoryTranscation} component={Pages.HistoryTranscation} />
-          <PublicRoute path={Paths.AffiliateMarketing} component={Pages.AffiliateMarketing} />
+          <ProtectedRoute path={Paths.AccountInformation} component={Pages.AccountInformation} />
+          <ProtectedRoute path={Paths.HistoryTranscation} component={Pages.HistoryTranscation} />
+          <ProtectedRoute path={Paths.AffiliateMarketing} component={Pages.AffiliateMarketing} />
 
           <ProtectedRoute path={Paths.Dashboard} component={Pages.Dashboard} />
 

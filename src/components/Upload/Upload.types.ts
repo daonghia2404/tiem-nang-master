@@ -4,5 +4,5 @@ export type TUploadProps = {
   accept?: string;
   multiple?: boolean;
   disabled?: boolean;
-  onChange?: (data: FileList | null) => void;
+  onChange?: (data: { fileId: string; fullUrl: string }) => void;
 };

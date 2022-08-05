@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
 
 import ImageConnectionPeople from '@/assets/images/image-connection-people.png';
 import BgAffiliateMarketing from '@/assets/images/bg-affiliate-marketing.png';
@@ -8,12 +9,14 @@ import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import HistoryCoin from '@/pages/AffiliateMarketing/HistoryCoin';
 import Events from '@/pages/AffiliateMarketing/Events';
 import { copyText } from '@/utils/functions';
+import { TRootState } from '@/redux/reducers';
 
 import { dataAffiliateMarketingTabs } from './AffiliateMarketing.data';
 import './AffiliateMarketing.scss';
 
 const AffiliateMarketing: React.FC = () => {
   const [keyAffiliateMarketingTab, setKeyAffiliateMarketingTab] = useState('HISTORY_COIN');
+  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
 
   const handleChangeAffiliateMarketingTab = (key: string): void => {
     setKeyAffiliateMarketingTab(key);
@@ -33,10 +36,10 @@ const AffiliateMarketing: React.FC = () => {
 
           <div className="AffiliateMarketing-banner-description">Chia sẻ mã giới thiệu của bạn để nhận coin</div>
           <div className="AffiliateMarketing-banner-code flex items-center">
-            <div className="AffiliateMarketing-banner-code-value">123456ABC</div>
+            <div className="AffiliateMarketing-banner-code-value">{profileState?.referralId}</div>
             <div
               className="AffiliateMarketing-banner-code-copy flex items-center"
-              onClick={(): void => copyText('123456ABC')}
+              onClick={(): void => copyText(profileState?.referralId || '')}
             >
               <Icon name={EIconName.Copy} color={EIconColor.ORANGE_PEEL} />
               Copy

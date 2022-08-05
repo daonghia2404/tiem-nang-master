@@ -13,7 +13,7 @@ export function* authLoginSaga(action: ActionType<typeof authLoginAction.request
     const response = yield call(authLogin, materials);
     const authLoginResponse: TAuthLoginResponse = response as TAuthLoginResponse;
 
-    Helpers.storeAccessToken('');
+    Helpers.storeAccessToken(authLoginResponse.data.token || '');
     Helpers.storeRefreshToken('');
 
     yield put(authLoginAction.success(authLoginResponse));

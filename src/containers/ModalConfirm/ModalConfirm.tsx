@@ -7,7 +7,15 @@ import Button from '@/components/Button';
 import { TModalConfirmProps } from './ModalConfirm.types.d';
 import './ModalConfirm.scss';
 
-const ModalConfirm: React.FC<TModalConfirmProps> = ({ visible, width = 765, title, text, onClose, onSubmit }) => {
+const ModalConfirm: React.FC<TModalConfirmProps> = ({
+  visible,
+  loading,
+  width = 765,
+  title,
+  text,
+  onClose,
+  onSubmit,
+}) => {
   return (
     <Modal closeable={false} width={width} visible={visible} onClose={onClose} hideFooter className="ModalConfirm">
       <div className="ModalConfirm-header">{title}</div>
@@ -15,10 +23,10 @@ const ModalConfirm: React.FC<TModalConfirmProps> = ({ visible, width = 765, titl
       <div className="ModalConfirm-footer">
         <Row gutter={40}>
           <Col span={12}>
-            <Button title="Hủy bỏ" type="default" onClick={onClose} />
+            <Button title="Hủy bỏ" type="default" onClick={onClose} disabled={loading} />
           </Col>
           <Col span={12}>
-            <Button title="Đồng ý" type="primary" onClick={onSubmit} />
+            <Button title="Đồng ý" type="primary" onClick={onSubmit} loading={loading} />
           </Col>
         </Row>
       </div>
