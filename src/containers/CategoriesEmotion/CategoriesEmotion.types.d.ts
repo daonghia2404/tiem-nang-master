@@ -1,8 +1,13 @@
 export type TCategoriesEmotionProps = {
   data: TCategoriesData[];
+  ids?: (string | undefined)[];
+  showLoadMore?: boolean;
+  loading?: boolean;
+  onClickItem?: (data: any) => void;
+  onLoadMore?: () => void;
 };
 
 export type TCategoriesData = {
   title: string;
-  list: { label: string; icon: string }[];
+  list: { name: string; _id: string; iconPath?: string }[];
 };

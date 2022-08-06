@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
-import { Link, useLocation } from '@reach/router';
+import { Link, navigate, useLocation } from '@reach/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
@@ -29,6 +29,7 @@ const Header: React.FC<THeaderProps> = () => {
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse?.data);
 
   const [visibleAccountDropdown, setVisibleAccountDropdown] = useState(false);
+  const [keyword, setKeyword] = useState('');
 
   const [modalAuthState, setModalAuthState] = useState<{
     visible: boolean;
@@ -36,6 +37,10 @@ const Header: React.FC<THeaderProps> = () => {
   }>({
     visible: false,
   });
+
+  const handleSearch = (): void => {
+    navigate(Paths.BooksListSearch(keyword));
+  };
 
   const handleOpenAccountDropdown = (): void => {
     setVisibleAccountDropdown(true);
@@ -112,7 +117,12 @@ const Header: React.FC<THeaderProps> = () => {
               </Col>
               <Col flex={1}>
                 <div className="Header-middle-search">
-                  <Input placeholder="Tìm kiếm" suffix={<Icon name={EIconName.Search} color={EIconColor.BLACK} />} />
+                  <Input
+                    placeholder="Tìm kiếm"
+                    suffix={<Icon name={EIconName.Search} color={EIconColor.BLACK} onClick={handleSearch} />}
+                    onChange={(e): void => setKeyword(e.target.value)}
+                    onEnter={handleSearch}
+                  />
                 </div>
               </Col>
               <Col>

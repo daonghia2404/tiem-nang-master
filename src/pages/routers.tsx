@@ -21,6 +21,7 @@ const retryLoadComponent = (fn: () => Promise<unknown>, retriesLeft = 5, interva
   });
 
 const BooksLibrary = lazy(() => retryLoadComponent(() => import('@/pages/BooksLibrary')));
+const BooksListSearch = lazy(() => retryLoadComponent(() => import('@/pages/BooksListSearch')));
 const Release = lazy(() => retryLoadComponent(() => import('@/pages/Release')));
 const Courses = lazy(() => retryLoadComponent(() => import('@/pages/Courses')));
 const Contact = lazy(() => retryLoadComponent(() => import('@/pages/Contact')));
@@ -52,6 +53,7 @@ export const ModulePaths = {};
 
 export const Paths = {
   BooksLibrary: '/',
+  BooksListSearch: (keyword?: string): string => `/tim-kiem/${keyword || ':keyword'}`,
   Release: '/giai-toa',
   Contact: '/lien-he',
   Courses: '/khoa-hoc',
@@ -61,7 +63,7 @@ export const Paths = {
   ListBanks: '/chuyen-khoan-ngan-hang',
   BookShelf: '/ke-sach',
   NotificationDetail: (id?: string): string => `/thong-bao/${id || ':id'}`,
-  BookDetail: (id?: string): string => `/chi-tiet-sach/${id || ':id'}`,
+  BookDetail: (slug?: string, id?: string): string => `/chi-tiet-sach/${slug || ':slug'}/${id || ':id'}`,
   BookReader: (id?: string): string => `/doc-sach/${id || ':id'}`,
 
   AccountInformation: '/thong-tin-tai-khoan',
@@ -79,6 +81,7 @@ export const Paths = {
 
 export const Pages = {
   BooksLibrary,
+  BooksListSearch,
   Release,
   Contact,
   Courses,

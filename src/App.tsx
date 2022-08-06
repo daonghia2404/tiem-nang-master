@@ -31,6 +31,7 @@ const App: React.FC = () => {
       <Router primary={false}>
         <Guest path={LayoutPaths.Guest}>
           <PublicRoute path={Paths.BooksLibrary} component={Pages.BooksLibrary} />
+          <PublicRoute path={Paths.BooksListSearch()} component={Pages.BooksListSearch} />
           <PublicRoute path={Paths.Release} component={Pages.Release} />
           <ProtectedRoute path={Paths.Contact} component={Pages.Contact} />
           <PublicRoute path={Paths.Courses} component={Pages.Courses} />
@@ -38,7 +39,7 @@ const App: React.FC = () => {
           <PublicRoute path={Paths.AboutUs} component={Pages.AboutUs} />
           <PublicRoute path={Paths.Faq} component={Pages.Faq} />
           <PublicRoute path={Paths.ListBanks} component={Pages.ListBanks} />
-          <PublicRoute path={Paths.BookShelf} component={Pages.BookShelf} />
+          <ProtectedRoute path={Paths.BookShelf} component={Pages.BookShelf} />
           <PublicRoute path={Paths.NotificationDetail()} component={Pages.NotificationDetail} />
           <PublicRoute path={Paths.BookDetail()} component={Pages.BookDetail} />
           <PublicRoute path={Paths.BookReader()} component={Pages.BookReader} />

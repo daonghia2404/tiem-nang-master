@@ -90,7 +90,7 @@ const AuthorizedInstance = (baseURL: string): AxiosInstance => {
   };
 
   instance.interceptors.request.use(onRequest);
-  instance.interceptors.response.use(onResponseSuccess, onResponseError);
+  instance.interceptors.response.use(onResponseSuccess);
 
   return instance;
 };

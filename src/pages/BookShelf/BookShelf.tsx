@@ -49,7 +49,7 @@ const BookShelf: React.FC = () => {
                   <Row gutter={[80, 30]}>
                     {dataBooksList.map((item) => (
                       <Col key={item.id} span={8}>
-                        <BookBlock {...item} link={Paths.BookReader('1')} />
+                        {/* <BookBlock {...item} /> */}
                       </Col>
                     ))}
                   </Row>

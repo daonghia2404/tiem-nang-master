@@ -77,16 +77,6 @@ const Member: React.FC = () => {
     return data.level <= currentLevel || data.level !== currentLevel + 1;
   };
 
-  const getMembershipList = useCallback(() => {
-    const params = {
-      page: DEFAULT_PAGE,
-      pageSize: 100,
-      keyword: '',
-    };
-
-    dispatch(getMembershipListAction.request({ params }));
-  }, [dispatch]);
-
   const getMyMembership = useCallback(() => {
     dispatch(getMyMembershipAction.request({}));
   }, [dispatch]);
@@ -129,6 +119,16 @@ const Member: React.FC = () => {
       item,
     ),
   }));
+
+  const getMembershipList = useCallback(() => {
+    const params = {
+      page: DEFAULT_PAGE,
+      pageSize: 100,
+      keyword: '',
+    };
+
+    dispatch(getMembershipListAction.request({ params }));
+  }, [dispatch]);
 
   useEffect(() => {
     getMembershipList();

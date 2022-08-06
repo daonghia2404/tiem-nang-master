@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Collapse } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 
 import BgAccountDropdown from '@/assets/images/bg-account-dropdown.png';
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import ImageCrown from '@/assets/images/image-crown.svg';
+import { TRootState } from '@/redux/reducers';
+import { DEFAULT_PAGE } from '@/common/constants';
+import { EGetMembershipListAction, getMembershipListAction } from '@/redux/actions';
 
 import { TAccountRewardProps } from './AccountReward.types.d';
 import './AccountReward.scss';
@@ -11,6 +15,19 @@ import './AccountReward.scss';
 const { Panel } = Collapse;
 
 const AccountReward: React.FC<TAccountRewardProps> = () => {
+  const dispatch = useDispatch();
+  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse?.data);
+  const myMembershipState = useSelector((state: TRootState) => state.membershipReducer.getMyMembershipResponse?.data);
+
+  const getMembershipListState = useSelector(
+    (state: TRootState) => state.membershipReducer.getMembershipListResponse?.data?.records,
+  );
+  const getMembershipListLoading = useSelector(
+    (state: TRootState) => state.loadingReducer[EGetMembershipListAction.GET_MEMBERSHIP_LIST],
+  );
+
+  const currentLevel = myMembershipState?.level || 0;
+
   const renderListRewards = (data: React.ReactNode[]): React.ReactElement => {
     return (
       <div className="AccountReward-list-wrapper">
@@ -27,52 +44,30 @@ const AccountReward: React.FC<TAccountRewardProps> = () => {
     );
   };
 
-  const dataRewardLevels = [
-    {
-      key: 1,
-      title: 'Danh hiệu Tập đọc',
-      description: renderListRewards([
-        <>
-          Thăng bậc <strong>TẬP ĐỌC</strong> sau khi hoàn tất 20 tâm sách!
-        </>,
-        'Nhận 50 Bcoin khi đạt được danh hiệu này',
-        'Nhận thưởng 5 Bcoin vào Ví sau khi hoàn tất 1 tâm sách!',
-      ]),
-    },
-    {
-      key: 2,
-      title: 'Danh hiệu Sách thủ',
-      description: renderListRewards([
-        <>
-          Thăng bậc <strong>TẬP ĐỌC</strong> sau khi hoàn tất 20 tâm sách!
-        </>,
-        'Nhận 50 Bcoin khi đạt được danh hiệu này',
-        'Nhận thưởng 5 Bcoin vào Ví sau khi hoàn tất 1 tâm sách!',
-      ]),
-    },
-    {
-      key: 3,
-      title: 'Danh hiệu Mọt sách',
-      description: renderListRewards([
-        <>
-          Thăng bậc <strong>TẬP ĐỌC</strong> sau khi hoàn tất 20 tâm sách!
-        </>,
-        'Nhận 50 Bcoin khi đạt được danh hiệu này',
-        'Nhận thưởng 5 Bcoin vào Ví sau khi hoàn tất 1 tâm sách!',
-      ]),
-    },
-    {
-      key: 4,
-      title: 'Danh hiệu Thông thái',
-      description: renderListRewards([
-        <>
-          Thăng bậc <strong>TẬP ĐỌC</strong> sau khi hoàn tất 20 tâm sách!
-        </>,
-        'Nhận 50 Bcoin khi đạt được danh hiệu này',
-        'Nhận thưởng 5 Bcoin vào Ví sau khi hoàn tất 1 tâm sách!',
-      ]),
-    },
-  ];
+  const dataRewardLevels = getMembershipListState?.map((item) => ({
+    key: item.level,
+    title: item.name,
+    remain: '',
+    description: renderListRewards([
+      <>
+        Thăng bậc <strong>{item.name}</strong> nhận FREE {item.book_for_free} tâm sách!
+      </>,
+    ]),
+  }));
+
+  const getMembershipList = useCallback(() => {
+    const params = {
+      page: DEFAULT_PAGE,
+      pageSize: 100,
+      keyword: '',
+    };
+
+    dispatch(getMembershipListAction.request({ params }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    getMembershipList();
+  }, [getMembershipList]);
 
   return (
     <div className="AccountReward">
@@ -83,11 +78,11 @@ const AccountReward: React.FC<TAccountRewardProps> = () => {
         <div className="AccountReward-header-info flex justify-between">
           <div className="AccountReward-header-info-item">
             <div className="AccountReward-header-info-item-subtitle">Danh hiệu</div>
-            <div className="AccountReward-header-info-item-title">Tập đọc</div>
+            <div className="AccountReward-header-info-item-title">{myMembershipState?.name}</div>
           </div>
           <div className="AccountReward-header-info-item">
             <div className="AccountReward-header-info-item-subtitle">Tên thành viên</div>
-            <div className="AccountReward-header-info-item-name">nguyenduythanh</div>
+            <div className="AccountReward-header-info-item-name">{profileState?.name}</div>
           </div>
         </div>
 
@@ -106,23 +101,25 @@ const AccountReward: React.FC<TAccountRewardProps> = () => {
         </div>
       </div>
 
-      <div className="AccountReward-body">
-        <Collapse
-          defaultActiveKey={[1]}
-          expandIcon={({ isActive }): React.ReactNode => (
-            <div style={{ transform: `rotate(${isActive ? 90 : 0}deg)` }}>
-              <Icon name={EIconName.AngleRight} />
-            </div>
-          )}
-          expandIconPosition="right"
-        >
-          {dataRewardLevels.map((item) => (
-            <Panel key={item.key} header={item.title}>
-              {item.description}
-            </Panel>
-          ))}
-        </Collapse>
-      </div>
+      {!getMembershipListLoading && (
+        <div className="AccountReward-body">
+          <Collapse
+            defaultActiveKey={[currentLevel ? currentLevel + 1 : 1]}
+            expandIcon={({ isActive }): React.ReactNode => (
+              <div style={{ transform: `rotate(${isActive ? 90 : 0}deg)` }}>
+                <Icon name={EIconName.AngleRight} />
+              </div>
+            )}
+            expandIconPosition="right"
+          >
+            {dataRewardLevels?.map((item) => (
+              <Panel key={item.key} header={item.title}>
+                {item.description}
+              </Panel>
+            ))}
+          </Collapse>
+        </div>
+      )}
     </div>
   );
 };

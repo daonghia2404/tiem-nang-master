@@ -1,6 +1,6 @@
 export type TBookBlockProps = {
-  title?: string;
+  name: string;
   image: string;
   isQuoteBook?: boolean;
-  link?: string;
+  onClick?: () => void;
 };

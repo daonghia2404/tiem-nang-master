@@ -80,3 +80,7 @@ export enum EFormat {
   DATE = 'DD/MM/YYYY',
   DATE_TIME = 'DD/MM/YYYY - HH:mm',
 }
+
+export enum EProductType {
+  PAPER_BOOK = 'PAPER_BOOK',
+}

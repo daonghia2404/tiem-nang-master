@@ -82,8 +82,16 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
       badge: showNotificationTotal(),
       onClick: (): void => setVisibleNotification(true),
     },
-    { icon: IconRefresh, label: 'Lịch sử giao dịch' },
-    { icon: IconShare, label: 'Tiếp thị liên kết' },
+    {
+      icon: IconRefresh,
+      label: 'Lịch sử giao dịch',
+      onClick: (): void => handleNavigate(`${LayoutPaths.Admin}${Paths.HistoryTranscation}`),
+    },
+    {
+      icon: IconShare,
+      label: 'Tiếp thị liên kết',
+      onClick: (): void => handleNavigate(`${LayoutPaths.Admin}${Paths.AffiliateMarketing}`),
+    },
     { icon: IconLogout, label: 'Đăng xuất', onClick: handleOpenModalLogout },
   ];
 

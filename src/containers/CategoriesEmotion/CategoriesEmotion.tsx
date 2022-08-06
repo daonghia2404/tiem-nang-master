@@ -1,11 +1,26 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { Col, Row } from 'antd';
+import classNames from 'classnames';
+
+import ImageBook from '@/assets/images/emotion/icon-books.svg';
 
 import { TCategoriesEmotionProps } from './CategoriesEmotion.types.d';
 import './CategoriesEmotion.scss';
 
-const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({ data = [] }) => {
+const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({
+  loading,
+  ids = [],
+  data = [],
+  showLoadMore,
+  onClickItem,
+  onLoadMore,
+}) => {
+  const handleLoadMore = (): void => {
+    if (!loading) onLoadMore?.();
+  };
+
   return (
     <div className="CategoriesEmotion">
       <div className="container">
@@ -18,11 +33,16 @@ const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({ data = [] }) => 
                   <Row gutter={[15, 12]}>
                     {item.list.map((list, listIdx) => (
                       <Col key={listIdx}>
-                        <div className="CategoriesEmotion-filters-item-list-item flex items-center">
+                        <div
+                          className={classNames('CategoriesEmotion-filters-item-list-item flex items-center', {
+                            active: ids.includes(list._id),
+                          })}
+                          onClick={(): void => onClickItem?.(list)}
+                        >
                           <div className="CategoriesEmotion-filters-item-list-item-icon">
-                            <img src={list.icon} alt="" />
+                            <img src={list.iconPath || ImageBook} alt="" />
                           </div>
-                          <div className="CategoriesEmotion-filters-item-list-item-label">{list.label}</div>
+                          <div className="CategoriesEmotion-filters-item-list-item-label">{list.name}</div>
                         </div>
                       </Col>
                     ))}
@@ -31,6 +51,12 @@ const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({ data = [] }) => 
               </div>
             ))}
           </div>
+
+          {showLoadMore && (
+            <div className={classNames('CategoriesEmotion-loadmore', { disabled: loading })} onClick={handleLoadMore}>
+              Xem thêm
+            </div>
+          )}
         </div>
       </div>
     </div>

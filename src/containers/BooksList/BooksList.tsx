@@ -1,18 +1,43 @@
-import React from 'react';
+/* eslint-disable no-underscore-dangle */
+import React, { useState } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
+import { navigate } from '@reach/router';
 
 import BookBlock from '@/components/BookBlock';
 import Pagination from '@/components/Pagination';
 import ImageEmpty from '@/assets/images/image-empty.png';
 import Carousels from '@/components/Carousels';
+import { TProduct } from '@/common/models';
+import { EProductType } from '@/common/enums';
+import { Paths } from '@/pages/routers';
 
-import { dataBooksListFilters } from './BooksList.data';
 import { TBooksListProps } from './BooksList.types.d';
 import './BooksList.scss';
 
-const BooksList: React.FC<TBooksListProps> = ({ data = [], title, useCarousel, emptyTitle }) => {
+const BooksList: React.FC<TBooksListProps> = ({
+  ids = [],
+  data = [],
+  dataFilter,
+  title,
+  useCarousel,
+  emptyTitle,
+  page = 0,
+  pageSize = 0,
+  total = 0,
+  onPaginateChange,
+  onClickFilter,
+}) => {
   const isEmpty = data && data.length === 0;
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
+  const handleClickBookBlock = (dataBook: TProduct): void => {
+    if (!isDragging) {
+      if (dataBook.type === EProductType.PAPER_BOOK) {
+        navigate(Paths.BookDetail(dataBook.slug, dataBook._id));
+      }
+    }
+  };
 
   return (
     <div className="BooksList">
@@ -23,9 +48,14 @@ const BooksList: React.FC<TBooksListProps> = ({ data = [], title, useCarousel, e
           ) : (
             <div className="BooksList-filters">
               <Row gutter={20}>
-                {dataBooksListFilters.map((item, index) => (
-                  <Col key={item.value}>
-                    <div className={classNames('BooksList-filters-item', { active: index === 0 })}>{item.label}</div>
+                {dataFilter?.map((item) => (
+                  <Col key={item._id}>
+                    <div
+                      className={classNames('BooksList-filters-item', { active: ids.includes(item._id) })}
+                      onClick={(): void => onClickFilter?.(item)}
+                    >
+                      {item.name}
+                    </div>
                   </Col>
                 ))}
               </Row>
@@ -41,10 +71,18 @@ const BooksList: React.FC<TBooksListProps> = ({ data = [], title, useCarousel, e
             <>
               {useCarousel ? (
                 <div className="BooksList-carousel">
-                  <Carousels infinite autoplay arrows={false} dots={false} slidesToShow={5} slidesPerRow={1}>
-                    {data.map((item: any) => (
-                      <div className="BooksList-carousel-item" key={item.id}>
-                        <BookBlock {...item} />
+                  <Carousels
+                    arrows={false}
+                    dots={false}
+                    infinite={false}
+                    slidesToShow={data.length < 5 ? data.length : 5}
+                    slidesPerRow={1}
+                    slidesToScroll={5}
+                    onDragging={setIsDragging}
+                  >
+                    {data.map((item) => (
+                      <div className="BooksList-carousel-item" key={item._id}>
+                        <BookBlock {...item} onClick={(): void => handleClickBookBlock(item)} />
                       </div>
                     ))}
                   </Carousels>
@@ -55,7 +93,7 @@ const BooksList: React.FC<TBooksListProps> = ({ data = [], title, useCarousel, e
                     {data.map((item: any, index: number) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <Col key={index}>
-                        <BookBlock {...item} />
+                        <BookBlock {...item} onClick={(): void => handleClickBookBlock(item)} />
                       </Col>
                     ))}
                   </Row>
@@ -66,7 +104,7 @@ const BooksList: React.FC<TBooksListProps> = ({ data = [], title, useCarousel, e
 
           {!useCarousel && (
             <div className="BooksList-pagination flex justify-end">
-              <Pagination page={1} pageSize={4} total={24} />
+              <Pagination page={page} pageSize={pageSize} total={total} onChange={onPaginateChange} />
             </div>
           )}
         </div>

@@ -11,6 +11,7 @@
     border-radius: 1rem;
     box-shadow: $common-shadow;
     padding: 1.8rem 2rem;
+    min-height: 20rem;
   }
 
   &-filters {
@@ -32,11 +33,11 @@
           transition: $common-transition;
           background: $wild-sand;
           border-radius: .5rem;
-          border: 1px solid $wild-sand;
 
           &:hover,
           &.active {
-            border-color: $orange-peel;
+            background: $orange-peel;
+            color: $white;
           }
 
           &-icon {
@@ -45,6 +46,10 @@
             height: 1.6rem;
             margin-right: 1rem;
             @include centerScaleImage;
+
+            img {
+              border-radius: 50%;
+            }
           }
 
           &-label {
@@ -52,6 +57,19 @@
           }
         }
       }
+    }
+  }
+
+  &-loadmore {
+    margin-top: 1.8rem;
+    text-align: center;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: $orange-peel;
+
+    &.disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
     }
   }
 }
