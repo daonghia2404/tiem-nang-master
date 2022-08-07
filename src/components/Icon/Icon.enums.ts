@@ -13,6 +13,9 @@ export enum EIconName {
   Camera = 'Camera',
   Play = 'Play',
   Locker = 'Locker',
+  Pause = 'Pause',
+  Saved = 'Saved',
+  Unsaved = 'Unsaved',
 }
 
 export enum EIconColor {

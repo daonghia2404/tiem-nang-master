@@ -24,7 +24,7 @@ export type TGetApophthganRequest = {
 
 export type TGetApophthganSuccess = {
   type: EGetApophthganAction.GET_APOPHTHGAN_SUCCESS;
-  payload: { response: TGetApophthganResponse };
+  payload: { response?: TGetApophthganResponse };
 };
 
 export type TGetApophthganFailed = { type: EGetApophthganAction.GET_APOPHTHGAN_FAILED };
@@ -45,7 +45,7 @@ export const getApophthganAction = {
   success: createActionCreator(
     EGetApophthganAction.GET_APOPHTHGAN_SUCCESS,
     (resolve) =>
-      (response: TGetApophthganResponse): TGetApophthganSuccess =>
+      (response?: TGetApophthganResponse): TGetApophthganSuccess =>
         resolve({ response }),
   ),
   failure: createActionCreator(

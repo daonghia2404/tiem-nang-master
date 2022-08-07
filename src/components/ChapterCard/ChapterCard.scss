@@ -1,0 +1,35 @@
+@import '@/assets/styles/_global.scss';
+
+.ChapterCard {
+  border: 1px solid $nobel;
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: $common-transition;
+
+  audio {
+    display: none;
+  }
+
+  &:hover {
+    border-color: $orange-peel;
+    cursor: pointer;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 1.6rem;
+  }
+
+  &-title {
+    font-size: 1.6rem;
+    @include ellipsis(1);
+  }
+
+  &-icon {
+    margin-left: 1.2rem;
+
+    .Icon {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+  }
+}

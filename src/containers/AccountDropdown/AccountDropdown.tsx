@@ -26,12 +26,14 @@ import { TGetNotificationsResponse, TNotification } from '@/services/api';
 import WrapperLazyLoad from '@/components/WrapperLazyLoad';
 import { getTotalPage } from '@/utils/functions';
 import { readNotificationAction } from '@/redux/actions/notification/read-notification';
+import PaymentMethodModal from '@/containers/PaymentMethodModal';
 
 const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) => {
   const dispatch = useDispatch();
 
   const [visibleNotification, setVisibleNotification] = useState<boolean>(false);
   const [visibleModalLogout, setVisibleModalLogout] = useState<boolean>(false);
+  const [visiblePaymentMethodModal, setVisiblePaymentMethodModal] = useState<boolean>(false);
 
   const [getNotificationsParamsRequest, setGetNotificationsParamsRequest] = useState({
     page: DEFAULT_PAGE,
@@ -119,6 +121,13 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
         page: getNotificationsParamsRequest.page + 1,
       });
     }
+  };
+
+  const handleOpenPaymentMethodModal = (): void => {
+    setVisiblePaymentMethodModal(true);
+  };
+  const handleClosePaymentMethodModal = (): void => {
+    setVisiblePaymentMethodModal(false);
   };
 
   useEffect(() => {
@@ -225,7 +234,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
                 </div>
               </div>
               <div className="AccountDropdown-header-wallet-item">
-                <Button title="Nạp ngay" />
+                <Button title="Nạp ngay" onClick={handleOpenPaymentMethodModal} />
               </div>
             </div>
           </div>
@@ -252,6 +261,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
         </div>
       )}
 
+      <PaymentMethodModal visible={visiblePaymentMethodModal} onClose={handleClosePaymentMethodModal} />
       <ModalLogout visible={visibleModalLogout} onClose={handleCloseModalLogout} />
     </div>
   );

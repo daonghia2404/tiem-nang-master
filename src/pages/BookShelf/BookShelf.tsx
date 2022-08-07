@@ -45,7 +45,7 @@ const BookShelf: React.FC = () => {
   };
 
   const handleClickBookBlock = (dataBook: TProduct): void => {
-    navigate(Paths.BookReader(dataBook._id));
+    navigate(Paths.BookReader(dataBook.slug, dataBook._id));
   };
 
   const handlePageChange = (page: number, pageSize?: number): void => {

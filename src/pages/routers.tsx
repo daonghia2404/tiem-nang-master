@@ -64,7 +64,7 @@ export const Paths = {
   BookShelf: '/ke-sach',
   NotificationDetail: (id?: string): string => `/thong-bao/${id || ':id'}`,
   BookDetail: (slug?: string, id?: string): string => `/chi-tiet-sach/${slug || ':slug'}/${id || ':id'}`,
-  BookReader: (id?: string): string => `/doc-sach/${id || ':id'}`,
+  BookReader: (slug?: string, id?: string): string => `/doc-sach/${slug || ':slug'}/${id || ':id'}`,
 
   AccountInformation: '/thong-tin-tai-khoan',
   HistoryTranscation: '/lich-su-giao-dich',

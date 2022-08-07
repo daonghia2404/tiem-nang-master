@@ -24,6 +24,7 @@ const Release: React.FC = () => {
   const getProductsByCategoriesState = useSelector(
     (state: TRootState) => state.productReducer.getProductsByCategoriesResponse?.data,
   );
+  const getApophthganState = useSelector((state: TRootState) => state.apophthganReducer.getApophthganResponse?.data);
 
   const dataCategoriesEmotion = [
     {
@@ -103,8 +104,13 @@ const Release: React.FC = () => {
         data={dataCategoriesEmotion}
         onClickItem={handleClickEmotion}
       />
-      <BooksList useCarousel title="Danh ngôn" data={[]} />
-      <BooksList useCarousel title="Tựa sách nên đọc" data={getProductsByCategoriesState} />
+      <BooksList useCarousel title="Danh ngôn" data={getApophthganState} emptyTitle="Không có dữ liệu danh ngôn" />
+      <BooksList
+        useCarousel
+        title="Tựa sách nên đọc"
+        data={getProductsByCategoriesState}
+        emptyTitle="Không có dữ liệu tựa sách nên đọc"
+      />
     </div>
   );
 };

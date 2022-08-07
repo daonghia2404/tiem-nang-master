@@ -19,6 +19,9 @@ import Info from './Info';
 import Camera from './Camera';
 import Play from './Play';
 import Locker from './Locker';
+import Pause from './Pause';
+import Saved from './Saved';
+import Unsaved from './Unsaved';
 
 const Icon: React.FC<TIconProps> = ({ name, className, color, onClick }) => {
   const renderIcon = (): React.ReactElement => {
@@ -51,6 +54,12 @@ const Icon: React.FC<TIconProps> = ({ name, className, color, onClick }) => {
         return <Locker color={color} />;
       case EIconName.Play:
         return <Play color={color} />;
+      case EIconName.Pause:
+        return <Pause color={color} />;
+      case EIconName.Saved:
+        return <Saved color={color} />;
+      case EIconName.Unsaved:
+        return <Unsaved color={color} />;
 
       default:
         return <></>;

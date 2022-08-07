@@ -25,4 +25,11 @@
       color: $white;
     }
   }
+
+  &-icon {
+    flex: 0 0 2.4rem;
+    max-width: 2.4rem;
+    height: 2.4rem;
+    margin-right: .4rem;
+  }
 }

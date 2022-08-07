@@ -1,3 +1,4 @@
+import { TCommonResponse } from '@/common/types';
 import ApiService from '@/services/api';
 
 // TYPES
@@ -13,7 +14,9 @@ export type TGetApophthganMaterials = {
   params?: TGetApophthganParams;
 };
 
-export type TGetApophthganResponse = unknown;
+export type TGetApophthganResponse = TCommonResponse & {
+  data: [];
+};
 
 // FUNCTION
 
