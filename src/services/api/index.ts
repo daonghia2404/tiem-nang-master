@@ -15,3 +15,5 @@ export * from './apophthgan';
 export * from './product';
 export * from './category';
 export * from './transaction';
+export * from './appellation';
+export * from './banking';

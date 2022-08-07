@@ -1,13 +1,15 @@
 import React from 'react';
+import { navigate } from '@reach/router';
 
 import Modal from '@/components/Modal';
 import ImageVnPay from '@/assets/images/image-vn-pay.png';
 import ImageViettelPay from '@/assets/images/image-viettel-pay.png';
 import ImageMomo from '@/assets/images/image-momo.png';
+import Button from '@/components/Button';
+import { Paths } from '@/pages/routers';
 
 import { TPaymentMethodModalProps } from './PaymentMethodModal.types.d';
 import './PaymentMethodModal.scss';
-import Button from '@/components/Button';
 
 const PaymentMethodModal: React.FC<TPaymentMethodModalProps> = ({ visible, onClose }) => {
   return (
@@ -20,7 +22,12 @@ const PaymentMethodModal: React.FC<TPaymentMethodModalProps> = ({ visible, onClo
     >
       <div className="PaymentMethodModal-wrapper">
         <div className="PaymentMethodModal-methods">
-          <div className="PaymentMethodModal-methods-item flex items-center">
+          <div
+            className="PaymentMethodModal-methods-item flex items-center"
+            onClick={(): void => {
+              navigate(Paths.ListBanks);
+            }}
+          >
             <div className="PaymentMethodModal-methods-item-label">Chuyển khoản ngân hàng</div>
           </div>
 

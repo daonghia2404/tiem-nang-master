@@ -2,7 +2,9 @@ import { all, fork } from 'redux-saga/effects';
 
 import advisorySaga from './advisory';
 import apophthganSaga from './apophthgan';
+import appellationSaga from './appellation';
 import authSaga from './auth';
+import bankingSaga from './banking';
 import categorySaga from './category';
 import membershipSaga from './membership';
 import moodSaga from './mood';
@@ -16,7 +18,9 @@ const rootSaga = function* root(): Generator {
   yield all([
     fork(advisorySaga),
     fork(apophthganSaga),
+    fork(appellationSaga),
     fork(authSaga),
+    fork(bankingSaga),
     fork(categorySaga),
     fork(membershipSaga),
     fork(moodSaga),

@@ -3,7 +3,9 @@ import { combineReducers } from 'redux';
 import { loadingReducer, errorReducer, successReducer } from './status';
 import advisoryReducer from './advisory';
 import apophthganReducer from './apophthgan';
+import appellationReducer from './appellation';
 import authReducer from './auth';
+import bankingReducer from './banking';
 import categoryReducer from './category';
 import membershipReducer from './membership';
 import moodReducer from './mood';
@@ -20,7 +22,9 @@ const rootReducer = combineReducers({
   successReducer,
   advisoryReducer,
   apophthganReducer,
+  appellationReducer,
   authReducer,
+  bankingReducer,
   categoryReducer,
   membershipReducer,
   moodReducer,

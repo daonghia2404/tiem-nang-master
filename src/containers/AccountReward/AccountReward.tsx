@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useCallback, useEffect } from 'react';
 import { Collapse } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +8,7 @@ import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import ImageCrown from '@/assets/images/image-crown.svg';
 import { TRootState } from '@/redux/reducers';
 import { DEFAULT_PAGE } from '@/common/constants';
-import { EGetMembershipListAction, getMembershipListAction } from '@/redux/actions';
+import { EGetAppellationAction, getAppellationAction, getMyAppellationAction } from '@/redux/actions';
 
 import { TAccountRewardProps } from './AccountReward.types.d';
 import './AccountReward.scss';
@@ -16,17 +17,18 @@ const { Panel } = Collapse;
 
 const AccountReward: React.FC<TAccountRewardProps> = () => {
   const dispatch = useDispatch();
-  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse?.data);
-  const myMembershipState = useSelector((state: TRootState) => state.membershipReducer.getMyMembershipResponse?.data);
-
-  const getMembershipListState = useSelector(
-    (state: TRootState) => state.membershipReducer.getMembershipListResponse?.data?.records,
+  const appellationListState = useSelector(
+    (state: TRootState) => state.appellationReducer.getAppellationResponse?.data.records,
   );
-  const getMembershipListLoading = useSelector(
-    (state: TRootState) => state.loadingReducer[EGetMembershipListAction.GET_MEMBERSHIP_LIST],
+  const myAppellationState = useSelector(
+    (state: TRootState) => state.appellationReducer.getMyAppellationResponse?.data,
   );
 
-  const currentLevel = myMembershipState?.level || 0;
+  const getAppellationLoading = useSelector(
+    (state: TRootState) => state.loadingReducer[EGetAppellationAction.GET_APPELLATION],
+  );
+
+  const nextLevel = appellationListState?.[0]?._id || 0;
 
   const renderListRewards = (data: React.ReactNode[]): React.ReactElement => {
     return (
@@ -44,30 +46,40 @@ const AccountReward: React.FC<TAccountRewardProps> = () => {
     );
   };
 
-  const dataRewardLevels = getMembershipListState?.map((item) => ({
-    key: item.level,
+  const dataRewardLevels = appellationListState?.map((item) => ({
+    key: item._id,
     title: item.name,
     remain: '',
     description: renderListRewards([
       <>
-        Thăng bậc <strong>{item.name}</strong> nhận FREE {item.book_for_free} tâm sách!
+        Thăng bậc <strong>{item.name}</strong> sau khi hoàn tất {item.bookRequired} tâm sách!
       </>,
+      `Nhận ${item.bcoinOfLevel} Bcoin khi đạt được danh hiệu này`,
+      `Nhận thưởng ${item.giftPerBook} Bcoin vào Ví sau khi hoàn tất 1 tâm sách!`,
     ]),
   }));
 
-  const getMembershipList = useCallback(() => {
+  const getMyAppellation = useCallback(() => {
+    dispatch(getMyAppellationAction.request({}));
+  }, [dispatch]);
+
+  const getAppellationList = useCallback(() => {
     const params = {
       page: DEFAULT_PAGE,
       pageSize: 100,
       keyword: '',
     };
 
-    dispatch(getMembershipListAction.request({ params }));
+    dispatch(getAppellationAction.request({ params }));
   }, [dispatch]);
 
   useEffect(() => {
-    getMembershipList();
-  }, [getMembershipList]);
+    getMyAppellation();
+  }, [getMyAppellation]);
+
+  useEffect(() => {
+    getAppellationList();
+  }, [getAppellationList]);
 
   return (
     <div className="AccountReward">
@@ -78,17 +90,24 @@ const AccountReward: React.FC<TAccountRewardProps> = () => {
         <div className="AccountReward-header-info flex justify-between">
           <div className="AccountReward-header-info-item">
             <div className="AccountReward-header-info-item-subtitle">Danh hiệu</div>
-            <div className="AccountReward-header-info-item-title">{myMembershipState?.name}</div>
+            <div className="AccountReward-header-info-item-title">{myAppellationState?.name}</div>
           </div>
           <div className="AccountReward-header-info-item">
             <div className="AccountReward-header-info-item-subtitle">Tên thành viên</div>
-            <div className="AccountReward-header-info-item-name">{profileState?.name}</div>
+            <div className="AccountReward-header-info-item-name">{myAppellationState?.username}</div>
           </div>
         </div>
 
         <div className="AccountReward-header-progress-wrapper">
           <div className="AccountReward-header-progress">
-            <div className="AccountReward-header-progress-line" style={{ width: '60%' }} />
+            <div
+              className="AccountReward-header-progress-line"
+              style={{
+                width: `${
+                  ((myAppellationState?.myBook || 0) / (myAppellationState?.myBookRequireForUpAppellation || 1)) * 100
+                }%`,
+              }}
+            />
           </div>
 
           <div className="AccountReward-header-progress-description flex justify-between">
@@ -96,15 +115,17 @@ const AccountReward: React.FC<TAccountRewardProps> = () => {
               <Icon name={EIconName.Info} color={EIconColor.WHITE} />
               “Đọc Tâm sách - Thưởng Bookcoin!”
             </div>
-            <div className="AccountReward-header-progress-description-value">21/50</div>
+            <div className="AccountReward-header-progress-description-value">
+              {myAppellationState?.myBook}/{myAppellationState?.myBookRequireForUpAppellation}
+            </div>
           </div>
         </div>
       </div>
 
-      {!getMembershipListLoading && (
+      {!getAppellationLoading && (
         <div className="AccountReward-body">
           <Collapse
-            defaultActiveKey={[currentLevel ? currentLevel + 1 : 1]}
+            defaultActiveKey={[nextLevel]}
             expandIcon={({ isActive }): React.ReactNode => (
               <div style={{ transform: `rotate(${isActive ? 90 : 0}deg)` }}>
                 <Icon name={EIconName.AngleRight} />

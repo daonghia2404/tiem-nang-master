@@ -1,16 +1,34 @@
-import React from 'react';
+/* eslint-disable no-underscore-dangle */
+import React, { useCallback, useEffect } from 'react';
 import { Col, Collapse, Row } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import Input from '@/components/Input';
-import LogoVietcombank from '@/assets/images/logo-vietcombank.svg';
-import LogoTechcombank from '@/assets/images/logo-techcombank.svg';
+import { EGetBanksListAction, getBanksListAction } from '@/redux/actions';
+import { TRootState } from '@/redux/reducers';
 
 import './ListBanks.scss';
 
 const { Panel } = Collapse;
 
 const ListBanks: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const listBankState = useSelector((state: TRootState) => state.bankingReducer.getBanksListResponse?.data);
+  const getListBankLoading = useSelector(
+    (state: TRootState) => state.loadingReducer[EGetBanksListAction.GET_BANKS_LIST],
+  );
+  const firstBankId = listBankState?.[0]?._id || 0;
+
+  const getListBank = useCallback(() => {
+    dispatch(getBanksListAction.request({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    getListBank();
+  }, [getListBank]);
+
   const renderListBanksHeader = (logo: string, label: string): React.ReactNode => {
     return (
       <div className="ListBanks-item-header flex items-center">
@@ -47,36 +65,32 @@ const ListBanks: React.FC = () => {
       </div>
     );
   };
-  const dataFriendlyAnswerQuestions = [
-    {
-      key: 1,
-      title: renderListBanksHeader(LogoVietcombank, 'Vietcombank'),
-      description: renderListBanksBody('Nạp Bcoin', '36044123456789', 'Công ty BCA', 'Vietcombank'),
-    },
-    {
-      key: 2,
-      title: renderListBanksHeader(LogoTechcombank, 'Techcombank'),
-      description: renderListBanksBody('Nạp Bcoin', '47155234567890', 'Công ty BCA', 'Techcombank'),
-    },
-  ];
+  const dataFriendlyAnswerQuestions = listBankState?.map((item) => ({
+    key: item._id,
+    title: renderListBanksHeader(item.icon_url, item.bank_name),
+    description: renderListBanksBody('Nạp Bcoin', item.bank_account, item.owner_name, item.bank_name),
+  }));
+
   return (
     <div className="ListBanks">
       <div className="container">
         <div className="ListBanks-wrapper">
-          <Collapse
-            defaultActiveKey={[1]}
-            accordion
-            expandIcon={({ isActive }): React.ReactNode =>
-              isActive ? <Icon name={EIconName.Check} color={EIconColor.GREEN_HAZE} /> : <></>
-            }
-            expandIconPosition="right"
-          >
-            {dataFriendlyAnswerQuestions.map((item) => (
-              <Panel key={item.key} header={item.title}>
-                {item.description}
-              </Panel>
-            ))}
-          </Collapse>
+          {!getListBankLoading && (
+            <Collapse
+              defaultActiveKey={[firstBankId]}
+              accordion
+              expandIcon={({ isActive }): React.ReactNode =>
+                isActive ? <Icon name={EIconName.Check} color={EIconColor.GREEN_HAZE} /> : <></>
+              }
+              expandIconPosition="right"
+            >
+              {dataFriendlyAnswerQuestions?.map((item) => (
+                <Panel key={item.key} header={item.title}>
+                  {item.description}
+                </Panel>
+              ))}
+            </Collapse>
+          )}
         </div>
       </div>
     </div>

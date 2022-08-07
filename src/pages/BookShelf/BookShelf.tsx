@@ -1,21 +1,83 @@
-import React, { useState } from 'react';
+/* eslint-disable no-underscore-dangle */
+import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
+import { navigate } from '@reach/router';
+import { useDispatch, useSelector } from 'react-redux';
 
 import BookBlock from '@/components/BookBlock';
-import { dataBooksList } from '@/containers/BooksList/BooksList.data';
 import AccountReward from '@/containers/AccountReward';
+import { TGetMyProductParams } from '@/services/api';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/common/constants';
+import { getMyProductAction, getProductsSavedAction } from '@/redux/actions';
+import { Paths } from '@/pages/routers';
+import Pagination from '@/components/Pagination';
+import { TRootState } from '@/redux/reducers';
+import { scrollToTop } from '@/utils/functions';
+import Empty from '@/components/Empty';
+import { TProduct } from '@/common/models';
 
+import { EKeyBookShelfTab } from './BookShelf.enums';
 import { dataBookShelfTabs } from './BookShelf.data';
 import './BookShelf.scss';
-import { Paths } from '@/pages/routers';
 
 const BookShelf: React.FC = () => {
-  const [keyBookShelfTab, setKeyBookShelfTab] = useState('BOUGHT');
+  const dispatch = useDispatch();
+  const [keyBookShelfTab, setKeyBookShelfTab] = useState(EKeyBookShelfTab.BOUGHT);
+  const [getMyProductParamsRequest, setGetMyProductParamsRequest] = useState<TGetMyProductParams>({
+    page: DEFAULT_PAGE,
+    pageSize: DEFAULT_PAGE_SIZE,
+  });
+  const isMyBookTab = keyBookShelfTab === EKeyBookShelfTab.BOUGHT;
 
-  const handleChangeKeyBookShelfTab = (key: string): void => {
+  const myProductsState = useSelector((state: TRootState) => state.productReducer.getMyProductResponse?.data);
+  const myProductsSavedState = useSelector((state: TRootState) => state.productReducer.getProductsSavedResponse?.data);
+
+  const data = isMyBookTab
+    ? myProductsState?.records?.map((item) => item.product)
+    : myProductsSavedState?.records?.map((item) => item.product);
+  const total = isMyBookTab ? myProductsState?.total : myProductsSavedState?.total;
+  const isEmpty = data?.length === 0;
+
+  const handleChangeKeyBookShelfTab = (key: EKeyBookShelfTab): void => {
     setKeyBookShelfTab(key);
+    setGetMyProductParamsRequest({ page: DEFAULT_PAGE, pageSize: DEFAULT_PAGE_SIZE });
   };
+
+  const handleClickBookBlock = (dataBook: TProduct): void => {
+    navigate(Paths.BookReader(dataBook._id));
+  };
+
+  const handlePageChange = (page: number, pageSize?: number): void => {
+    setGetMyProductParamsRequest({
+      ...getMyProductParamsRequest,
+      page,
+      pageSize: pageSize || getMyProductParamsRequest.pageSize,
+    });
+    scrollToTop();
+  };
+
+  const getMyProducts = useCallback(() => {
+    if (isMyBookTab) {
+      dispatch(getMyProductAction.request({ params: getMyProductParamsRequest }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, getMyProductParamsRequest]);
+
+  const getMyProductsSaved = useCallback(() => {
+    if (!isMyBookTab) {
+      dispatch(getProductsSavedAction.request({ params: getMyProductParamsRequest }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, getMyProductParamsRequest]);
+
+  useEffect(() => {
+    getMyProductsSaved();
+  }, [getMyProductsSaved]);
+
+  useEffect(() => {
+    getMyProducts();
+  }, [getMyProducts]);
 
   return (
     <div className="BookShelf">
@@ -46,13 +108,26 @@ const BookShelf: React.FC = () => {
                 </div>
 
                 <div className="BookShelf-tabs-body">
-                  <Row gutter={[80, 30]}>
-                    {dataBooksList.map((item) => (
-                      <Col key={item.id} span={8}>
-                        {/* <BookBlock {...item} /> */}
-                      </Col>
-                    ))}
-                  </Row>
+                  {isEmpty ? (
+                    <Empty title="Không có dữ liệu sách đã mua" />
+                  ) : (
+                    <Row gutter={[80, 30]}>
+                      {data?.map((item) => (
+                        <Col key={item._id} span={8}>
+                          <BookBlock {...item} onClick={(): void => handleClickBookBlock(item)} />
+                        </Col>
+                      ))}
+                    </Row>
+                  )}
+
+                  <div className="BookShelf-pagination">
+                    <Pagination
+                      page={getMyProductParamsRequest.page}
+                      pageSize={getMyProductParamsRequest.pageSize}
+                      total={total}
+                      onChange={handlePageChange}
+                    />
+                  </div>
                 </div>
               </div>
             </Col>
