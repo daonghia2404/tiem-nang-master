@@ -7,5 +7,6 @@ export * from './mood';
 export * from './notification';
 export * from './product';
 export * from './profile';
+export * from './transaction';
 export * from './ui';
 export * from './upload';

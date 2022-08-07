@@ -10,6 +10,7 @@ import moodReducer from './mood';
 import notificationReducer from './notification';
 import productReducer from './product';
 import profileReducer from './profile';
+import transactionReducer from './transaction';
 import uiReducer from './ui';
 import uploadReducer from './upload';
 
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   notificationReducer,
   productReducer,
   profileReducer,
+  transactionReducer,
   uiReducer,
   uploadReducer,
 });

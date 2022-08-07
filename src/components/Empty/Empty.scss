@@ -1,0 +1,16 @@
+@import '@/assets/styles/_global.scss';
+
+.Empty {
+  text-align: center;
+  padding: 3rem;
+
+  img {
+    max-width: 40.4rem;
+    width: 100%;
+  }
+
+  span {
+    font-size: 1.8rem;
+    display: block;
+  }
+}

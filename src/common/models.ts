@@ -20,9 +20,20 @@ export type TProductVoice = {
   _id: string;
 };
 
+export type TAuthor = {
+  createdAt: string;
+  description: string;
+  isDeleted: boolean;
+  name: string;
+  updatedAt: string;
+  __v: number;
+  _id: string;
+};
+
 export type TProduct = {
   amount: number;
-  author: string;
+  author: TAuthor;
+  create_at?: string;
   available: boolean;
   avgContentRate: number;
   avgVoiceRate: number;
@@ -49,6 +60,8 @@ export type TProduct = {
   updatedAt: string;
   viewCount: number;
   voice: TProductVoice[];
+  order_code?: string;
+  bcoin?: number;
   __v: number;
   _id: string;
 };

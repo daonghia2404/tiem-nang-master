@@ -162,7 +162,7 @@ export const formatAbbreviationsName = (value: string): string => {
 };
 
 export const formatISODateToDateTime = (time: string, format?: string): string => {
-  return moment(time).format(format || EFormat.DATE_TIME);
+  return moment(time).format(format || EFormat.TIME_DATE);
 };
 
 export const formatMoneyVND = (config: {

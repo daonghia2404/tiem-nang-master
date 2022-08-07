@@ -79,6 +79,7 @@ export enum EEmpty {
 export enum EFormat {
   DATE = 'DD/MM/YYYY',
   DATE_TIME = 'DD/MM/YYYY - HH:mm',
+  TIME_DATE = 'HH:mm - DD/MM/YYYY',
 }
 
 export enum EProductType {

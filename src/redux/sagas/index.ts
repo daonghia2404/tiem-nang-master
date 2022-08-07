@@ -9,6 +9,7 @@ import moodSaga from './mood';
 import notificationSaga from './notification';
 import productSaga from './product';
 import profileSaga from './profile';
+import transactionSaga from './transaction';
 import uploadSaga from './upload';
 
 const rootSaga = function* root(): Generator {
@@ -22,6 +23,7 @@ const rootSaga = function* root(): Generator {
     fork(notificationSaga),
     fork(productSaga),
     fork(profileSaga),
+    fork(transactionSaga),
     fork(uploadSaga),
   ]);
 };

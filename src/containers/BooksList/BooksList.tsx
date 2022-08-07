@@ -6,7 +6,6 @@ import { navigate } from '@reach/router';
 
 import BookBlock from '@/components/BookBlock';
 import Pagination from '@/components/Pagination';
-import ImageEmpty from '@/assets/images/image-empty.png';
 import Carousels from '@/components/Carousels';
 import { TProduct } from '@/common/models';
 import { EProductType } from '@/common/enums';
@@ -14,6 +13,7 @@ import { Paths } from '@/pages/routers';
 
 import { TBooksListProps } from './BooksList.types.d';
 import './BooksList.scss';
+import Empty from '@/components/Empty';
 
 const BooksList: React.FC<TBooksListProps> = ({
   ids = [],
@@ -63,10 +63,7 @@ const BooksList: React.FC<TBooksListProps> = ({
           )}
 
           {isEmpty ? (
-            <div className="BooksList-empty">
-              <img src={ImageEmpty} alt="" />
-              {emptyTitle && <span>{emptyTitle}</span>}
-            </div>
+            <Empty title={emptyTitle} />
           ) : (
             <>
               {useCarousel ? (

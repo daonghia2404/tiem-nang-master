@@ -14,3 +14,4 @@ export * from './mood';
 export * from './apophthgan';
 export * from './product';
 export * from './category';
+export * from './transaction';

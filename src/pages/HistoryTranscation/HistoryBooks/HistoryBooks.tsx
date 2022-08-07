@@ -1,40 +1,55 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { Col, Row } from 'antd';
 
-import ImageBook1 from '@/assets/images/image-book-1.png';
+import Pagination from '@/components/Pagination';
+import { formatISODateToDateTime } from '@/utils/functions';
+import Empty from '@/components/Empty';
 
 import { THistoryBooksProps } from './HistoryBooks.types.d';
 import './HistoryBooks.scss';
 
-const HistoryBooks: React.FC<THistoryBooksProps> = () => {
+const HistoryBooks: React.FC<THistoryBooksProps> = ({ data = [], page, pageSize, total, onPaginateChange }) => {
+  const isEmpty = data.length === 0;
+
   return (
     <div className="HistoryBooks">
-      <Row gutter={[40, 40]}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-          <Col key={item} span={12}>
-            <div className="HistoryBooks-item">
-              <div className="HistoryBooks-item-header flex">
-                <div className="HistoryBooks-item-image">
-                  <img src={ImageBook1} alt="" />
+      {isEmpty ? (
+        <Empty title="Không có dữ liệu lịch sử mua sách" />
+      ) : (
+        <Row gutter={[40, 40]}>
+          {data.map((item) => (
+            <Col key={item._id} span={12}>
+              <div className="HistoryBooks-item">
+                <div className="HistoryBooks-item-header flex">
+                  <div className="HistoryBooks-item-image">
+                    <img src={item.image} alt="" />
+                  </div>
+
+                  <div className="HistoryBooks-item-info flex flex-col">
+                    <div className="HistoryBooks-item-info-title">{item.name}</div>
+                    <div className="HistoryBooks-item-info-description">{item.author?.name}</div>
+                    <div className="HistoryBooks-item-info-price">
+                      <strong>{item.bcoin} </strong>Bcoin
+                    </div>
+                  </div>
                 </div>
 
-                <div className="HistoryBooks-item-info flex flex-col">
-                  <div className="HistoryBooks-item-info-title">Khoa học & đời sống</div>
-                  <div className="HistoryBooks-item-info-description">William</div>
-                  <div className="HistoryBooks-item-info-price">
-                    <strong>120.000 </strong>Bcoin
+                <div className="HistoryBooks-item-footer flex justify-between items-end">
+                  <div className="HistoryBooks-item-footer-text">Mã đơn hàng: {item.order_code}</div>
+                  <div className="HistoryBooks-item-footer-text nowrap">
+                    {formatISODateToDateTime(item.create_at || '')}
                   </div>
                 </div>
               </div>
+            </Col>
+          ))}
+        </Row>
+      )}
 
-              <div className="HistoryBooks-item-footer flex justify-between">
-                <div className="HistoryBooks-item-footer-text">Mã đơn hàng: 1234A</div>
-                <div className="HistoryBooks-item-footer-text">8:00 - 20/04/2022</div>
-              </div>
-            </div>
-          </Col>
-        ))}
-      </Row>
+      <div className="HistoryBooks-pagination flex justify-end">
+        <Pagination page={page} pageSize={pageSize} total={total} onChange={onPaginateChange} />
+      </div>
     </div>
   );
 };
