@@ -26,6 +26,7 @@ const Release = lazy(() => retryLoadComponent(() => import('@/pages/Release')));
 const Courses = lazy(() => retryLoadComponent(() => import('@/pages/Courses')));
 const Contact = lazy(() => retryLoadComponent(() => import('@/pages/Contact')));
 const PrivacyPolicy = lazy(() => retryLoadComponent(() => import('@/pages/PrivacyPolicy')));
+const PrivatePolicy = lazy(() => retryLoadComponent(() => import('@/pages/PrivatePolicy')));
 const AboutUs = lazy(() => retryLoadComponent(() => import('@/pages/AboutUs')));
 const Faq = lazy(() => retryLoadComponent(() => import('@/pages/Faq')));
 const ListBanks = lazy(() => retryLoadComponent(() => import('@/pages/ListBanks')));
@@ -58,6 +59,7 @@ export const Paths = {
   Contact: '/lien-he',
   Courses: '/khoa-hoc',
   PrivacyPolicy: '/dieu-khoan-chinh-sach',
+  PrivatePolicy: '/chinh-sach-bao-mat',
   AboutUs: '/ve-chung-toi',
   Faq: '/cau-hoi-thuong-gap',
   ListBanks: '/chuyen-khoan-ngan-hang',
@@ -86,6 +88,7 @@ export const Pages = {
   Contact,
   Courses,
   PrivacyPolicy,
+  PrivatePolicy,
   AboutUs,
   Faq,
   ListBanks,

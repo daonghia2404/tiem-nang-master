@@ -66,7 +66,7 @@ const AccountInformation: React.FC = () => {
     <div className="AccountInformation">
       <div className="AccountInformation-wrapper">
         <Row gutter={[40, 40]}>
-          <Col span={12}>
+          <Col span={24} lg={{ span: 12 }}>
             <div className="AccountInformation-card">
               <div className="AccountInformation-card-header">Thông tin cá nhân</div>
               <div className="AccountInformation-card-body">
@@ -95,7 +95,7 @@ const AccountInformation: React.FC = () => {
               </div>
             </div>
           </Col>
-          <Col span={12}>
+          <Col span={24} lg={{ span: 12 }}>
             <div className="AccountInformation-card">
               <div className="AccountInformation-card-header">Đổi mật khẩu</div>
               <div className="AccountInformation-card-body">

@@ -1,9 +1,11 @@
 import { createReducer } from 'deox';
 
 import {
+  TAskProductQuestionResponse,
   TBuyProductResponse,
   TGetFilterProductListResponse,
   TGetMyProductResponse,
+  TGetProductQuestionsResponse,
   TGetProductRateResponse,
   TGetProductResponse,
   TGetProductsByCategoriesResponse,
@@ -14,9 +16,11 @@ import {
   TUnsaveProductResponse,
 } from '@/services/api/product';
 import {
+  askProductQuestionAction,
   buyProductAction,
   getFilterProductListAction,
   getMyProductAction,
+  getProductQuestionsAction,
   getProductRateAction,
   getProductAction,
   getProductsByCategoriesAction,
@@ -26,9 +30,11 @@ import {
   saveProductAction,
   unsaveProductAction,
 } from '@/redux/actions';
+import { askProductQuestionUpdateState } from './ask-product-question';
 import { buyProductUpdateState } from './buy-product';
 import { getFilterProductListUpdateState } from './get-filter-product-list';
 import { getMyProductUpdateState } from './get-my-product';
+import { getProductQuestionsUpdateState } from './get-product-questions';
 import { getProductRateUpdateState } from './get-product-rate';
 import { getProductUpdateState } from './get-product';
 import { getProductsByCategoriesUpdateState } from './get-products-by-categories';
@@ -39,9 +45,11 @@ import { saveProductUpdateState } from './save-product';
 import { unsaveProductUpdateState } from './unsave-product';
 
 export type TProductState = {
+  askProductQuestionResponse?: TAskProductQuestionResponse;
   buyProductResponse?: TBuyProductResponse;
   getFilterProductListResponse?: TGetFilterProductListResponse;
   getMyProductResponse?: TGetMyProductResponse;
+  getProductQuestionsResponse?: TGetProductQuestionsResponse;
   getProductRateResponse?: TGetProductRateResponse;
   getProductResponse?: TGetProductResponse;
   getProductsByCategoriesResponse?: TGetProductsByCategoriesResponse;
@@ -53,9 +61,11 @@ export type TProductState = {
 };
 
 const initialState: TProductState = {
+  askProductQuestionResponse: undefined,
   buyProductResponse: undefined,
   getFilterProductListResponse: undefined,
   getMyProductResponse: undefined,
+  getProductQuestionsResponse: undefined,
   getProductRateResponse: undefined,
   getProductResponse: undefined,
   getProductsByCategoriesResponse: undefined,
@@ -67,9 +77,11 @@ const initialState: TProductState = {
 };
 
 const ProductReducer = createReducer(initialState, (handleAction) => [
+  handleAction(askProductQuestionAction.success, askProductQuestionUpdateState),
   handleAction(buyProductAction.success, buyProductUpdateState),
   handleAction(getFilterProductListAction.success, getFilterProductListUpdateState),
   handleAction(getMyProductAction.success, getMyProductUpdateState),
+  handleAction(getProductQuestionsAction.success, getProductQuestionsUpdateState),
   handleAction(getProductRateAction.success, getProductRateUpdateState),
   handleAction(getProductAction.success, getProductUpdateState),
   handleAction(getProductsByCategoriesAction.success, getProductsByCategoriesUpdateState),

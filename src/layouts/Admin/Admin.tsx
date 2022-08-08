@@ -16,11 +16,13 @@ const Admin: React.FC<TAdminProps> = ({ children }) => {
       </div>
       <div className="Admin-body">
         <div className="container">
-          <Row gutter={40}>
-            <Col span={7}>
+          <Row gutter={[40, 40]}>
+            <Col span={24} lg={{ span: 7 }}>
               <MyAccount />
             </Col>
-            <Col span={17}>{children}</Col>
+            <Col span={24} lg={{ span: 17 }}>
+              {children}
+            </Col>
           </Row>
         </div>
       </div>

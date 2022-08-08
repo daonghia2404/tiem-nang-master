@@ -25,6 +25,7 @@ const PaymentMethodModal: React.FC<TPaymentMethodModalProps> = ({ visible, onClo
           <div
             className="PaymentMethodModal-methods-item flex items-center"
             onClick={(): void => {
+              onClose?.();
               navigate(Paths.ListBanks);
             }}
           >

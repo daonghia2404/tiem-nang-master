@@ -21,6 +21,8 @@ const ContactForm: React.FC<TContactFormProps> = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
+  const isMobile = useSelector((state: TRootState) => state.uiReducer.device.isMobile);
+
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
   const getAdvisoryIssuesState = useSelector(
     (state: TRootState) => state.advisoryReducer.getAdvisoryIssuesResponse?.data?.records,
@@ -70,23 +72,23 @@ const ContactForm: React.FC<TContactFormProps> = () => {
         <div className="ContactForm-wrapper">
           <div className="ContactForm-title">Tư vấn</div>
           <Form form={form} className="ContactForm-form" onFinish={handleSubmit}>
-            <Row gutter={[40, 40]}>
-              <Col span={12}>
+            <Row gutter={isMobile ? [16, 16] : [40, 40]}>
+              <Col span={24} sm={{ span: 12 }}>
                 <Form.Item name="name" rules={[validationRules.required()]}>
                   <Input label="Tên của bạn" placeholder="Nhập tên" />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={24} sm={{ span: 12 }}>
                 <Form.Item name="issueType" rules={[validationRules.required()]}>
                   <Select label="Vấn đề gặp phải" placeholder="Chọn nguyên nhân" options={advisoryIssuesOptions} />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={24} sm={{ span: 12 }}>
                 <Form.Item name="appointmentDate" rules={[validationRules.required()]}>
                   <DatePicker label="Đặt lịch tư vấn" placeholder="Thời gian" />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={24} sm={{ span: 12 }}>
                 <Form.Item name="contact" rules={[validationRules.required()]}>
                   <Input label="Liên hệ" placeholder="Số điện thoại/Email" />
                 </Form.Item>

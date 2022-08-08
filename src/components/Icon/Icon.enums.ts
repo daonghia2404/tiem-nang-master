@@ -16,6 +16,7 @@ export enum EIconName {
   Pause = 'Pause',
   Saved = 'Saved',
   Unsaved = 'Unsaved',
+  Menu = 'Menu',
 }
 
 export enum EIconColor {

@@ -86,10 +86,11 @@ const BooksLibrary: React.FC = () => {
   };
 
   const handleFilterProduct = (data: TFilterProductList): void => {
+    const isExisted = getProductsParamsRequest.paths?.filter === data._id;
     setGetProductsParamsRequest({
       ...getProductsParamsRequest,
       paths: {
-        filter: data._id,
+        filter: isExisted ? undefined : data._id,
       },
     });
   };

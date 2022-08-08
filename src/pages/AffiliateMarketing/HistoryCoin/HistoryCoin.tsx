@@ -15,7 +15,7 @@ const HistoryCoin: React.FC<THistoryCoinProps> = () => {
       ) : (
         <Row gutter={[40, 30]}>
           {[1, 2, 3, 4].map((item) => (
-            <Col key={item} span={12}>
+            <Col key={item} span={24} md={{ span: 12 }}>
               <div className="HistoryCoin-item flex items-center">
                 <div className="HistoryCoin-item-image">
                   <img src={ImageNotification} alt="" />

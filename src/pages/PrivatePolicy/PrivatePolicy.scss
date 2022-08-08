@@ -1,0 +1,16 @@
+@import '../../assets/styles/global';
+
+.PrivatePolicy {
+  &-wrapper {
+    padding: 5rem 0;
+  }
+
+  &-image {
+    max-width: 38.4rem;
+    margin: 0 auto 1.5rem;
+
+    img {
+      width: 100%;
+    }
+  }
+}

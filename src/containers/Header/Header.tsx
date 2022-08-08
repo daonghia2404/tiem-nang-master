@@ -25,6 +25,8 @@ const Header: React.FC<THeaderProps> = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const atk = Helper.getAccessToken();
+  const isMobile = useSelector((state: TRootState) => state.uiReducer.device.isMobile);
+  const [visibleMenuMobile, setVisibleMenuMobile] = useState<boolean>(false);
 
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse?.data);
 
@@ -40,6 +42,7 @@ const Header: React.FC<THeaderProps> = () => {
 
   const handleSearch = (): void => {
     navigate(Paths.BooksListSearch(keyword));
+    handleCloseMenuMobile();
   };
 
   const handleOpenAccountDropdown = (): void => {
@@ -57,6 +60,30 @@ const Header: React.FC<THeaderProps> = () => {
   const handleCloseModalAuth = (): void => {
     setModalAuthState({ ...modalAuthState, visible: false });
   };
+
+  const renderComponentSearch = (): React.ReactNode => {
+    return (
+      <div className="Header-middle-search">
+        <Input
+          placeholder="Tìm kiếm"
+          suffix={<Icon name={EIconName.Search} color={EIconColor.BLACK} onClick={handleSearch} />}
+          onChange={(e): void => setKeyword(e.target.value)}
+          onEnter={handleSearch}
+        />
+      </div>
+    );
+  };
+
+  const handleOpenMenuMobile = (): void => {
+    setVisibleMenuMobile(true);
+  };
+  const handleCloseMenuMobile = (): void => {
+    setVisibleMenuMobile(false);
+  };
+
+  useEffect(() => {
+    handleCloseMenuMobile();
+  }, [isMobile]);
 
   const getProfile = useCallback(() => {
     if (atk) dispatch(getProfileAction.request({}));
@@ -115,53 +142,70 @@ const Header: React.FC<THeaderProps> = () => {
                   <img src={Logo} alt="" />
                 </Link>
               </Col>
-              <Col flex={1}>
-                <div className="Header-middle-search">
-                  <Input
-                    placeholder="Tìm kiếm"
-                    suffix={<Icon name={EIconName.Search} color={EIconColor.BLACK} onClick={handleSearch} />}
-                    onChange={(e): void => setKeyword(e.target.value)}
-                    onEnter={handleSearch}
-                  />
-                </div>
-              </Col>
+              {!isMobile && <Col flex={1}>{renderComponentSearch()}</Col>}
+
               <Col>
-                {!profileState ? (
-                  <div className="Header-middle-account flex items-center">
-                    <div className="Header-middle-account-name">
-                      <span onClick={(): void => handleOpenModalAuth(EKeyStateModalAuth.SIGN_IN)}>Đăng nhập</span>/
-                      <span onClick={(): void => handleOpenModalAuth(EKeyStateModalAuth.SIGN_UP)}>Đăng ký</span>
-                    </div>
-                    <div className="Header-middle-account-avatar">
-                      <Avatar />
-                    </div>
-                  </div>
-                ) : (
-                  <DropdownCustom
-                    visible={visibleAccountDropdown}
-                    arrow
-                    onVisibleChange={setVisibleAccountDropdown}
-                    overlayClassName="Header-middle-account-dropdown"
-                    overlay={<AccountDropdown visible={visibleAccountDropdown} onClose={handleCloseAccountDropdown} />}
-                    placement="bottomRight"
-                  >
-                    <div className="Header-middle-account flex items-center" onClick={handleOpenAccountDropdown}>
-                      <div className="Header-middle-account-name">{profileState.name}</div>
-                      <div className="Header-middle-account-avatar">
-                        <Avatar image={profileState?.avatar} />
+                <Row align="middle">
+                  <Col>
+                    {!profileState ? (
+                      <div className="Header-middle-account flex items-center">
+                        <div className="Header-middle-account-name">
+                          <span onClick={(): void => handleOpenModalAuth(EKeyStateModalAuth.SIGN_IN)}>Đăng nhập</span>/
+                          <span onClick={(): void => handleOpenModalAuth(EKeyStateModalAuth.SIGN_UP)}>Đăng ký</span>
+                        </div>
+                        <div className="Header-middle-account-avatar">
+                          <Avatar />
+                        </div>
                       </div>
-                    </div>
-                  </DropdownCustom>
-                )}
+                    ) : (
+                      <DropdownCustom
+                        visible={visibleAccountDropdown}
+                        arrow
+                        onVisibleChange={setVisibleAccountDropdown}
+                        overlayClassName="Header-middle-account-dropdown"
+                        overlay={
+                          <AccountDropdown visible={visibleAccountDropdown} onClose={handleCloseAccountDropdown} />
+                        }
+                        placement="bottomRight"
+                      >
+                        <div className="Header-middle-account flex items-center" onClick={handleOpenAccountDropdown}>
+                          <div className="Header-middle-account-name">{profileState.name}</div>
+                          <div className="Header-middle-account-avatar">
+                            <Avatar image={profileState?.avatar} />
+                          </div>
+                        </div>
+                      </DropdownCustom>
+                    )}
+                  </Col>
+                  {isMobile && (
+                    <Col>
+                      <div className="Header-middle-account-menu" onClick={handleOpenMenuMobile}>
+                        <Icon name={EIconName.Menu} />
+                      </div>
+                    </Col>
+                  )}
+                </Row>
               </Col>
             </Row>
           </div>
         </div>
       </div>
 
-      <div className="Header-bottom">
+      {isMobile && (
+        <div
+          className={classNames('Header-bottom-overlay', { active: visibleMenuMobile })}
+          onClick={handleCloseMenuMobile}
+        />
+      )}
+      <div className={classNames('Header-bottom', { active: visibleMenuMobile })}>
+        {isMobile && (
+          <div className="Header-bottom-close" onClick={handleCloseMenuMobile}>
+            <Icon name={EIconName.CloseSquare} />
+          </div>
+        )}
         <div className="container">
           <div className="Header-bottom-wrapper">
+            {isMobile && renderComponentSearch()}
             <div className="Header-bottom-list">
               <Row align="middle" justify="space-around">
                 {dataHeaderMenu.map((item) => (
@@ -169,6 +213,7 @@ const Header: React.FC<THeaderProps> = () => {
                     <Link
                       to={item.link}
                       className={classNames('Header-bottom-list-item', { active: item.activePaths.includes(pathname) })}
+                      onClick={handleCloseMenuMobile}
                     >
                       {item.title}
                     </Link>

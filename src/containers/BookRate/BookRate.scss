@@ -23,15 +23,32 @@
           font-weight: 600;
           margin-bottom: 0.8rem;
           text-transform: capitalize;
+
+          @media (max-width: 991px) {
+            flex-direction: column;
+            align-items: flex-start !important;
+          }
         }
 
         &-date {
           font-size: 1.6rem;
           margin-left: 4.4rem;
+
+          @media (max-width: 991px) {
+            margin-left: 0;
+          }
         }
 
         &-rate {
           margin-left: 4.4rem;
+
+          @media (max-width: 991px) {
+            margin-left: 0;
+
+            .Rate .ant-rate {
+              font-size: 1.8rem;
+            }
+          }
         }
 
         &-content {
@@ -50,6 +67,13 @@
       &:nth-child(2) {
         border-left: 1px solid $mercury;
         border-right: 1px solid $mercury;
+
+        @media (max-width: 991px) {
+          border-left: none;
+          border-right: none;
+          border-top: 1px solid $mercury;
+          border-bottom: 1px solid $mercury;
+        }
       }
     }
 

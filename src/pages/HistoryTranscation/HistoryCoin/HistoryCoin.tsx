@@ -19,7 +19,7 @@ const HistoryCoin: React.FC<THistoryCoinProps> = ({ data, page, pageSize, total,
       ) : (
         <Row gutter={[40, 40]}>
           {data.map((item) => (
-            <Col key={item._id} span={12}>
+            <Col key={item._id} span={24} md={{ span: 12 }}>
               <div className="HistoryCoin-item">
                 <div className="HistoryCoin-item-row flex justify-between items-center">
                   <div className="HistoryCoin-item-row-text">Mã nhận :</div>

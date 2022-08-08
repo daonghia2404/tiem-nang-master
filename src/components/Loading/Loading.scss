@@ -1,7 +1,15 @@
 @import '../../assets/styles/global';
 
 .Loading {
-  .ant-spin-dot-item {
-    background-color: $orange-peel
+  .ant-spin {
+    line-height: 1;
+
+    &-dot {
+      font-size: 2rem;
+
+      &-item {
+        background-color: $orange-peel
+      }
+    }
   }
 }

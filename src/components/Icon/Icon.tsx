@@ -22,6 +22,7 @@ import Locker from './Locker';
 import Pause from './Pause';
 import Saved from './Saved';
 import Unsaved from './Unsaved';
+import Menu from './Menu';
 
 const Icon: React.FC<TIconProps> = ({ name, className, color, onClick }) => {
   const renderIcon = (): React.ReactElement => {
@@ -60,6 +61,8 @@ const Icon: React.FC<TIconProps> = ({ name, className, color, onClick }) => {
         return <Saved color={color} />;
       case EIconName.Unsaved:
         return <Unsaved color={color} />;
+      case EIconName.Menu:
+        return <Menu color={color} />;
 
       default:
         return <></>;

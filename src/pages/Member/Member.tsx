@@ -138,11 +138,11 @@ const Member: React.FC = () => {
     <div className="Member">
       <div className="container">
         <div className="Member-wrapper">
-          <Row gutter={40}>
-            <Col span={8}>
+          <Row gutter={[40, 40]}>
+            <Col span={24} lg={{ span: 8 }}>
               <MemberCard onClickLevelUpBtn={handleClickLeveUpBtn} />
             </Col>
-            <Col span={16}>
+            <Col span={24} lg={{ span: 16 }}>
               {!getMembershipListLoading && (
                 <div className="Member-body">
                   <Collapse

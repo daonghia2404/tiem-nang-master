@@ -20,7 +20,7 @@ const Events: React.FC<TEventsProps> = () => {
       ) : (
         <Row gutter={[40, 40]}>
           {[1, 2, 3, 4, 5, 6].map((item) => (
-            <Col key={item} span={12}>
+            <Col key={item} span={24} md={{ span: 12 }}>
               <div className="Events-item" onClick={(): void => handleNavigate()}>
                 <div className="Events-item-row flex justify-between items-center">
                   <div className="Events-item-row-text">Tài khoản nhập: </div>

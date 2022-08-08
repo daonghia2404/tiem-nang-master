@@ -10,11 +10,11 @@ import ImageAppStore from '@/assets/images/image-app-store.png';
 import IconZaloCircle from '@/assets/icons/icon-zalo-circle.svg';
 import IconFacebookCircle from '@/assets/icons/icon-facebook-circle.svg';
 import IconWechatCircle from '@/assets/icons/icon-wechat-circle.svg';
+import { Paths } from '@/pages/routers';
 
 import { dataFooterMenu } from './Footer.data';
 import { TFooterProps } from './Footer.types.d';
 import './Footer.scss';
-import { Paths } from '@/pages/routers';
 
 const Footer: React.FC<TFooterProps> = () => {
   const { pathname } = useLocation();
@@ -23,8 +23,8 @@ const Footer: React.FC<TFooterProps> = () => {
       <div className="Footer-top">
         <div className="container">
           <div className="Footer-top-wrapper">
-            <Row gutter={32}>
-              <Col span={8}>
+            <Row gutter={[32, 32]}>
+              <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                 <div className="Footer-col">
                   <Link to={Paths.AboutUs} className="Footer-title vollkorn-font">
                     Về chúng tôi
@@ -47,7 +47,7 @@ const Footer: React.FC<TFooterProps> = () => {
                   </div>
                 </div>
               </Col>
-              <Col span={8}>
+              <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                 <div className="Footer-col">
                   <div className="Footer-title vollkorn-font">Tải ứng dụng</div>
 
@@ -74,7 +74,7 @@ const Footer: React.FC<TFooterProps> = () => {
                   </Row>
                 </div>
               </Col>
-              <Col span={8}>
+              <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
                 <div className="Footer-col">
                   <div className="Footer-title vollkorn-font">Thông tin liên hệ</div>
                   <ul className="Footer-list">

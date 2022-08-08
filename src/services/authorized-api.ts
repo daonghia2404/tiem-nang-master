@@ -46,6 +46,7 @@ const AuthorizedInstance = (baseURL: string): AxiosInstance => {
 
   const onResponseSuccess = (response: AxiosResponse): AxiosResponse => response;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onResponseError = async (axiosError: AxiosError): Promise<void | AxiosResponse<any>> => {
     const { response } = axiosError;
     const responseStatus = response?.status;

@@ -65,7 +65,7 @@ const BookRate: React.FC<TBookRateProps> = () => {
     <div className="BookRate">
       <div className="BookRate-rate">
         <Row>
-          <Col span={6}>
+          <Col span={24} lg={{ span: 6 }}>
             <div className="BookRate-rate-total flex flex-col items-center justify-center">
               <span className="BookRate-rate-total-label">
                 {(((bookData?.avgContentRate || 0) + (bookData?.avgVoiceRate || 0)) / 2)?.toFixed(1)}
@@ -73,7 +73,7 @@ const BookRate: React.FC<TBookRateProps> = () => {
               <Rate value={((bookData?.avgContentRate || 0) + (bookData?.avgVoiceRate || 0)) / 2} disabled />
             </div>
           </Col>
-          <Col span={12}>
+          <Col span={24} lg={{ span: 12 }}>
             <div className="BookRate-rate-detail">
               <div className="BookRate-rate-detail-item">
                 <div className="BookRate-rate-detail-item-label flex justify-between">
@@ -102,7 +102,7 @@ const BookRate: React.FC<TBookRateProps> = () => {
               </div>
             </div>
           </Col>
-          <Col span={6}>
+          <Col span={24} lg={{ span: 6 }}>
             <div className="BookRate-rate-btn flex items-center justify-center">
               <Button title="Viết cảm nhận" onClick={handleOpenBookRateFormModal} disabled={!productState?.is_buy} />
             </div>

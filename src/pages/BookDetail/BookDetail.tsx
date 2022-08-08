@@ -80,7 +80,7 @@ const BookDetail: React.FC = () => {
       <div className="container">
         <div className="BookDetail-wrapper">
           <Row gutter={[40, 24]}>
-            <Col span={12}>
+            <Col span={24} lg={{ span: 12 }}>
               <div className="BookDetail-image">
                 <Carousels arrows={false} dots={false} slidesToShow={1} infinite autoplay>
                   {bookData?.images?.map((item) => (
@@ -91,7 +91,7 @@ const BookDetail: React.FC = () => {
                 </Carousels>
               </div>
             </Col>
-            <Col span={12}>
+            <Col span={24} lg={{ span: 12 }}>
               <div className="BookDetail-info">
                 <div className="BookDetail-info-title">{bookData?.name}</div>
                 <Row justify="space-between" align="middle">

@@ -36,6 +36,7 @@ const App: React.FC = () => {
           <ProtectedRoute path={Paths.Contact} component={Pages.Contact} />
           <PublicRoute path={Paths.Courses} component={Pages.Courses} />
           <PublicRoute path={Paths.PrivacyPolicy} component={Pages.PrivacyPolicy} />
+          <PublicRoute path={Paths.PrivatePolicy} component={Pages.PrivatePolicy} />
           <PublicRoute path={Paths.AboutUs} component={Pages.AboutUs} />
           <PublicRoute path={Paths.Faq} component={Pages.Faq} />
           <PublicRoute path={Paths.ListBanks} component={Pages.ListBanks} />

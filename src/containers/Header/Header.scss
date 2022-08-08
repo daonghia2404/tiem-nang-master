@@ -27,6 +27,10 @@
       max-width: 25.5rem;
       display: block;
 
+      @media (max-width: 575px) {
+        max-width: 20rem;
+      }
+
       img {
         width: 100%;
       }
@@ -36,11 +40,19 @@
       max-width: 70rem;
       margin: 0 auto;
 
+      @media (max-width: 991px) {
+        margin-bottom: 2.4rem;
+      }
+
       .ant-input-affix-wrapper {
-        height: 50px;
-        padding: 4px 32px;
+        height: 5rem;
+        padding: .4rem 3.2rem;
         background: $wild-sand;
         border-radius: 5rem;
+
+        @media (max-width: 991px) {
+          padding: .4rem 1.6rem;
+        }
 
         .ant-input {
           font-size: 1.8rem;
@@ -54,14 +66,24 @@
       }
 
       .Icon {
-        width: 24px;
-        height: 24px;
+        width: 2.4rem;
+        height: 2.4rem;
         cursor: pointer;
       }
     }
 
     &-account {
       cursor: pointer;
+
+      &-menu {
+        cursor: pointer;
+        margin-left: 1.6rem;
+
+        .Icon {
+          width: 4rem;
+          height: 4rem;
+        }
+      }
 
       &-dropdown {
         min-width: 41.4rem !important;
@@ -101,6 +123,64 @@
   &-bottom {
     background: $orange-peel;
 
+    &-close {
+      position: absolute;
+      width: 3rem;
+      height: 3rem;
+      top: 1.6rem;
+      right: 1.6rem;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    &-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba($black, 0.6);
+      transition: $common-transition;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 3;
+
+      &.active {
+        opacity: 1;
+        pointer-events: unset;
+      }
+    }
+
+    @media (max-width: 991px) {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 4;
+      height: 100vh;
+      overflow: auto;
+      width: 40rem;
+      padding: 6.2rem 2.4rem 2.4rem;
+      transition: $common-transition;
+      transform: translateX(100%);
+
+      &.active {
+        transform: translateX(0%);
+      }
+
+      .container {
+        padding: 0;
+      }
+
+      .ant-row {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .ant-col {
+          width: 100%;
+        }
+      }
+    }
+
     &-list {
       max-width: 89.5rem;
       margin: 0 auto;
@@ -116,6 +196,10 @@
         &:hover {
           &::before {
             transform: translateX(-50%) scaleX(1);
+
+            @media (max-width: 991px) {
+              transform: translateX(0%) scaleX(1);
+            }
           }
         }
 
@@ -124,6 +208,10 @@
 
           &::before {
             transform: translateX(-50%) scaleX(1);
+
+            @media (max-width: 991px) {
+              transform: translateX(0%) scaleX(1);
+            }
           }
         }
 
@@ -138,6 +226,12 @@
           left: 50%;
           transform: translateX(-50%) scaleX(0);
           bottom: 1rem;
+
+          @media (max-width: 991px) {
+            transform-origin: left;
+            left: 0;
+            transform: translateX(0%) scaleX(0);
+          }
         }
       }
     }

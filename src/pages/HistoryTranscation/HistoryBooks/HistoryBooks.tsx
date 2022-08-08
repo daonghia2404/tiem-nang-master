@@ -19,7 +19,7 @@ const HistoryBooks: React.FC<THistoryBooksProps> = ({ data = [], page, pageSize,
       ) : (
         <Row gutter={[40, 40]}>
           {data.map((item) => (
-            <Col key={item._id} span={12}>
+            <Col key={item._id} span={24} md={{ span: 12 }}>
               <div className="HistoryBooks-item">
                 <div className="HistoryBooks-item-header flex">
                   <div className="HistoryBooks-item-image">

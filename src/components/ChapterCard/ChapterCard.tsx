@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import Icon, { EIconName } from '@/components/Icon';
+import Loading from '@/components/Loading';
+import env from '@/env';
 
 import { TChapterCardProps } from './ChapterCard.types.d';
 import './ChapterCard.scss';
-import Loading from '@/components/Loading';
 
-const ChapterCard: React.FC<TChapterCardProps> = ({ name, isActive }) => {
+const ChapterCard: React.FC<TChapterCardProps> = ({ src, name, isActive }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [loading, setLoading] = useState(false);
@@ -25,15 +26,19 @@ const ChapterCard: React.FC<TChapterCardProps> = ({ name, isActive }) => {
   };
 
   const handleClick = (): void => {
-    if (audioRef?.current) {
-      if (isPlaying) {
-        setIsPlaying(false);
-      } else if (!source) {
-        setLoading(true);
-      } else {
-        setIsPlaying(true);
-      }
+    if (isPlaying) {
+      setIsPlaying(false);
+    } else if (!source) {
+      setLoading(true);
+      setSource(`${env.api.baseUrl.service}/upload/get-voice/${src}`);
+    } else {
+      setLoading(false);
+      setIsPlaying(true);
     }
+  };
+
+  const handleLoadSourceSuccess = (): void => {
+    handleClick();
   };
 
   useEffect(() => {
@@ -47,7 +52,7 @@ const ChapterCard: React.FC<TChapterCardProps> = ({ name, isActive }) => {
   return (
     <div className="ChapterCard flex items-center justify-between" onClick={handleClick}>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      {source && <audio ref={audioRef} src={source} />}
+      {source && <audio ref={audioRef} src={source} onLoadedData={handleLoadSourceSuccess} />}
 
       <div className="ChapterCard-title">{name}</div>
       <div className="ChapterCard-icon">{loading ? <Loading /> : <Icon name={showIconChapter()} />}</div>

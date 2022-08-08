@@ -10,10 +10,10 @@ import Carousels from '@/components/Carousels';
 import { TProduct } from '@/common/models';
 import { EProductType } from '@/common/enums';
 import { Paths } from '@/pages/routers';
+import Empty from '@/components/Empty';
 
 import { TBooksListProps } from './BooksList.types.d';
 import './BooksList.scss';
-import Empty from '@/components/Empty';
 
 const BooksList: React.FC<TBooksListProps> = ({
   ids = [],
@@ -76,6 +76,29 @@ const BooksList: React.FC<TBooksListProps> = ({
                     slidesPerRow={1}
                     slidesToScroll={5}
                     onDragging={setIsDragging}
+                    responsive={[
+                      {
+                        breakpoint: 991,
+                        settings: {
+                          slidesToShow: data.length < 4 ? data.length : 4,
+                          slidesToScroll: 4,
+                        },
+                      },
+                      {
+                        breakpoint: 768,
+                        settings: {
+                          slidesToShow: data.length < 3 ? data.length : 3,
+                          slidesToScroll: 3,
+                        },
+                      },
+                      {
+                        breakpoint: 575,
+                        settings: {
+                          slidesToShow: data.length < 2 ? data.length : 2,
+                          slidesToScroll: 2,
+                        },
+                      },
+                    ]}
                   >
                     {data.map((item) => (
                       <div className="BooksList-carousel-item" key={item._id}>

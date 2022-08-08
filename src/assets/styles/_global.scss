@@ -23,18 +23,10 @@ html {
   @media (max-width: 991px) {
     font-size: 7px;
   }
-
-  @media (max-width: 768px) {
-    font-size: 6px;
-  }
 }
 
 * {
   font-family: 'Baloo 2', cursive;
-}
-
-body {
-  min-width: 1440px;
 }
 
 .container {
@@ -111,6 +103,13 @@ body {
 a {
   &:hover {
     color: $orange-peel;
+  }
+}
+
+.ant-form {
+  .ant-form-item-explain {
+    padding-top: .4rem;
+    font-size: 1.6rem;
   }
 }
 

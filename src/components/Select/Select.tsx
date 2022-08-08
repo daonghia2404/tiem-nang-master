@@ -43,7 +43,7 @@ const Select: React.FC<TSelectProps> = ({
     return (
       <div className={classNames('Select-dropdown', dropdownClassName)}>
         <div className="Select-dropdown-main">
-          <WrapperLazyLoad maxHeight={256} onEnd={handleScrollEnd}>
+          <WrapperLazyLoad maxHeight={400} onEnd={handleScrollEnd}>
             {menu}
           </WrapperLazyLoad>
         </div>

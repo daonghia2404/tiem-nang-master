@@ -31,6 +31,21 @@
     .ant-col {
       flex: 0 0 calc(100% / 5);
       max-width: calc(100% / 5);
+
+      @media (max-width: 991px) {
+        flex: 0 0 calc(100% / 4);
+        max-width: calc(100% / 4);
+      }
+
+      @media (max-width: 768px) {
+        flex: 0 0 calc(100% / 3);
+        max-width: calc(100% / 3);
+      }
+
+      @media (max-width: 575px) {
+        flex: 0 0 calc(100% / 2);
+        max-width: calc(100% / 2);
+      }
     }
   }
 

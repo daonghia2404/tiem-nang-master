@@ -1,6 +1,7 @@
 @import '@/assets/styles/_global.scss';
 
 .Footer {
+  overflow: hidden;
   background: $cinder;
 
   &-top {
@@ -75,6 +76,15 @@
   &-bottom {
     &-wrapper {
       padding: 3.2rem 0;
+
+      .ant-row {
+        @media (max-width: 575px) {
+          .ant-col {
+            flex: 0 0 50%;
+            max-width: 50%;
+          }
+        }
+      }
     }
   }
 }

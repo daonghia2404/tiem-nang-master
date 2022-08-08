@@ -13,7 +13,7 @@ import { getMyProductAction, getProductsSavedAction } from '@/redux/actions';
 import { Paths } from '@/pages/routers';
 import Pagination from '@/components/Pagination';
 import { TRootState } from '@/redux/reducers';
-import { scrollToTop } from '@/utils/functions';
+import { removeAccents, scrollToTop, urlSafe } from '@/utils/functions';
 import Empty from '@/components/Empty';
 import { TProduct } from '@/common/models';
 
@@ -23,6 +23,9 @@ import './BookShelf.scss';
 
 const BookShelf: React.FC = () => {
   const dispatch = useDispatch();
+
+  const isMobile = useSelector((state: TRootState) => state.uiReducer.device.isMobile);
+
   const [keyBookShelfTab, setKeyBookShelfTab] = useState(EKeyBookShelfTab.BOUGHT);
   const [getMyProductParamsRequest, setGetMyProductParamsRequest] = useState<TGetMyProductParams>({
     page: DEFAULT_PAGE,
@@ -45,7 +48,7 @@ const BookShelf: React.FC = () => {
   };
 
   const handleClickBookBlock = (dataBook: TProduct): void => {
-    navigate(Paths.BookReader(dataBook.slug, dataBook._id));
+    navigate(Paths.BookReader(urlSafe(removeAccents(dataBook.name)), dataBook._id));
   };
 
   const handlePageChange = (page: number, pageSize?: number): void => {
@@ -83,11 +86,11 @@ const BookShelf: React.FC = () => {
     <div className="BookShelf">
       <div className="container">
         <div className="BookShelf-wrapper">
-          <Row gutter={40}>
-            <Col span={8}>
+          <Row gutter={[40, 24]}>
+            <Col span={24} lg={{ span: 8 }}>
               <AccountReward />
             </Col>
-            <Col span={16}>
+            <Col span={24} lg={{ span: 16 }}>
               <div className="BookShelf-tabs">
                 <div className="BookShelf-tabs-header">
                   <Row>
@@ -111,9 +114,9 @@ const BookShelf: React.FC = () => {
                   {isEmpty ? (
                     <Empty title="Không có dữ liệu sách đã mua" />
                   ) : (
-                    <Row gutter={[80, 30]}>
+                    <Row gutter={isMobile ? [30, 30] : [80, 30]}>
                       {data?.map((item) => (
-                        <Col key={item._id} span={8}>
+                        <Col key={item._id} span={12} sm={{ span: 8 }}>
                           <BookBlock {...item} onClick={(): void => handleClickBookBlock(item)} />
                         </Col>
                       ))}

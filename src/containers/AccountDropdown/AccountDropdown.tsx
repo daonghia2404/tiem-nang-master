@@ -124,9 +124,11 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
   };
 
   const handleOpenPaymentMethodModal = (): void => {
+    onClose?.();
     setVisiblePaymentMethodModal(true);
   };
   const handleClosePaymentMethodModal = (): void => {
+    onClose?.();
     setVisiblePaymentMethodModal(false);
   };
 

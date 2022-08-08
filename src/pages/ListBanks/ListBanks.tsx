@@ -49,16 +49,16 @@ const ListBanks: React.FC = () => {
     return (
       <div className="ListBanks-item-body">
         <Row gutter={[40, 30]}>
-          <Col span={12}>
+          <Col span={24} md={{ span: 12 }}>
             <Input label="Nội dung chuyển khoản" readOnly value={content} copy />
           </Col>
-          <Col span={12}>
+          <Col span={24} md={{ span: 12 }}>
             <Input label="Số tài khoản" readOnly value={accountNumber} copy />
           </Col>
-          <Col span={12}>
+          <Col span={24} md={{ span: 12 }}>
             <Input label="Tên chủ tài khoản" readOnly value={nameAccount} />
           </Col>
-          <Col span={12}>
+          <Col span={24} md={{ span: 12 }}>
             <Input label="Tên ngân hàng" readOnly value={nameBank} />
           </Col>
         </Row>

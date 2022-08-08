@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Col, Row } from 'antd';
 
 import Modal from '@/components/Modal';
@@ -8,6 +9,7 @@ import SignUpForm from '@/containers/ModalAuth/SignUpForm';
 import ForgotPasswordForm from '@/containers/ModalAuth/ForgotPasswordForm';
 import VerifyOtpForm from '@/containers/ModalAuth/VerifyOtpForm';
 import ChangePasswordForm from '@/containers/ModalAuth/ChangePasswordForm';
+import { TRootState } from '@/redux/reducers';
 
 import { dataCarouselModalAuth } from './ModalAuth.data';
 import { TDataStateModalAuth, TModalAuthProps } from './ModalAuth.types.d';
@@ -15,6 +17,8 @@ import { EKeyStateModalAuth } from './ModalAuth.enums';
 import './ModalAuth.scss';
 
 const ModalAuth: React.FC<TModalAuthProps> = ({ visible, defaultKey, onClose }) => {
+  const isMobile = useSelector((state: TRootState) => state.uiReducer.device.isMobile);
+
   const [stateModalAuth, setStateModalAuth] = useState<{
     key: EKeyStateModalAuth;
     data?: TDataStateModalAuth;
@@ -39,26 +43,29 @@ const ModalAuth: React.FC<TModalAuthProps> = ({ visible, defaultKey, onClose }) 
   }, [visible, defaultKey]);
 
   return (
-    <Modal className="ModalAuth" width={1024} visible={visible} onClose={onClose}>
+    <Modal className="ModalAuth" width={isMobile ? 512 : 1024} visible={visible} onClose={onClose}>
       <div className="ModalAuth-wrapper">
         <Row>
-          <Col span={12}>
-            <div className="ModalAuth-carousel flex flex-col items-center justify-center">
-              <Carousels slidesToShow={1} autoplay infinite arrows={false}>
-                {dataCarouselModalAuth.map((item, index) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <div key={index} className="ModalAuth-carousel-item">
-                    <div className="ModalAuth-carousel-item-image">
-                      <img src={item.image} alt="" />
+          {!isMobile && (
+            <Col span={12}>
+              <div className="ModalAuth-carousel flex flex-col items-center justify-center">
+                <Carousels slidesToShow={1} autoplay infinite arrows={false}>
+                  {dataCarouselModalAuth.map((item, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={index} className="ModalAuth-carousel-item">
+                      <div className="ModalAuth-carousel-item-image">
+                        <img src={item.image} alt="" />
+                      </div>
+                      <div className="ModalAuth-carousel-item-title">{item.title}</div>
+                      <div className="ModalAuth-carousel-item-description">{item.description}</div>
                     </div>
-                    <div className="ModalAuth-carousel-item-title">{item.title}</div>
-                    <div className="ModalAuth-carousel-item-description">{item.description}</div>
-                  </div>
-                ))}
-              </Carousels>
-            </div>
-          </Col>
-          <Col span={12}>
+                  ))}
+                </Carousels>
+              </div>
+            </Col>
+          )}
+
+          <Col span={24} lg={{ span: 12 }}>
             {stateModalAuth.key === EKeyStateModalAuth.SIGN_IN && (
               <SignInForm
                 onClickRegister={(): void => handleChangeStateModalAuth(EKeyStateModalAuth.SIGN_UP)}
