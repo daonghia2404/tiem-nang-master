@@ -3,6 +3,7 @@ import { createReducer } from 'deox';
 import {
   TAskProductQuestionResponse,
   TBuyProductResponse,
+  TDownloadProductFileResponse,
   TGetFilterProductListResponse,
   TGetMyProductResponse,
   TGetProductQuestionsResponse,
@@ -18,6 +19,7 @@ import {
 import {
   askProductQuestionAction,
   buyProductAction,
+  downloadProductFileAction,
   getFilterProductListAction,
   getMyProductAction,
   getProductQuestionsAction,
@@ -32,6 +34,7 @@ import {
 } from '@/redux/actions';
 import { askProductQuestionUpdateState } from './ask-product-question';
 import { buyProductUpdateState } from './buy-product';
+import { downloadProductFileUpdateState } from './download-product-file';
 import { getFilterProductListUpdateState } from './get-filter-product-list';
 import { getMyProductUpdateState } from './get-my-product';
 import { getProductQuestionsUpdateState } from './get-product-questions';
@@ -47,6 +50,7 @@ import { unsaveProductUpdateState } from './unsave-product';
 export type TProductState = {
   askProductQuestionResponse?: TAskProductQuestionResponse;
   buyProductResponse?: TBuyProductResponse;
+  downloadProductFileResponse?: TDownloadProductFileResponse;
   getFilterProductListResponse?: TGetFilterProductListResponse;
   getMyProductResponse?: TGetMyProductResponse;
   getProductQuestionsResponse?: TGetProductQuestionsResponse;
@@ -63,6 +67,7 @@ export type TProductState = {
 const initialState: TProductState = {
   askProductQuestionResponse: undefined,
   buyProductResponse: undefined,
+  downloadProductFileResponse: undefined,
   getFilterProductListResponse: undefined,
   getMyProductResponse: undefined,
   getProductQuestionsResponse: undefined,
@@ -79,6 +84,7 @@ const initialState: TProductState = {
 const ProductReducer = createReducer(initialState, (handleAction) => [
   handleAction(askProductQuestionAction.success, askProductQuestionUpdateState),
   handleAction(buyProductAction.success, buyProductUpdateState),
+  handleAction(downloadProductFileAction.success, downloadProductFileUpdateState),
   handleAction(getFilterProductListAction.success, getFilterProductListUpdateState),
   handleAction(getMyProductAction.success, getMyProductUpdateState),
   handleAction(getProductQuestionsAction.success, getProductQuestionsUpdateState),

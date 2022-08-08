@@ -17,6 +17,10 @@ export enum EIconName {
   Saved = 'Saved',
   Unsaved = 'Unsaved',
   Menu = 'Menu',
+  Prev = 'Prev',
+  Next = 'Next',
+  TimePastPrev = 'TimePastPrev',
+  TimePastNext = 'TimePastNext',
 }
 
 export enum EIconColor {

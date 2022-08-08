@@ -1,0 +1,125 @@
+@import '../../assets/styles/global';
+
+.BookAudio {
+  background: linear-gradient(180deg, #FFB63C 0%, #FFA30A 83.7%);
+
+  &-wrapper {
+    padding: .8rem;
+
+    @media (max-width: 991px) {
+      padding: 1.6rem;
+
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      align-items: center;
+    }
+  }
+
+  &-image {
+    max-width: 20.4rem;
+    flex: 0 0 20.4rem;
+    position: relative;
+    overflow: hidden;
+    @include centerOriginImage;
+    padding: 1rem;
+    margin-right: 4rem;
+
+    @media (max-width: 991px) {
+      margin: 0 0 2.4rem 0;
+    }
+
+    &::before {
+      @include fullAbsolute;
+      z-index: 1;
+      background: linear-gradient(180deg, #42B3FF 0%, #AEFAFF 100%);
+      content: ''
+    }
+
+    img {
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  &-info {
+    max-width: 30rem;
+    margin-right: 2.4rem;
+
+    @media (max-width: 991px) {
+      max-width: 100%;
+      margin: 0;
+    }
+
+    &-title {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: $white;
+      margin-bottom: 1.5rem;
+    }
+
+    &-author {
+      font-size: 2.4rem;
+      color: $white;
+    }
+  }
+
+  &-control {
+    flex: 1;
+
+    @media (max-width: 991px) {
+      width: 100%;
+      margin: 2.4rem 0 1.6rem;
+    }
+
+    &-chapter {
+      font-size: 18px;
+      color: $white;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    &-bars {
+      position: relative;
+
+      // &-current,
+      // &-total {
+      //   position: absolute;
+      //   color: $white;
+      //   font-size: 1.4rem;
+      //   font-weight: 400;
+      //   top: calc(100% + 20px)
+      // }
+
+      // &-current {
+      //   left: 0;
+      // }
+
+      // &-total {
+      //   right: 0;
+      // }
+    }
+
+
+    &-actions {
+      margin-top: 15px;
+
+      &-item {
+        color: $white;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+
+        span {
+          margin-left: 4px;
+        }
+
+        .Icon {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}

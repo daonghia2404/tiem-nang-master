@@ -1,5 +1,6 @@
 export * from './ask-product-question';
 export * from './buy-product';
+export * from './download-product-file';
 export * from './get-filter-product-list';
 export * from './get-my-product';
 export * from './get-product-questions';

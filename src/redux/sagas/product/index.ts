@@ -3,6 +3,7 @@ import { all, takeLatest } from 'redux-saga/effects';
 import {
   askProductQuestionAction,
   buyProductAction,
+  downloadProductFileAction,
   getFilterProductListAction,
   getMyProductAction,
   getProductQuestionsAction,
@@ -18,6 +19,7 @@ import {
 
 import { askProductQuestionSaga } from './ask-product-question';
 import { buyProductSaga } from './buy-product';
+import { downloadProductFileSaga } from './download-product-file';
 import { getFilterProductListSaga } from './get-filter-product-list';
 import { getMyProductSaga } from './get-my-product';
 import { getProductQuestionsSaga } from './get-product-questions';
@@ -34,6 +36,7 @@ export default function* root(): Generator {
   yield all([
     takeLatest(askProductQuestionAction.request.type, askProductQuestionSaga),
     takeLatest(buyProductAction.request.type, buyProductSaga),
+    takeLatest(downloadProductFileAction.request.type, downloadProductFileSaga),
     takeLatest(getFilterProductListAction.request.type, getFilterProductListSaga),
     takeLatest(getMyProductAction.request.type, getMyProductSaga),
     takeLatest(getProductQuestionsAction.request.type, getProductQuestionsSaga),

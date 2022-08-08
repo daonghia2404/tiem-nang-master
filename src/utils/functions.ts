@@ -235,3 +235,21 @@ export const parseObjectToFormData = (data: { [key: string]: any }): FormData =>
   });
   return formData;
 };
+
+export const downloadFile = async (file: File | Blob, name: string): Promise<void> => {
+  const a = document.createElement('a');
+  document.body.appendChild(a);
+  const blobFile = file;
+
+  const blob = new Blob([blobFile], { type: 'application/pdf' });
+  const url = window.URL.createObjectURL(blob);
+
+  a.href = url;
+  a.download = name;
+  a.click();
+  window.URL.revokeObjectURL(url);
+};
+
+export const formatDuration = (milliseconds = 0): string => {
+  return moment.utc(milliseconds * 1000).format('HH:mm:ss');
+};

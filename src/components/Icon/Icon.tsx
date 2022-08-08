@@ -23,6 +23,10 @@ import Pause from './Pause';
 import Saved from './Saved';
 import Unsaved from './Unsaved';
 import Menu from './Menu';
+import Next from './Next';
+import Prev from './Prev';
+import TimePastNext from './TimePastNext';
+import TimePastPrev from './TimePastPrev';
 
 const Icon: React.FC<TIconProps> = ({ name, className, color, onClick }) => {
   const renderIcon = (): React.ReactElement => {
@@ -63,6 +67,14 @@ const Icon: React.FC<TIconProps> = ({ name, className, color, onClick }) => {
         return <Unsaved color={color} />;
       case EIconName.Menu:
         return <Menu color={color} />;
+      case EIconName.Next:
+        return <Next color={color} />;
+      case EIconName.Prev:
+        return <Prev color={color} />;
+      case EIconName.TimePastNext:
+        return <TimePastNext color={color} />;
+      case EIconName.TimePastPrev:
+        return <TimePastPrev color={color} />;
 
       default:
         return <></>;
