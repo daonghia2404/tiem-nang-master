@@ -6,7 +6,7 @@
   "scripts": {
     "start": "env-cmd -f .env react-app-rewired start",
     "build": "react-app-rewired build",
-    "build:netlify": "NODE_VERSION=14.18.2 REACT_APP_SERVICE_BASE_URL= CI=false react-app-rewired build",
+    "build:netlify": "NODE_VERSION=14.18.2 REACT_APP_SERVICE_BASE_URL=https://api.tiemnangmaster.com CI=false react-app-rewired build",
     "build:dev": "env-cmd -f .env.dev react-app-rewired build",
     "build:production": "env-cmd -f .env.production react-app-rewired build",
     "test": "react-app-rewired test",
