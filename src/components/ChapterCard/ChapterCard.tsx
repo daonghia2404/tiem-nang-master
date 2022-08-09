@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
 
 import Icon, { EIconName } from '@/components/Icon';
 import Loading from '@/components/Loading';
@@ -7,15 +8,27 @@ import env from '@/env';
 import { TChapterCardProps } from './ChapterCard.types.d';
 import './ChapterCard.scss';
 
-const ChapterCard: React.FC<TChapterCardProps> = ({ src, name, isActive }) => {
+const ChapterCard: React.FC<TChapterCardProps> = ({
+  src,
+  name,
+  isActive,
+  isAudioPlay,
+  isAudioLoading,
+  isPlayed,
+  onChangeAudioIsPlay,
+  onClick,
+}) => {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [source, setSource] = useState('');
 
+  const isNotPlayAudioFile = typeof isPlayed !== 'undefined';
+
   const showIconChapter = (): EIconName => {
     switch (true) {
+      case isAudioPlay:
       case isActive && isPlaying:
         return EIconName.Pause;
       case isActive && !isPlaying:
@@ -26,14 +39,24 @@ const ChapterCard: React.FC<TChapterCardProps> = ({ src, name, isActive }) => {
   };
 
   const handleClick = (): void => {
-    if (isPlaying) {
-      setIsPlaying(false);
-    } else if (!source) {
-      setLoading(true);
-      setSource(`${env.api.baseUrl.service}/upload/get-voice/${src}`);
+    if (!isNotPlayAudioFile) {
+      if (isPlaying) {
+        setIsPlaying(false);
+      } else if (!source) {
+        setLoading(true);
+        setSource(`${env.api.baseUrl.service}/upload/get-voice/${src}`);
+      } else {
+        setLoading(false);
+        setIsPlaying(true);
+      }
     } else {
-      setLoading(false);
-      setIsPlaying(true);
+      onClick?.();
+    }
+  };
+
+  const handleClickChapterCardIcon = (): void => {
+    if (!loading) {
+      onChangeAudioIsPlay?.(!isAudioPlay);
     }
   };
 
@@ -49,13 +72,22 @@ const ChapterCard: React.FC<TChapterCardProps> = ({ src, name, isActive }) => {
     }
   }, [isPlaying]);
 
+  useEffect(() => {
+    setLoading(Boolean(isAudioLoading));
+  }, [isAudioLoading]);
+
   return (
-    <div className="ChapterCard flex items-center justify-between" onClick={handleClick}>
+    <div
+      className={classNames('ChapterCard flex items-center justify-between', { played: isPlayed })}
+      onClick={handleClick}
+    >
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       {source && <audio ref={audioRef} src={source} onLoadedData={handleLoadSourceSuccess} />}
 
       <div className="ChapterCard-title">{name}</div>
-      <div className="ChapterCard-icon">{loading ? <Loading /> : <Icon name={showIconChapter()} />}</div>
+      <div className="ChapterCard-icon" onClick={handleClickChapterCardIcon}>
+        {loading ? <Loading /> : <Icon name={showIconChapter()} />}
+      </div>
     </div>
   );
 };

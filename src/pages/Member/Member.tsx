@@ -77,6 +77,17 @@ const Member: React.FC = () => {
     return data.level <= currentLevel || data.level !== currentLevel + 1;
   };
 
+  const renderDefaultActiveKey = (): number => {
+    switch (true) {
+      case !currentLevel:
+        return 1;
+      case currentLevel === dataRewardLevels?.length:
+        return currentLevel;
+      default:
+        return currentLevel + 1;
+    }
+  };
+
   const getMyMembership = useCallback(() => {
     dispatch(getMyMembershipAction.request({}));
   }, [dispatch]);
@@ -146,7 +157,7 @@ const Member: React.FC = () => {
               {!getMembershipListLoading && (
                 <div className="Member-body">
                   <Collapse
-                    defaultActiveKey={[currentLevel ? currentLevel + 1 : 1]}
+                    defaultActiveKey={[renderDefaultActiveKey()]}
                     expandIcon={({ isActive }): React.ReactNode => (
                       <div style={{ transform: `rotate(${isActive ? 90 : 0}deg)` }}>
                         <Icon name={EIconName.AngleRight} />

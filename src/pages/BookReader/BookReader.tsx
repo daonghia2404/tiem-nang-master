@@ -1,12 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 /* eslint-disable no-underscore-dangle */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Col, Form, Row } from 'antd';
+import { Col, Row } from 'antd';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { navigate, useParams } from '@reach/router';
-import { Document, Page, pdfjs } from 'react-pdf';
 
 import Rate from '@/components/Rate';
 import Slider from '@/components/Slider';
@@ -19,20 +16,18 @@ import { TRootState } from '@/redux/reducers';
 import { Paths } from '@/pages/routers';
 import { showNotification } from '@/utils/functions';
 import { ETypeNotification } from '@/common/enums';
-import SamplePdf from './sample-pdf.pdf';
 import { TProductFile, TProductVoice } from '@/common/models';
+import BookAudio from '@/containers/BookAudio';
+import BookPdf from '@/pages/BookReader/BookPdf';
+import { TSelectOption } from '@/components/Select';
 
 import { EKeyBookReaderTab } from './BookReader.enums';
 import { dataBackgroundSetting, dataBookReaderTabs } from './BookReader.data';
 import './BookReader.scss';
-import BookAudio from '@/containers/BookAudio';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const BookReader: React.FC = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [form] = Form.useForm();
   const [keyTabBookReader, setKeyTabBookReader] = useState<EKeyBookReaderTab>(EKeyBookReaderTab.CHAPTERS);
 
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
@@ -40,28 +35,29 @@ const BookReader: React.FC = () => {
 
   const [voice, setVoice] = useState<TProductVoice>();
   const [file, setFile] = useState<TProductFile>();
+  const [isAudioPlay, setIsAudioPlay] = useState<boolean>(false);
+  const [isAudioLoading, setIsAudioLoading] = useState<boolean>(false);
+  const [config, setConfig] = useState<{
+    background: TSelectOption;
+    fontSize: number;
+  }>({
+    background: dataBackgroundSetting[0],
+    fontSize: 16,
+  });
 
   const handleChangeKeyTabBookReader = (key: EKeyBookReaderTab): void => {
     setKeyTabBookReader(key);
   };
 
-  const handleVerifyPassword = (cb: (password: string) => void, reason: string): void => {
-    // const passwordDecrypt = decryptPdfFilePassword(fileData);
-    // cb(passwordDecrypt);
-    // if (reason !== 1) {
-    //   showNotification(ETypeNotification.ERROR, 'Không có quyền truy cập');
-    //   navigate(`${LayoutPaths.Profile}${Paths.MyBooks}`);
-    // }
-  };
+  const handleChangeAudio = (type: string): void => {
+    if (voice) {
+      const indexArray = voice.index - 1;
+      const nextChapter = bookData?.voice?.[indexArray + 1];
+      const prevChapter = bookData?.voice?.[indexArray - 1];
 
-  const handleLoadPdfSuccess = (data: any): void => {
-    const { numPages } = data._pdfInfo;
-    const initPage = 1;
-
-    // setPageNumber({
-    //   page: initPage,
-    //   total: numPages,
-    // });
+      if (type === 'prev' && prevChapter) setVoice(prevChapter);
+      if (type === 'next' && nextChapter) setVoice(nextChapter);
+    }
   };
 
   const getProduct = useCallback(() => {
@@ -69,9 +65,14 @@ const BookReader: React.FC = () => {
   }, [id, dispatch]);
 
   useEffect(() => {
-    if (productState && !productState?.is_buy) {
-      navigate(Paths.BookDetail(bookData?.slug, id));
-      showNotification(ETypeNotification.ERROR, 'Bạn chưa mua tâm sách này. Vui lòng mua tâm sách trước');
+    if (productState) {
+      if (!productState?.is_buy) {
+        navigate(Paths.BookDetail(bookData?.slug, id));
+        showNotification(ETypeNotification.ERROR, 'Bạn chưa mua tâm sách này. Vui lòng mua tâm sách trước');
+      } else {
+        setVoice(productState.book?.voice?.[0]);
+        setFile(productState.book?.file?.[0]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, productState]);
@@ -101,9 +102,7 @@ const BookReader: React.FC = () => {
           </div>
           <Row gutter={[40, 24]}>
             <Col span={24} lg={{ span: 16 }}>
-              {/* <Document file={SamplePdf} onLoadSuccess={handleLoadPdfSuccess} onPassword={handleVerifyPassword}>
-                <Page scale={2} pageNumber={4} width={700} />
-              </Document> */}
+              <BookPdf source={file} fontSize={config.fontSize} background={config.background?.value} />
             </Col>
             <Col span={24} lg={{ span: 8 }}>
               <div className="BookReader-tabs">
@@ -120,32 +119,58 @@ const BookReader: React.FC = () => {
                 </div>
 
                 <div className="BookReader-tabs-body">
-                  {keyTabBookReader === EKeyBookReaderTab.CHAPTERS && <TabChapter />}
+                  {keyTabBookReader === EKeyBookReaderTab.CHAPTERS && (
+                    <TabChapter
+                      source={voice}
+                      onClickChapter={setVoice}
+                      onChangeAudioIsPlay={setIsAudioPlay}
+                      isAudioPlay={isAudioPlay}
+                      isAudioLoading={isAudioLoading}
+                    />
+                  )}
                   {keyTabBookReader === EKeyBookReaderTab.QUESTIONS && <TabQuestion />}
-                  {keyTabBookReader === EKeyBookReaderTab.DOCUMENTS && <TabDocument />}
+                  {keyTabBookReader === EKeyBookReaderTab.DOCUMENTS && <TabDocument onClickDocument={setFile} />}
                 </div>
               </div>
               <div className="BookReader-setting">
                 <div className="BookReader-setting-header">Thiết lập</div>
                 <div className="BookReader-setting-body">
-                  <Form form={form} className="BookReader-setting-form">
-                    <Form.Item name="fontSize">
+                  <div className="BookReader-setting-form">
+                    <div className="ant-form-item">
                       <Slider
                         label="Kích thước chữ"
+                        value={config.fontSize}
                         min={10}
                         max={20}
                         step={1}
+                        onChange={(value): void =>
+                          setConfig({
+                            ...config,
+                            fontSize: value,
+                          })
+                        }
                         marks={{
                           10: '10',
                           16: '16',
                           20: '20',
                         }}
                       />
-                    </Form.Item>
-                    <Form.Item name="background">
-                      <BackgroundForm label="Màu nền" options={dataBackgroundSetting} />
-                    </Form.Item>
-                  </Form>
+                    </div>
+
+                    <div className="ant-form-item">
+                      <BackgroundForm
+                        value={config.background}
+                        label="Màu nền"
+                        options={dataBackgroundSetting}
+                        onChange={(value): void =>
+                          setConfig({
+                            ...config,
+                            background: value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </Col>
@@ -153,7 +178,14 @@ const BookReader: React.FC = () => {
         </div>
       </div>
 
-      <BookAudio />
+      <BookAudio
+        source={voice}
+        isAudioPlay={isAudioPlay}
+        onClickPrev={(): void => handleChangeAudio('prev')}
+        onClickNext={(): void => handleChangeAudio('next')}
+        onChangeAudioIsPlay={setIsAudioPlay}
+        onChangeAudioLoading={setIsAudioLoading}
+      />
     </div>
   );
 };

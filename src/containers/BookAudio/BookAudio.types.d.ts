@@ -1,8 +1,10 @@
+import { TProductVoice } from '@/common/models';
+
 export type TBookAudioProps = {
-  image: string;
-  title: string;
-  src: string;
-  id: string;
-  onClickPrev: () => void;
-  onClickNext: () => void;
+  source?: TProductVoice;
+  isAudioPlay?: boolean;
+  onClickPrev?: () => void;
+  onClickNext?: () => void;
+  onChangeAudioIsPlay?: (isPlay: boolean) => void;
+  onChangeAudioLoading?: (isLoading: boolean) => void;
 };

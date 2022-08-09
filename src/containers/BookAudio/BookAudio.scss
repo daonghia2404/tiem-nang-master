@@ -4,7 +4,7 @@
   background: linear-gradient(180deg, #FFB63C 0%, #FFA30A 83.7%);
 
   &-wrapper {
-    padding: .8rem;
+    padding: 1.6rem .8rem;
 
     @media (max-width: 991px) {
       padding: 1.6rem;
@@ -66,6 +66,12 @@
 
   &-control {
     flex: 1;
+    transition: $common-transition;
+
+    &.loading {
+      pointer-events: none;
+      opacity: 0.6;
+    }
 
     @media (max-width: 991px) {
       width: 100%;
@@ -81,6 +87,7 @@
 
     &-bars {
       position: relative;
+      cursor: pointer;
 
       // &-current,
       // &-total {
@@ -118,6 +125,16 @@
         .Icon {
           width: 20px;
           height: 20px;
+        }
+      }
+    }
+  }
+
+  .Loading {
+    .ant-spin {
+      &-dot {
+        &-item {
+          background-color: $white;
         }
       }
     }

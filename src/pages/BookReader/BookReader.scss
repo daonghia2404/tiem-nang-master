@@ -1,6 +1,8 @@
 @import '../../assets/styles/global';
 
 .BookReader {
+  overflow: hidden;
+
   &-wrapper {
     padding: 5rem 0;
   }
@@ -89,16 +91,5 @@
         }
       }
     }
-  }
-
-  .react-pdf__Document {
-    pointer-events: none;
-  }
-
-  .react-pdf__Page__svg,
-  .react-pdf__Page__canvas {
-    margin: 0 auto;
-    max-width: 100%;
-    height: auto !important;
   }
 }

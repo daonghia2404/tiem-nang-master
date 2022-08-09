@@ -1,38 +1,51 @@
 import React, { useEffect, useRef, useState } from 'react';
 import TimeSlider from 'react-input-slider';
+import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 
-import { formatDuration } from '@/utils/functions';
-import Loading from '@/components/Loading';
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import { TRootState } from '@/redux/reducers';
+import env from '@/env';
+import Loading from '@/components/Loading';
 
 import { TBookAudioProps } from './BookAudio.types';
 import './BookAudio.scss';
 
-const BookAudio: React.FC<TBookAudioProps> = ({ image, title, src, id, onClickPrev, onClickNext }) => {
+const BookAudio: React.FC<TBookAudioProps> = ({
+  isAudioPlay,
+  source,
+  onClickPrev,
+  onClickNext,
+  onChangeAudioIsPlay,
+  onChangeAudioLoading,
+}) => {
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const bookData = productState?.book;
-
   const audioRef = useRef<HTMLAudioElement>(null);
+
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlay, setPlay] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [file, setFile] = useState<any>(undefined);
 
   const getFileAudio = async (): Promise<void> => {
-    if (src) {
-      const fileFetch = await fetch(src);
+    if (source) {
+      if (audioRef?.current) {
+        audioRef.current?.pause();
+        audioRef.current.src = '';
+      }
+      setPlay(false);
+      setIsLoading(true);
+      const fileFetch = await fetch(`${env.api.baseUrl.service}/upload/get-voice/${source.src}`);
       const fileBlob = await fileFetch.blob();
       setFile(window.URL.createObjectURL(fileBlob));
     }
   };
 
-  const isLoading = duration === 0;
-
   const handleLoadedData = (): void => {
+    setIsLoading(false);
     setDuration(audioRef?.current?.duration || 0);
-    if (isPlay) audioRef?.current?.play();
   };
 
   const handlePausePlayClick = (): void => {
@@ -56,19 +69,54 @@ const BookAudio: React.FC<TBookAudioProps> = ({ image, title, src, id, onClickPr
     }
   };
 
+  const handleClickSkip = (type: string): void => {
+    if (audioRef?.current) {
+      if (type === 'next') {
+        audioRef.current.currentTime += 10;
+      }
+
+      if (type === 'prev') {
+        audioRef.current.currentTime -= 10;
+      }
+      audioRef.current.play();
+      setPlay(true);
+    }
+  };
+
   const handleClickAudioPrev = (): void => {
     onClickPrev?.();
+    setPlay(false);
   };
 
   const handleClickAudioNext = (): void => {
     onClickNext?.();
+    setPlay(false);
   };
 
   useEffect(() => {
     setDuration(0);
     getFileAudio();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [src]);
+  }, [source]);
+
+  useEffect(() => {
+    onChangeAudioIsPlay?.(isPlay);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlay]);
+
+  useEffect(() => {
+    if (isAudioPlay) {
+      audioRef?.current?.play();
+    } else {
+      audioRef?.current?.pause();
+    }
+    setPlay(Boolean(isAudioPlay));
+  }, [isAudioPlay]);
+
+  useEffect(() => {
+    onChangeAudioLoading?.(isLoading);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   return (
     <div className="BookAudio">
@@ -82,8 +130,12 @@ const BookAudio: React.FC<TBookAudioProps> = ({ image, title, src, id, onClickPr
             <div className="BookAudio-info-title">{bookData?.name}</div>
             <div className="BookAudio-info-author">{bookData?.author.name}</div>
           </div>
-          <div className="BookAudio-control">
-            <div className="BookAudio-control-chapter">Chương1: Lorem ipsum dolor sit amet, consec</div>
+          <div
+            className={classNames('BookAudio-control', {
+              loading: isLoading,
+            })}
+          >
+            <div className="BookAudio-control-chapter">{source?.name || 'Tâm sách Audio'}</div>
             <div className="BookAudio-control-bars">
               <TimeSlider
                 axis="x"
@@ -121,17 +173,21 @@ const BookAudio: React.FC<TBookAudioProps> = ({ image, title, src, id, onClickPr
               </div>
               <div
                 className="BookAudio-control-actions-item .skip-prev flex items-center"
-                onClick={handleClickAudioPrev}
+                onClick={(): void => handleClickSkip('prev')}
               >
                 <Icon name={EIconName.TimePastPrev} color={EIconColor.WHITE} />
                 <span>10s</span>
               </div>
               <div className="BookAudio-control-actions-item .play" onClick={handlePausePlayClick}>
-                <Icon name={isPlay ? EIconName.Pause : EIconName.Play} color={EIconColor.WHITE} />
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  <Icon name={isPlay ? EIconName.Pause : EIconName.Play} color={EIconColor.WHITE} />
+                )}
               </div>
               <div
                 className="BookAudio-control-actions-item .skip-next flex items-center"
-                onClick={handleClickAudioPrev}
+                onClick={(): void => handleClickSkip('next')}
               >
                 <Icon name={EIconName.TimePastNext} color={EIconColor.WHITE} />
                 <span>10s</span>

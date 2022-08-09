@@ -79,7 +79,7 @@ const Footer: React.FC<TFooterProps> = () => {
                   <div className="Footer-title vollkorn-font">Thông tin liên hệ</div>
                   <ul className="Footer-list">
                     <li className="Footer-list-item Footer-text">
-                      <strong>ĐỊA CHỈ:</strong> 498 Nguyễn Lương Bằng, Kiến An, Tp Hải phòng
+                      <strong>ĐỊA CHỈ:</strong> 498 Nguyễn Lương Bằng, Kiến An, TP Hải Phòng
                     </li>
                     <li className="Footer-list-item Footer-text">
                       <strong>ĐIỆN THOẠI:</strong>{' '}

@@ -11,7 +11,13 @@ import ChapterCard from '@/components/ChapterCard';
 import { TTabChapterProps } from './TabChapter.types';
 import './TabChapter.scss';
 
-const TabChapter: React.FC<TTabChapterProps> = () => {
+const TabChapter: React.FC<TTabChapterProps> = ({
+  source,
+  isAudioPlay,
+  isAudioLoading,
+  onClickChapter,
+  onChangeAudioIsPlay,
+}) => {
   const [visibleBookRateFormModal, setVisibleBookRateFormModal] = useState<boolean>(false);
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const bookData = productState?.book;
@@ -32,7 +38,16 @@ const TabChapter: React.FC<TTabChapterProps> = () => {
       ) : (
         <div className="TabChapter-chapter">
           {bookData?.voice?.map((item) => (
-            <ChapterCard key={item._id} {...item} isActive />
+            <ChapterCard
+              key={item._id}
+              {...item}
+              isActive
+              isAudioPlay={isAudioPlay && item._id === source?._id}
+              isAudioLoading={isAudioLoading && item._id === source?._id}
+              isPlayed={item._id === source?._id}
+              onClick={(): void => onClickChapter?.(item)}
+              onChangeAudioIsPlay={onChangeAudioIsPlay}
+            />
           ))}
         </div>
       )}

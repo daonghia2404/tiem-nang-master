@@ -10,8 +10,10 @@
     display: none;
   }
 
+  &.played,
   &:hover {
     border-color: $orange-peel;
+    background: $mercury;
     cursor: pointer;
   }
 
