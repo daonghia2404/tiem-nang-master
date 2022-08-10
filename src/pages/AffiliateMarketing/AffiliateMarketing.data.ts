@@ -1,4 +1,6 @@
+import { ETransactionType } from '@/services/api';
+
 export const dataAffiliateMarketingTabs = [
-  { label: 'Lịch sử nhận coin', value: 'HISTORY_COIN' },
-  { label: 'Sự kiện', value: 'EVENT' },
+  { label: 'Lịch sử nhận coin', value: ETransactionType.APPELATION_RECEIVED },
+  // { label: 'Sự kiện', value: 'EVENT' },
 ];

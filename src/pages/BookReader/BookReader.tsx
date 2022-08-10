@@ -11,13 +11,12 @@ import BackgroundForm from '@/components/BackgroundForm';
 import TabChapter from '@/pages/BookReader/TabChapter';
 import TabDocument from '@/pages/BookReader/TabDocument';
 import TabQuestion from '@/pages/BookReader/TabQuestion';
-import { getProductAction } from '@/redux/actions';
+import { getProductAction, uiActions } from '@/redux/actions';
 import { TRootState } from '@/redux/reducers';
 import { Paths } from '@/pages/routers';
 import { showNotification } from '@/utils/functions';
 import { ETypeNotification } from '@/common/enums';
-import { TProductFile, TProductVoice } from '@/common/models';
-import BookAudio from '@/containers/BookAudio';
+import { TProductFile } from '@/common/models';
 import BookPdf from '@/pages/BookReader/BookPdf';
 import { TSelectOption } from '@/components/Select';
 
@@ -33,10 +32,12 @@ const BookReader: React.FC = () => {
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const bookData = productState?.book;
 
-  const [voice, setVoice] = useState<TProductVoice>();
+  const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
+  const voice = audioState?.voice;
+  const isAudioPlay = audioState?.isAudioPlay;
+  const isAudioLoading = audioState?.isAudioLoading;
+
   const [file, setFile] = useState<TProductFile>();
-  const [isAudioPlay, setIsAudioPlay] = useState<boolean>(false);
-  const [isAudioLoading, setIsAudioLoading] = useState<boolean>(false);
   const [config, setConfig] = useState<{
     background: TSelectOption;
     fontSize: number;
@@ -49,17 +50,6 @@ const BookReader: React.FC = () => {
     setKeyTabBookReader(key);
   };
 
-  const handleChangeAudio = (type: string): void => {
-    if (voice) {
-      const indexArray = voice.index - 1;
-      const nextChapter = bookData?.voice?.[indexArray + 1];
-      const prevChapter = bookData?.voice?.[indexArray - 1];
-
-      if (type === 'prev' && prevChapter) setVoice(prevChapter);
-      if (type === 'next' && nextChapter) setVoice(nextChapter);
-    }
-  };
-
   const getProduct = useCallback(() => {
     if (id) dispatch(getProductAction.request({ paths: { id } }));
   }, [id, dispatch]);
@@ -70,7 +60,7 @@ const BookReader: React.FC = () => {
         navigate(Paths.BookDetail(bookData?.slug, id));
         showNotification(ETypeNotification.ERROR, 'Bạn chưa mua tâm sách này. Vui lòng mua tâm sách trước');
       } else {
-        setVoice(productState.book?.voice?.[0]);
+        dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
         setFile(productState.book?.file?.[0]);
       }
     }
@@ -120,13 +110,7 @@ const BookReader: React.FC = () => {
 
                 <div className="BookReader-tabs-body">
                   {keyTabBookReader === EKeyBookReaderTab.CHAPTERS && (
-                    <TabChapter
-                      source={voice}
-                      onClickChapter={setVoice}
-                      onChangeAudioIsPlay={setIsAudioPlay}
-                      isAudioPlay={isAudioPlay}
-                      isAudioLoading={isAudioLoading}
-                    />
+                    <TabChapter source={voice} isAudioPlay={isAudioPlay} isAudioLoading={isAudioLoading} />
                   )}
                   {keyTabBookReader === EKeyBookReaderTab.QUESTIONS && <TabQuestion />}
                   {keyTabBookReader === EKeyBookReaderTab.DOCUMENTS && <TabDocument onClickDocument={setFile} />}
@@ -177,15 +161,6 @@ const BookReader: React.FC = () => {
           </Row>
         </div>
       </div>
-
-      <BookAudio
-        source={voice}
-        isAudioPlay={isAudioPlay}
-        onClickPrev={(): void => handleChangeAudio('prev')}
-        onClickNext={(): void => handleChangeAudio('next')}
-        onChangeAudioIsPlay={setIsAudioPlay}
-        onChangeAudioLoading={setIsAudioLoading}
-      />
     </div>
   );
 };

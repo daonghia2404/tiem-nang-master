@@ -1,16 +1,32 @@
 import { createReducer } from 'deox';
 import { uiActions } from '@/redux/actions';
+import { TSetAudioData } from '@/redux/actions/ui/types';
 
 export enum EDeviceType {
   DESKTOP = 'desktop',
   MOBILE = 'mobile',
 }
 
-const initialState = {
+export type TInitialState = {
+  device: {
+    type: EDeviceType;
+    width: number;
+    isMobile: boolean;
+  };
+  audio: TSetAudioData;
+};
+
+const initialState: TInitialState = {
   device: {
     type: window.innerWidth > 991 ? EDeviceType.DESKTOP : EDeviceType.MOBILE,
     width: window.innerWidth,
     isMobile: window.innerWidth <= 991,
+  },
+  audio: {
+    voice: undefined,
+    isAudioLoading: false,
+    isAudioPlay: false,
+    visible: false,
   },
 };
 
@@ -21,6 +37,13 @@ const reducer = createReducer(initialState, (handleAction) => [
       type: payload.deviceWidth > 991 ? EDeviceType.DESKTOP : EDeviceType.MOBILE,
       width: payload.deviceWidth,
       isMobile: payload.deviceWidth <= 991,
+    },
+  })),
+  handleAction(uiActions.setAudio, (state, { payload }) => ({
+    ...state,
+    audio: {
+      ...state.audio,
+      ...payload.data,
     },
   })),
 ]);

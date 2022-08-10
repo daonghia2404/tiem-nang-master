@@ -1,26 +1,55 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ImageConnectionPeople from '@/assets/images/image-connection-people.png';
 import BgAffiliateMarketing from '@/assets/images/bg-affiliate-marketing.png';
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
-import HistoryCoin from '@/pages/AffiliateMarketing/HistoryCoin';
-import Events from '@/pages/AffiliateMarketing/Events';
 import { copyText } from '@/utils/functions';
 import { TRootState } from '@/redux/reducers';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/common/constants';
+import { getTransactionAction } from '@/redux/actions';
+import { TGetTransactionParams, ETransactionType } from '@/services/api';
+import HistoryCoin from '@/pages/HistoryTranscation/HistoryCoin';
 
 import { dataAffiliateMarketingTabs } from './AffiliateMarketing.data';
 import './AffiliateMarketing.scss';
 
 const AffiliateMarketing: React.FC = () => {
-  const [keyAffiliateMarketingTab, setKeyAffiliateMarketingTab] = useState('HISTORY_COIN');
+  const dispatch = useDispatch();
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
 
-  const handleChangeAffiliateMarketingTab = (key: string): void => {
-    setKeyAffiliateMarketingTab(key);
+  const getTransactionState = useSelector((state: TRootState) => state.transactionReducer.getTransactionResponse?.data);
+  const [getTransactionParamsRequest, setGetTransactionParamsRequest] = useState<TGetTransactionParams>({
+    page: DEFAULT_PAGE,
+    pageSize: DEFAULT_PAGE_SIZE,
+    type: ETransactionType.APPELATION_RECEIVED,
+  });
+
+  const handlePageChange = (page: number, pageSize?: number): void => {
+    setGetTransactionParamsRequest({
+      ...getTransactionParamsRequest,
+      page,
+      pageSize: pageSize || getTransactionParamsRequest.pageSize,
+    });
   };
+
+  const handleChangeHistoryTranscationTab = (type: ETransactionType): void => {
+    setGetTransactionParamsRequest({
+      page: DEFAULT_PAGE,
+      pageSize: DEFAULT_PAGE_SIZE,
+      type,
+    });
+  };
+
+  const getTransactionList = useCallback(() => {
+    dispatch(getTransactionAction.request({ params: getTransactionParamsRequest }));
+  }, [dispatch, getTransactionParamsRequest]);
+
+  useEffect(() => {
+    getTransactionList();
+  }, [getTransactionList]);
 
   return (
     <div className="AffiliateMarketing">
@@ -55,9 +84,9 @@ const AffiliateMarketing: React.FC = () => {
                   <div
                     key={item.value}
                     className={classNames('AffiliateMarketing-tabs-header-item', {
-                      active: keyAffiliateMarketingTab === item.value,
+                      active: getTransactionParamsRequest.type === item.value,
                     })}
-                    onClick={(): void => handleChangeAffiliateMarketingTab(item.value)}
+                    onClick={(): void => handleChangeHistoryTranscationTab(item.value)}
                   >
                     {item.label}
                   </div>
@@ -67,8 +96,16 @@ const AffiliateMarketing: React.FC = () => {
           </div>
 
           <div className="AffiliateMarketing-tabs-body">
-            {keyAffiliateMarketingTab === 'HISTORY_COIN' && <HistoryCoin />}
-            {keyAffiliateMarketingTab === 'EVENT' && <Events />}
+            {getTransactionParamsRequest.type === ETransactionType.APPELATION_RECEIVED && (
+              <HistoryCoin
+                data={getTransactionState?.records}
+                page={getTransactionParamsRequest.page}
+                pageSize={getTransactionParamsRequest.pageSize}
+                total={getTransactionState?.total}
+                onPaginateChange={handlePageChange}
+              />
+            )}
+            {/* {getTransactionParamsRequest.type === 'EVENT' && <Events />} */}
           </div>
         </div>
       </div>

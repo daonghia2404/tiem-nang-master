@@ -30,14 +30,14 @@ const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({
               <div key={index} className="CategoriesEmotion-filters-item">
                 <div className="CategoriesEmotion-filters-item-title">{item.title}</div>
                 <div className="CategoriesEmotion-filters-item-list">
-                  <Row gutter={[15, 12]}>
+                  <Row gutter={[15, 12]} wrap={false}>
                     {item.list.map((list, listIdx) => (
                       <Col key={listIdx}>
                         <div
                           className={classNames('CategoriesEmotion-filters-item-list-item flex items-center', {
                             active: ids.includes(list._id),
                           })}
-                          onClick={(): void => onClickItem?.(list)}
+                          onClick={(): void => onClickItem?.(list, index)}
                         >
                           <div className="CategoriesEmotion-filters-item-list-item-icon">
                             <img src={list.iconPath || ImageBook} alt="" />

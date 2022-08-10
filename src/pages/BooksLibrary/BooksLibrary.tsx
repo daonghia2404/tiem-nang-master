@@ -20,9 +20,8 @@ import {
   TGetProductsByCategoriesPaths,
 } from '@/services/api';
 import { TCategory } from '@/common/models';
-import { getTotalPage, showNotification } from '@/utils/functions';
+import { getTotalPage } from '@/utils/functions';
 import { TRootState } from '@/redux/reducers';
-import { ETypeNotification } from '@/common/enums';
 
 const BooksLibrary: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +30,7 @@ const BooksLibrary: React.FC = () => {
     body?: TGetProductsByCategoriesBody;
     paths?: TGetProductsByCategoriesPaths;
   }>({
-    body: [],
+    body: ['', '', ''],
     paths: undefined,
   });
   const getProductsByCategoryState = useSelector(
@@ -42,7 +41,7 @@ const BooksLibrary: React.FC = () => {
     page: DEFAULT_PAGE,
     pageSize: DEFAULT_PAGE_SIZE * 2,
   });
-  const [categoryList, setCategoryList] = useState<TCategory[]>([]);
+  const [categoryList, setCategoryList] = useState<TCategory[][]>([]);
   const getCategoryListTotalState = useSelector(
     (state: TRootState) => state.categoryReducer.getCategoryListResponse?.data.total,
   );
@@ -61,27 +60,34 @@ const BooksLibrary: React.FC = () => {
   const dataCategoriesEmotion = [
     {
       title: 'Chọn 3 danh mục',
-      list: categoryList,
+      list: categoryList?.[0] || [],
+    },
+    {
+      title: '',
+      list: categoryList?.[1] || [],
+    },
+    {
+      title: '',
+      list: categoryList?.[2] || [],
     },
   ];
 
-  const handleClickCategory = (data: TCategory): void => {
-    const isExisted = getProductsParamsRequest.body?.includes(data._id);
-    const isMaxCategoriesFilter = getProductsParamsRequest.body?.length === 3;
+  const handleClickCategory = (data: TCategory, indexArray?: number): void => {
+    if (typeof indexArray === 'number') {
+      const isExisted = getProductsParamsRequest.body?.includes(data._id);
 
-    if (isExisted) {
-      const newFilterCategories = getProductsParamsRequest.body?.filter((item) => item !== data._id);
-      setGetProductsParamsRequest({
-        ...getProductsParamsRequest,
-        body: newFilterCategories,
-      });
-    } else if (isMaxCategoriesFilter) {
-      showNotification(ETypeNotification.ERROR, 'Chỉ được chọn tối đa ba danh mục');
-    } else {
-      setGetProductsParamsRequest({
-        ...getProductsParamsRequest,
-        body: [...(getProductsParamsRequest.body || []), data._id],
-      });
+      if (!isExisted) {
+        const newFilter = getProductsParamsRequest.body?.map((item, index) => {
+          if (index === indexArray) return data._id;
+
+          return item;
+        });
+
+        setGetProductsParamsRequest({
+          ...getProductsParamsRequest,
+          body: newFilter,
+        });
+      }
     }
   };
 
@@ -108,8 +114,16 @@ const BooksLibrary: React.FC = () => {
     dispatch(
       getCategoryListAction.request({ params: getCategoryListParamsRequest }, (response): void => {
         const isFirstFetching = getCategoryListParamsRequest.page === DEFAULT_PAGE;
-        const data = response.data.records.flat();
-        setCategoryList(isFirstFetching ? data : [...categoryList, ...data]);
+        const data = response.data.records;
+        setCategoryList(
+          isFirstFetching
+            ? data
+            : [
+                [...(categoryList?.[0] || []), ...(data?.[0] || [])],
+                [...(categoryList?.[1] || []), ...(data?.[1] || [])],
+                [...(categoryList?.[2] || []), ...(data?.[2] || [])],
+              ],
+        );
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,7 +134,9 @@ const BooksLibrary: React.FC = () => {
   }, [dispatch]);
 
   const getProductsByCategory = useCallback(() => {
-    const isAtLeastThreeCategories = getProductsParamsRequest.body?.length === 3;
+    const isAtLeastThreeCategories =
+      getProductsParamsRequest.body?.filter((item) => Boolean(item?.trim()))?.length === 3;
+
     if (isAtLeastThreeCategories) {
       dispatch(getProductsByCategoriesAction.request({ ...getProductsParamsRequest }));
     }

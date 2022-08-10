@@ -15,7 +15,18 @@ export type TGetApophthganMaterials = {
 };
 
 export type TGetApophthganResponse = TCommonResponse & {
-  data: [];
+  data: TApophthgan[];
+};
+
+export type TApophthgan = {
+  author: string;
+  createdAt: string;
+  mood: string;
+  pathImage: string;
+  reason: string;
+  updatedAt: string;
+  _id: string;
+  __v: number;
 };
 
 // FUNCTION

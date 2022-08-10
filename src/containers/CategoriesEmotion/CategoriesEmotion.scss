@@ -27,6 +27,8 @@
       }
 
       &-list {
+        overflow: auto;
+
         &-item {
           cursor: pointer;
           padding: .4rem 1rem;
@@ -43,6 +45,7 @@
           &-icon {
             flex: 0 0 1.6rem;
             max-width: 1.6rem;
+            width: 1.6rem;
             height: 1.6rem;
             margin-right: 1rem;
             @include centerScaleImage;

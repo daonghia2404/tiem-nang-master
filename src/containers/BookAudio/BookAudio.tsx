@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import TimeSlider from 'react-input-slider';
 import classNames from 'classnames';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import { TRootState } from '@/redux/reducers';
 import env from '@/env';
 import Loading from '@/components/Loading';
+import { uiActions } from '@/redux/actions';
 
 import { TBookAudioProps } from './BookAudio.types';
 import './BookAudio.scss';
@@ -19,7 +20,10 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   onChangeAudioIsPlay,
   onChangeAudioLoading,
 }) => {
+  const dispatch = useDispatch();
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
+  const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
+
   const bookData = productState?.book;
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -93,6 +97,12 @@ const BookAudio: React.FC<TBookAudioProps> = ({
     setPlay(false);
   };
 
+  const handleCloseAudio = (): void => {
+    dispatch(uiActions.setAudio({ visible: false }));
+    audioRef?.current?.pause();
+    setPlay(false);
+  };
+
   useEffect(() => {
     setDuration(0);
     getFileAudio();
@@ -119,10 +129,12 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   }, [isLoading]);
 
   return (
-    <div className="BookAudio">
+    <div className={classNames('BookAudio', { visible: audioState.visible })}>
+      <div className="BookAudio-close" onClick={handleCloseAudio}>
+        <Icon name={EIconName.CloseSquare} />
+      </div>
       <div className="container">
         <div className="BookAudio-wrapper flex items-center">
-          {/* {isLoading && <Loading />} */}
           <div className="BookAudio-image">
             <img src={bookData?.image} alt="" />
           </div>

@@ -11,11 +11,13 @@
 
   &-filters {
     margin-bottom: 2.5rem;
+    overflow: auto;
 
     &-item {
       font-size: 1.8rem;
       transition: $common-transition;
       cursor: pointer;
+      white-space: nowrap;
 
       &:not(.active):hover {
         color: $orange-peel;

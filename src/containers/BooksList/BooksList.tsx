@@ -8,7 +8,6 @@ import BookBlock from '@/components/BookBlock';
 import Pagination from '@/components/Pagination';
 import Carousels from '@/components/Carousels';
 import { TProduct } from '@/common/models';
-import { EProductType } from '@/common/enums';
 import { Paths } from '@/pages/routers';
 import Empty from '@/components/Empty';
 
@@ -33,7 +32,7 @@ const BooksList: React.FC<TBooksListProps> = ({
 
   const handleClickBookBlock = (dataBook: TProduct): void => {
     if (!isDragging) {
-      if (dataBook.type === EProductType.PAPER_BOOK) {
+      if (dataBook.slug && dataBook._id) {
         navigate(Paths.BookDetail(dataBook.slug, dataBook._id));
       }
     }
@@ -47,7 +46,7 @@ const BooksList: React.FC<TBooksListProps> = ({
             <div className="BooksList-title">{title}</div>
           ) : (
             <div className="BooksList-filters">
-              <Row gutter={20}>
+              <Row gutter={20} wrap={false}>
                 {dataFilter?.map((item) => (
                   <Col key={item._id}>
                     <div

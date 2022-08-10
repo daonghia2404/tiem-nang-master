@@ -104,7 +104,12 @@ const Release: React.FC = () => {
         data={dataCategoriesEmotion}
         onClickItem={handleClickEmotion}
       />
-      <BooksList useCarousel title="Danh ngôn" data={getApophthganState} emptyTitle="Không có dữ liệu danh ngôn" />
+      <BooksList
+        useCarousel
+        title="Danh ngôn"
+        data={getApophthganState as any}
+        emptyTitle="Không có dữ liệu danh ngôn"
+      />
       <BooksList
         useCarousel
         title="Tựa sách nên đọc"

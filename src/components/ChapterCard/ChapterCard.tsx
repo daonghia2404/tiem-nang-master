@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
+import { useDispatch } from 'react-redux';
 
 import Icon, { EIconName } from '@/components/Icon';
 import Loading from '@/components/Loading';
 import env from '@/env';
+import { uiActions } from '@/redux/actions';
 
 import { TChapterCardProps } from './ChapterCard.types.d';
 import './ChapterCard.scss';
@@ -15,9 +17,9 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
   isAudioPlay,
   isAudioLoading,
   isPlayed,
-  onChangeAudioIsPlay,
   onClick,
 }) => {
+  const dispatch = useDispatch();
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [loading, setLoading] = useState(false);
@@ -56,7 +58,7 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
 
   const handleClickChapterCardIcon = (): void => {
     if (!loading) {
-      onChangeAudioIsPlay?.(!isAudioPlay);
+      dispatch(uiActions.setAudio({ isAudioLoading: !isAudioPlay }));
     }
   };
 

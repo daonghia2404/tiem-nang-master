@@ -1,7 +1,7 @@
 import { createActionCreator } from 'deox';
 
 import { EUIAction } from './constants';
-import { TResetActionStatus, TSetDevice } from './types';
+import { TResetActionStatus, TSetAudio, TSetAudioData, TSetDevice } from './types';
 
 export const uiActions = {
   setDevice: createActionCreator(
@@ -9,6 +9,12 @@ export const uiActions = {
     (resolve) =>
       (deviceWidth: number): TSetDevice =>
         resolve({ deviceWidth }),
+  ),
+  setAudio: createActionCreator(
+    EUIAction.SET_AUDIO,
+    (resolve) =>
+      (data: TSetAudioData): TSetAudio =>
+        resolve({ data }),
   ),
   resetActionStatus: createActionCreator(
     EUIAction.RESET_ACTION_STATUS,

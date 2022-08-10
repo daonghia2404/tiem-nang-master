@@ -3,7 +3,7 @@ export type TCategoriesEmotionProps = {
   ids?: (string | undefined)[];
   showLoadMore?: boolean;
   loading?: boolean;
-  onClickItem?: (data: any) => void;
+  onClickItem?: (data: any, index?: number) => void;
   onLoadMore?: () => void;
 };
 

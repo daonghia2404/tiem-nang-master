@@ -107,7 +107,6 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
         dispatch(getNotificationsUnreadAction.request({}));
       }),
     );
-    navigate(Paths.NotificationDetail(data.id));
   };
 
   const handleLoadMoreNotification = (): void => {
