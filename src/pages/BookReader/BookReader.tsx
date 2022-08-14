@@ -60,7 +60,9 @@ const BookReader: React.FC = () => {
         navigate(Paths.BookDetail(bookData?.slug, id));
         showNotification(ETypeNotification.ERROR, 'Bạn chưa mua tâm sách này. Vui lòng mua tâm sách trước');
       } else {
-        dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
+        if (productState.book?.voice?.[0]) {
+          dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
+        }
         setFile(productState.book?.file?.[0]);
       }
     }
@@ -113,7 +115,9 @@ const BookReader: React.FC = () => {
                     <TabChapter source={voice} isAudioPlay={isAudioPlay} isAudioLoading={isAudioLoading} />
                   )}
                   {keyTabBookReader === EKeyBookReaderTab.QUESTIONS && <TabQuestion />}
-                  {keyTabBookReader === EKeyBookReaderTab.DOCUMENTS && <TabDocument onClickDocument={setFile} />}
+                  {keyTabBookReader === EKeyBookReaderTab.DOCUMENTS && (
+                    <TabDocument source={file} onClickDocument={setFile} />
+                  )}
                 </div>
               </div>
               <div className="BookReader-setting">

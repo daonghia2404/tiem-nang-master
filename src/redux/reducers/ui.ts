@@ -14,6 +14,7 @@ export type TInitialState = {
     isMobile: boolean;
   };
   audio: TSetAudioData;
+  visibleModalAuth: boolean;
 };
 
 const initialState: TInitialState = {
@@ -28,6 +29,7 @@ const initialState: TInitialState = {
     isAudioPlay: false,
     visible: false,
   },
+  visibleModalAuth: false,
 };
 
 const reducer = createReducer(initialState, (handleAction) => [
@@ -45,6 +47,10 @@ const reducer = createReducer(initialState, (handleAction) => [
       ...state.audio,
       ...payload.data,
     },
+  })),
+  handleAction(uiActions.toggleModalAuth, (state, { payload }) => ({
+    ...state,
+    visibleModalAuth: payload.visible,
   })),
 ]);
 

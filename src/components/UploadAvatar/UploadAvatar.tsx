@@ -6,9 +6,9 @@ import ImageAvatarDefault from '@/assets/images/image-avatar-default.svg';
 import Upload from '@/components/Upload/Upload';
 import { handleErrorImageUrl } from '@/utils/functions';
 
+import { regex } from '@/common/constants';
 import { TUploadAvatarProps } from './UploadAvatar.types.d';
 import './UploadAvatar.scss';
-import { regex } from '@/common/constants';
 
 const UploadAvatar: React.FC<TUploadAvatarProps> = ({ value, onChange }) => {
   const [previewImage, setPreviewImage] = useState('');

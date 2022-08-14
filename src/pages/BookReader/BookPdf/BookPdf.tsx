@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /* eslint-disable no-underscore-dangle */
@@ -67,8 +68,11 @@ const BookPdf: React.FC<TBookPdfProps> = ({ source, fontSize, background }) => {
         </Document>
       )}
 
-      {/* eslint-disable-next-line react/no-danger */}
-      <div className="BookPdf-content" style={{ fontSize, background }} dangerouslySetInnerHTML={{ __html: file }} />
+      <div
+        className="BookPdf-content"
+        style={{ fontSize, background: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+        dangerouslySetInnerHTML={{ __html: file }}
+      />
     </div>
   );
 };

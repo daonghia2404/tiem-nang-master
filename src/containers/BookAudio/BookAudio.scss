@@ -109,7 +109,10 @@
 
     &-bars {
       position: relative;
-      cursor: pointer;
+
+      .css-7ckts9-Slider {
+        cursor: pointer;
+      }
 
       // &-current,
       // &-total {

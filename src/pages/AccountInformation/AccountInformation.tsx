@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { navigate } from '@reach/router';
 
 import { Col, Form, Row } from 'antd';
 import { showNotification, validationRules } from '@/utils/functions';
@@ -15,6 +16,7 @@ import {
   updateProfileAction,
 } from '@/redux/actions';
 import { ETypeNotification } from '@/common/enums';
+import { Paths } from '@/pages/routers';
 
 import './AccountInformation.scss';
 
@@ -51,6 +53,7 @@ const AccountInformation: React.FC = () => {
   const handleChangePasswordProfileSuccess = (): void => {
     showNotification(ETypeNotification.SUCCESS, 'Đổi mật khẩu tài khoản thành công');
     setPasswordValue('');
+    navigate(Paths.BooksLibrary);
     formPassword.resetFields();
   };
 
@@ -99,7 +102,12 @@ const AccountInformation: React.FC = () => {
             <div className="AccountInformation-card">
               <div className="AccountInformation-card-header">Đổi mật khẩu</div>
               <div className="AccountInformation-card-body">
-                <Form layout="vertical" className="AccountInformation-card-form" onFinish={handleSubmitFormPassword}>
+                <Form
+                  form={formPassword}
+                  layout="vertical"
+                  className="AccountInformation-card-form"
+                  onFinish={handleSubmitFormPassword}
+                >
                   <Form.Item name="password" rules={[validationRules.required()]}>
                     <Input type="password" placeholder="Nhập mật khẩu hiện tại" label="Mật khẩu hiện tại" />
                   </Form.Item>

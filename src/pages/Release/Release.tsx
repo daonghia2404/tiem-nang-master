@@ -24,7 +24,9 @@ const Release: React.FC = () => {
   const getProductsByCategoriesState = useSelector(
     (state: TRootState) => state.productReducer.getProductsByCategoriesResponse?.data,
   );
-  const getApophthganState = useSelector((state: TRootState) => state.apophthganReducer.getApophthganResponse?.data);
+  const getApophthganState = useSelector(
+    (state: TRootState) => state.apophthganReducer.getApophthganResponse?.data?.records,
+  );
 
   const dataCategoriesEmotion = [
     {

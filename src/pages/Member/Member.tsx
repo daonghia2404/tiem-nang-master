@@ -14,6 +14,7 @@ import {
   EUpdradeMyMembershipAction,
   getMembershipListAction,
   getMyMembershipAction,
+  getProfileAction,
   updradeMyMembershipAction,
 } from '@/redux/actions';
 import { TRootState } from '@/redux/reducers';
@@ -70,6 +71,7 @@ const Member: React.FC = () => {
     showNotification(ETypeNotification.SUCCESS, 'Thăng hạng thành viên thành công');
     getMyMembership();
     getMembershipList();
+    getProfile();
     handleCloseLevelUpRankModal();
   };
 
@@ -130,6 +132,10 @@ const Member: React.FC = () => {
       item,
     ),
   }));
+
+  const getProfile = useCallback(() => {
+    dispatch(getProfileAction.request({}));
+  }, [dispatch]);
 
   const getMembershipList = useCallback(() => {
     const params = {

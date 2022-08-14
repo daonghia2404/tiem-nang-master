@@ -17,9 +17,6 @@ import Button from '@/components/Button';
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import { LayoutPaths, Paths } from '@/pages/routers';
 import ModalLogout from '@/containers/ModalLogout';
-
-import { TAccountDropdownProps } from './AccountDropdown.types.d';
-import './AccountDropdown.scss';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/common/constants';
 import { getNotificationsAction, getNotificationsUnreadAction } from '@/redux/actions';
 import { TGetNotificationsResponse, TNotification } from '@/services/api';
@@ -27,6 +24,10 @@ import WrapperLazyLoad from '@/components/WrapperLazyLoad';
 import { getTotalPage } from '@/utils/functions';
 import { readNotificationAction } from '@/redux/actions/notification/read-notification';
 import PaymentMethodModal from '@/containers/PaymentMethodModal';
+import Empty from '@/components/Empty';
+
+import { TAccountDropdownProps } from './AccountDropdown.types.d';
+import './AccountDropdown.scss';
 
 const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) => {
   const dispatch = useDispatch();
@@ -40,12 +41,12 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
     pageSize: DEFAULT_PAGE_SIZE,
   });
   const [notifications, setNotifications] = useState<TNotification[]>([]);
+  const [notificationTotal, setNotificationTotal] = useState<number>(0);
+  const isEmpty = notifications.length === 0;
 
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
   const myMembershipState = useSelector((state: TRootState) => state.membershipReducer.getMyMembershipResponse?.data);
-  const notificationsTotalState = useSelector(
-    (state: TRootState) => state.notificationReducer.getNotificationsResponse?.data.total,
-  );
+
   const getNotificationsUnread = useSelector(
     (state: TRootState) => state.notificationReducer.getNotificationsUnreadResponse?.data,
   );
@@ -111,8 +112,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
 
   const handleLoadMoreNotification = (): void => {
     const isLoadMore =
-      getNotificationsParamsRequest.page <
-      getTotalPage(notificationsTotalState || 0, getNotificationsParamsRequest.pageSize);
+      getNotificationsParamsRequest.page < getTotalPage(notificationTotal, getNotificationsParamsRequest.pageSize);
 
     if (isLoadMore) {
       setGetNotificationsParamsRequest({
@@ -138,6 +138,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
         (response: TGetNotificationsResponse): void => {
           const isFirstFetching = getNotificationsParamsRequest.page === DEFAULT_PAGE;
           const data = response?.data?.records;
+          setNotificationTotal(response?.data?.total);
           setNotifications(isFirstFetching ? data : [...notifications, ...data]);
         },
       ),
@@ -168,31 +169,35 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
             <div className="AccountDropdown-notification-header-title">Thông báo</div>
           </div>
 
-          <div className="AccountDropdown-notification-body">
-            <WrapperLazyLoad maxHeight={400} onEnd={handleLoadMoreNotification}>
-              {notifications.map((item) => (
-                <div
-                  key={item.id}
-                  className="AccountDropdown-notification-body-item flex items-start"
-                  onClick={(): void => handleClickNotifcation(item)}
-                >
-                  <div className="AccountDropdown-notification-body-item-icon">
-                    <img src={Favicon} alt="" />
-                  </div>
-                  {!item.isRead && <div className="AccountDropdown-notification-body-item-unread" />}
+          {isEmpty ? (
+            <Empty title="Không có dữ liệu thông báo" />
+          ) : (
+            <div className="AccountDropdown-notification-body">
+              <WrapperLazyLoad maxHeight={400} onEnd={handleLoadMoreNotification}>
+                {notifications.map((item) => (
+                  <div
+                    key={item.id}
+                    className="AccountDropdown-notification-body-item flex items-start"
+                    onClick={(): void => handleClickNotifcation(item)}
+                  >
+                    <div className="AccountDropdown-notification-body-item-icon">
+                      <img src={Favicon} alt="" />
+                    </div>
+                    {!item.isRead && <div className="AccountDropdown-notification-body-item-unread" />}
 
-                  <div className="AccountDropdown-notification-body-item-info">
-                    <div className="AccountDropdown-notification-body-item-info-title">{item.title}</div>
-                    <div className="AccountDropdown-notification-body-item-info-description">{item.description}</div>
-                  </div>
+                    <div className="AccountDropdown-notification-body-item-info">
+                      <div className="AccountDropdown-notification-body-item-info-title">{item.title}</div>
+                      <div className="AccountDropdown-notification-body-item-info-description">{item.description}</div>
+                    </div>
 
-                  <div className="AccountDropdown-notification-body-item-arrow">
-                    <Icon name={EIconName.AngleRight} />
+                    <div className="AccountDropdown-notification-body-item-arrow">
+                      <Icon name={EIconName.AngleRight} />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </WrapperLazyLoad>
-          </div>
+                ))}
+              </WrapperLazyLoad>
+            </div>
+          )}
         </div>
       ) : (
         <div className="AccountDropdown-account">

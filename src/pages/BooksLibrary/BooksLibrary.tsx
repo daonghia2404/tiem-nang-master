@@ -154,6 +154,12 @@ const BooksLibrary: React.FC = () => {
     getFilterProductList();
   }, [getFilterProductList]);
 
+  useEffect(() => {
+    return (): void => {
+      dispatch(getProductsByCategoriesAction.success(undefined));
+    };
+  }, [dispatch]);
+
   return (
     <div className="BooksLibrary">
       <Banner image={ImageBanner1} />

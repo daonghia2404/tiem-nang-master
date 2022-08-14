@@ -11,7 +11,10 @@
 
   &-filters {
     margin-bottom: 2.5rem;
-    overflow: auto;
+
+    & > .ant-row {
+      overflow: auto;
+    }
 
     &-item {
       font-size: 1.8rem;

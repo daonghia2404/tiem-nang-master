@@ -41,18 +41,19 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
   };
 
   const handleClick = (): void => {
-    if (!isNotPlayAudioFile) {
-      if (isPlaying) {
-        setIsPlaying(false);
-      } else if (!source) {
-        setLoading(true);
-        setSource(`${env.api.baseUrl.service}/upload/get-voice/${src}`);
+    if (!loading) {
+      if (!isNotPlayAudioFile) {
+        if (isPlaying) {
+          setIsPlaying(false);
+        } else if (!source) {
+          setLoading(true);
+          setSource(`${env.api.baseUrl.service}/upload/get-voice/${src}`);
+        } else {
+          setIsPlaying(true);
+        }
       } else {
-        setLoading(false);
-        setIsPlaying(true);
+        onClick?.();
       }
-    } else {
-      onClick?.();
     }
   };
 
@@ -63,6 +64,7 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
   };
 
   const handleLoadSourceSuccess = (): void => {
+    setLoading(false);
     handleClick();
   };
 

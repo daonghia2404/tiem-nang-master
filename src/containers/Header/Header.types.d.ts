@@ -5,4 +5,5 @@ export type THeaderMenuData = {
   link: string;
   activePaths: string[];
   title: string;
+  requireAuth?: boolean;
 };

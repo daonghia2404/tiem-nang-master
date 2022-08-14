@@ -57,7 +57,7 @@ const BookQuestionForm: React.FC<TBookQuestionFormProps> = ({ visible, onClose, 
           </Form.Item>
 
           <div className="BookQuestionForm-submit">
-            <Button title="Gửi câu hỏi" htmlType="submit" loading={askQuestionLoading} />
+            <Button title="Đặt câu hỏi" htmlType="submit" loading={askQuestionLoading} />
           </div>
         </Form>
       </div>

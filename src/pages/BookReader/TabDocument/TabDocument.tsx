@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
+import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 
 import IconPdf from '@/assets/icons/icon-pdf.svg';
@@ -11,7 +12,7 @@ import { EFormat } from '@/common/enums';
 import { TTabDocumentProps } from './TabDocument.types';
 import './TabDocument.scss';
 
-const TabDocument: React.FC<TTabDocumentProps> = ({ onClickDocument }) => {
+const TabDocument: React.FC<TTabDocumentProps> = ({ source, onClickDocument }) => {
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const bookData = productState?.book;
 
@@ -31,7 +32,11 @@ const TabDocument: React.FC<TTabDocumentProps> = ({ onClickDocument }) => {
     <div className="TabDocument">
       <div className="TabDocument-list">
         {bookData?.file?.map((item) => (
-          <div key={item._id} className="TabDocument-list-item flex" onClick={(): void => onClickDocument?.(item)}>
+          <div
+            key={item._id}
+            className={classNames('TabDocument-list-item flex', { active: item._id === source?._id })}
+            onClick={(): void => onClickDocument?.(item)}
+          >
             <div className="TabDocument-list-item-icon">
               <img src={IconPdf} alt="" />
             </div>

@@ -27,7 +27,9 @@
       }
 
       &-list {
-        overflow: auto;
+        & > .ant-row {
+          overflow: auto;
+        }
 
         &-item {
           cursor: pointer;

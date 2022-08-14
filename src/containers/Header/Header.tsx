@@ -14,11 +14,13 @@ import { EKeyStateModalAuth } from '@/containers/ModalAuth/ModalAuth.enums';
 import AccountDropdown from '@/containers/AccountDropdown';
 import { Paths } from '@/pages/routers';
 import { TRootState } from '@/redux/reducers';
-import { getMyMembershipAction, getNotificationsUnreadAction, getProfileAction } from '@/redux/actions';
+import { getMyMembershipAction, getNotificationsUnreadAction, getProfileAction, uiActions } from '@/redux/actions';
 import Helper from '@/services/helpers';
+import { showNotification } from '@/utils/functions';
+import { ETypeNotification } from '@/common/enums';
 
 import { dataHeaderMenu } from './Header.data';
-import { THeaderProps } from './Header.types.d';
+import { THeaderMenuData, THeaderProps } from './Header.types.d';
 import './Header.scss';
 
 const Header: React.FC<THeaderProps> = () => {
@@ -33,6 +35,7 @@ const Header: React.FC<THeaderProps> = () => {
   const [visibleAccountDropdown, setVisibleAccountDropdown] = useState(false);
   const [keyword, setKeyword] = useState('');
 
+  const visibleModalAuth = useSelector((state: TRootState) => state.uiReducer.visibleModalAuth);
   const [modalAuthState, setModalAuthState] = useState<{
     visible: boolean;
     defaultKey?: EKeyStateModalAuth;
@@ -59,6 +62,7 @@ const Header: React.FC<THeaderProps> = () => {
 
   const handleCloseModalAuth = (): void => {
     setModalAuthState({ ...modalAuthState, visible: false });
+    dispatch(uiActions.toggleModalAuth(false));
   };
 
   const renderComponentSearch = (): React.ReactNode => {
@@ -66,6 +70,7 @@ const Header: React.FC<THeaderProps> = () => {
       <div className="Header-middle-search">
         <Input
           placeholder="Tìm kiếm"
+          value={keyword}
           suffix={<Icon name={EIconName.Search} color={EIconColor.BLACK} onClick={handleSearch} />}
           onChange={(e): void => setKeyword(e.target.value)}
           onEnter={handleSearch}
@@ -81,9 +86,17 @@ const Header: React.FC<THeaderProps> = () => {
     setVisibleMenuMobile(false);
   };
 
-  useEffect(() => {
+  const handleClickMenu = (data: THeaderMenuData): void => {
+    if (data.requireAuth && !atk) {
+      dispatch(uiActions.toggleModalAuth(true));
+      showNotification(ETypeNotification.ERROR, 'Bạn phải đăng nhập để thực hiện hành động này');
+    } else if (data.link) {
+      setKeyword('');
+      navigate(data.link);
+    }
+
     handleCloseMenuMobile();
-  }, [isMobile]);
+  };
 
   const getProfile = useCallback(() => {
     if (atk) dispatch(getProfileAction.request({}));
@@ -98,6 +111,19 @@ const Header: React.FC<THeaderProps> = () => {
   }, [dispatch, atk]);
 
   useEffect(() => {
+    handleCloseMenuMobile();
+  }, [isMobile]);
+
+  useEffect(() => {
+    const pathnameArray = pathname?.split('/') || [];
+    const isSearchPage = pathnameArray.includes('tim-kiem');
+    if (isSearchPage) {
+      setKeyword(pathnameArray?.[pathnameArray.length - 1]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     getProfile();
   }, [getProfile]);
 
@@ -108,6 +134,15 @@ const Header: React.FC<THeaderProps> = () => {
   useEffect(() => {
     getNotificationsUnread();
   }, [getNotificationsUnread]);
+
+  useEffect(() => {
+    if (visibleModalAuth) {
+      setModalAuthState({
+        visible: true,
+        defaultKey: EKeyStateModalAuth.SIGN_IN,
+      });
+    }
+  }, [visibleModalAuth]);
 
   return (
     <div className="Header">
@@ -210,13 +245,12 @@ const Header: React.FC<THeaderProps> = () => {
               <Row align="middle" justify="space-around">
                 {dataHeaderMenu.map((item) => (
                   <Col key={item.key}>
-                    <Link
-                      to={item.link}
+                    <div
                       className={classNames('Header-bottom-list-item', { active: item.activePaths.includes(pathname) })}
-                      onClick={handleCloseMenuMobile}
+                      onClick={(): void => handleClickMenu(item)}
                     >
                       {item.title}
-                    </Link>
+                    </div>
                   </Col>
                 ))}
               </Row>

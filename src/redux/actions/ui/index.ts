@@ -1,7 +1,7 @@
 import { createActionCreator } from 'deox';
 
 import { EUIAction } from './constants';
-import { TResetActionStatus, TSetAudio, TSetAudioData, TSetDevice } from './types';
+import { TResetActionStatus, TSetAudio, TSetAudioData, TSetDevice, TToggleModalAuth } from './types';
 
 export const uiActions = {
   setDevice: createActionCreator(
@@ -15,6 +15,12 @@ export const uiActions = {
     (resolve) =>
       (data: TSetAudioData): TSetAudio =>
         resolve({ data }),
+  ),
+  toggleModalAuth: createActionCreator(
+    EUIAction.TOGGLE_MODAL_AUTH,
+    (resolve) =>
+      (visible: boolean): TToggleModalAuth =>
+        resolve({ visible }),
   ),
   resetActionStatus: createActionCreator(
     EUIAction.RESET_ACTION_STATUS,

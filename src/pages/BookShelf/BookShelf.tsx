@@ -48,7 +48,11 @@ const BookShelf: React.FC = () => {
   };
 
   const handleClickBookBlock = (dataBook: TProduct): void => {
-    navigate(Paths.BookReader(urlSafe(removeAccents(dataBook.name)), dataBook._id));
+    if (isMyBookTab) {
+      navigate(Paths.BookReader(urlSafe(removeAccents(dataBook.name)), dataBook._id));
+    } else {
+      navigate(Paths.BookDetail(urlSafe(removeAccents(dataBook.name)), dataBook._id));
+    }
   };
 
   const handlePageChange = (page: number, pageSize?: number): void => {

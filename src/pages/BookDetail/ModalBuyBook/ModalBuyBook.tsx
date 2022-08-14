@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from '@reach/router';
 
 import ModalConfirm from '@/containers/ModalConfirm';
 import { TRootState } from '@/redux/reducers';
-import { buyProductAction, EBuyProductAction } from '@/redux/actions';
+import { buyProductAction, EBuyProductAction, getProfileAction } from '@/redux/actions';
 import { showNotification } from '@/utils/functions';
 import { ETypeNotification } from '@/common/enums';
 
@@ -28,9 +28,14 @@ const ModalBuyBook: React.FC<TModalBuyBookProps> = ({ visible, onClose, onSubmit
 
   const handleBuyBookSuccess = (): void => {
     showNotification(ETypeNotification.SUCCESS, 'Mua tâm sách thành công');
+    getProfile();
     onClose?.();
     onSubmit?.();
   };
+
+  const getProfile = useCallback(() => {
+    dispatch(getProfileAction.request({}));
+  }, [dispatch]);
 
   return (
     <ModalConfirm

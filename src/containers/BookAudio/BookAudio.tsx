@@ -20,6 +20,7 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   onChangeAudioIsPlay,
   onChangeAudioLoading,
 }) => {
+  const [isMounted, setIsMounted] = useState<boolean>(false);
   const dispatch = useDispatch();
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
@@ -50,15 +51,20 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   const handleLoadedData = (): void => {
     setIsLoading(false);
     setDuration(audioRef?.current?.duration || 0);
+    if (isMounted) handlePlayPauseClick();
+    setIsMounted(true);
   };
 
-  const handlePausePlayClick = (): void => {
-    if (isPlay) {
-      audioRef?.current?.pause();
-    } else {
-      audioRef?.current?.play();
+  const handlePlayPauseClick = (): void => {
+    if (audioRef?.current) {
+      audioRef.current.muted = false;
+      if (isPlay) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setPlay(!isPlay);
     }
-    setPlay(!isPlay);
   };
 
   const handleTimeSliderChange = ({ x }: { x: number }): void => {
@@ -190,7 +196,7 @@ const BookAudio: React.FC<TBookAudioProps> = ({
                 <Icon name={EIconName.TimePastPrev} color={EIconColor.WHITE} />
                 <span>10s</span>
               </div>
-              <div className="BookAudio-control-actions-item .play" onClick={handlePausePlayClick}>
+              <div className="BookAudio-control-actions-item .play" onClick={handlePlayPauseClick}>
                 {isLoading ? (
                   <Loading />
                 ) : (
@@ -214,10 +220,11 @@ const BookAudio: React.FC<TBookAudioProps> = ({
             // eslint-disable-next-line jsx-a11y/media-has-caption
             <audio
               ref={audioRef}
+              playsInline
               src={file}
               onLoadedData={handleLoadedData}
               onTimeUpdate={(): void => setCurrentTime(audioRef?.current?.currentTime || 0)}
-              onEnded={(): void => setPlay(false)}
+              onEnded={(): void => handleClickAudioNext()}
             />
           )}
         </div>

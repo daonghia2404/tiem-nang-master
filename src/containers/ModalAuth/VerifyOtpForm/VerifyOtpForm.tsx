@@ -43,13 +43,12 @@ const VerifyOtpForm: React.FC<TVerifyOtpFormProps> = ({
 
   const resendLoading = authRegisterResendOtpLoading || authForgotResendOtpLoading;
 
-  const handleSubmit = (code?: string): void => {
-    if (code) setPasscode(code);
+  const handleSubmit = (): void => {
     const headers = {
       token: data?.token || '',
     };
     const body = {
-      otp: code || passcode,
+      otp: passcode,
     };
     if (isVerifyRegister) {
       dispatch(authVerifyAction.request({ body, headers }, handleVerifySuccess));
@@ -98,7 +97,7 @@ const VerifyOtpForm: React.FC<TVerifyOtpFormProps> = ({
           <div className="ModalAuth-content-description">Vui lòng nhập mã OTP được gửi đến email</div>
         </div>
 
-        <Passcode onChange={setPasscode} onSubmit={handleSubmit} />
+        <Passcode onChange={setPasscode} onSubmit={setPasscode} />
 
         <div className="ModalAuth-form-submit" style={{ margin: '4rem 0 1.6rem' }}>
           <Button title="Xác nhận" type="primary" onClick={handleSubmit} />

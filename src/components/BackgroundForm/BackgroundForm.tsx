@@ -11,13 +11,13 @@ const BackgroundForm: React.FC<TBackgroundFormProps> = ({ label, value, onChange
     <div className="BackgroundForm">
       {label && <div className="BackgroundForm-label">{label}</div>}
       <div className="BackgroundForm-wrapper">
-        <Row gutter={[16, 16]}>
+        <Row gutter={[12, 16]}>
           {options.map((item) => (
             <Col key={item.value}>
               <div
                 className="BackgroundForm-item"
                 onClick={(): void => onChange?.(item)}
-                style={{ background: item.value }}
+                style={{ background: `url(${item.value})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
               >
                 {value?.value === item.value && (
                   <div className="BackgroundForm-item-check">

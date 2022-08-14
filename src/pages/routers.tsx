@@ -36,6 +36,7 @@ const BookDetail = lazy(() => retryLoadComponent(() => import('@/pages/BookDetai
 const BookReader = lazy(() => retryLoadComponent(() => import('@/pages/BookReader')));
 
 const AccountInformation = lazy(() => retryLoadComponent(() => import('@/pages/AccountInformation')));
+const Notifications = lazy(() => retryLoadComponent(() => import('@/pages/Notifications')));
 const HistoryTranscation = lazy(() => retryLoadComponent(() => import('@/pages/HistoryTranscation')));
 const AffiliateMarketing = lazy(() => retryLoadComponent(() => import('@/pages/AffiliateMarketing')));
 const Event = lazy(() => retryLoadComponent(() => import('@/pages/Event')));
@@ -69,6 +70,7 @@ export const Paths = {
   BookReader: (slug?: string, id?: string): string => `/doc-sach/${slug || ':slug'}/${id || ':id'}`,
 
   AccountInformation: '/thong-tin-tai-khoan',
+  Notifications: '/thong-bao',
   HistoryTranscation: '/lich-su-giao-dich',
   AffiliateMarketing: '/tiep-thi-lien-ket',
   Event: (id?: string): string => `/su-kien/${id || ':id'}`,
@@ -98,6 +100,7 @@ export const Pages = {
   BookReader,
 
   AccountInformation,
+  Notifications,
   HistoryTranscation,
   AffiliateMarketing,
   Event,

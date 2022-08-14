@@ -42,6 +42,14 @@ const BooksListSearch: React.FC = () => {
     getProductsListSearch();
   }, [getProductsListSearch]);
 
+  useEffect(() => {
+    setGetProductsSearchParamsRequest({
+      ...getProductsSearchParamsRequest,
+      keyword,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyword]);
+
   return (
     <div className="BooksListSearch">
       <Banner image={ImageBanner1} title="Tìm kiếm" />
