@@ -59,15 +59,20 @@ const BookReader: React.FC = () => {
       if (!productState?.is_buy) {
         navigate(Paths.BookDetail(bookData?.slug, id));
         showNotification(ETypeNotification.ERROR, 'Bạn chưa mua tâm sách này. Vui lòng mua tâm sách trước');
-      } else {
-        if (productState.book?.voice?.[0]) {
-          dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
-        }
-        setFile(productState.book?.file?.[0]);
+      } else if (productState.book?.voice?.[0]) {
+        dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, productState]);
+
+  useEffect(() => {
+    const isExistedFiles = productState?.book?.file && productState?.book?.file?.length > 0;
+    if (voice && isExistedFiles) {
+      const currentIndexVoice = voice.index - 1;
+      setFile(productState?.book.file[currentIndexVoice]);
+    }
+  }, [voice, productState]);
 
   useEffect(() => {
     getProduct();
