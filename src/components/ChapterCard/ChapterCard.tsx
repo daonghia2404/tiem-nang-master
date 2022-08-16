@@ -41,7 +41,7 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
   };
 
   const handleClick = (): void => {
-    if (!loading) {
+    if (!loading && isActive) {
       if (!isNotPlayAudioFile) {
         if (isPlaying) {
           setIsPlaying(false);

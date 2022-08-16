@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -100,7 +101,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
 
   const handleClickNotifcation = (data: TNotification): void => {
     const body = {
-      id: data.id,
+      id: data._id,
     };
     onClose?.();
     dispatch(
@@ -176,7 +177,7 @@ const AccountDropdown: React.FC<TAccountDropdownProps> = ({ visible, onClose }) 
               <WrapperLazyLoad maxHeight={400} onEnd={handleLoadMoreNotification}>
                 {notifications.map((item) => (
                   <div
-                    key={item.id}
+                    key={item._id}
                     className="AccountDropdown-notification-body-item flex items-start"
                     onClick={(): void => handleClickNotifcation(item)}
                   >

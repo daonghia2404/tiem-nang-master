@@ -30,7 +30,7 @@ const TabChapter: React.FC<TTabChapterProps> = ({ source, isAudioPlay, isAudioLo
   };
 
   const handleClickChapter = (data: TProductVoice): void => {
-    dispatch(uiActions.setAudio({ voice: data, visible: true }));
+    dispatch(uiActions.setAudio({ voice: data, visible: true, productState }));
   };
 
   return (

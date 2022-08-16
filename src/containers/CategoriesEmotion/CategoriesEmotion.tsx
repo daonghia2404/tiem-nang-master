@@ -13,24 +13,26 @@ const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({
   loading,
   ids = [],
   data = [],
-  showLoadMore,
   onClickItem,
   onLoadMore,
 }) => {
-  const handleLoadMore = (): void => {
-    if (!loading) onLoadMore?.();
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>): void => {
+    const element = e.currentTarget;
+    const isScrollEnd = element.offsetWidth + Math.ceil(element.scrollLeft) >= element.scrollWidth;
+
+    if (isScrollEnd && !loading) onLoadMore?.();
   };
 
   return (
     <div className="CategoriesEmotion">
       <div className="container">
         <div className="CategoriesEmotion-wrapper">
-          <div className="CategoriesEmotion-filters">
+          <div className="CategoriesEmotion-filters" onScroll={handleScroll}>
             {data.map((item, index) => (
-              <div key={index} className="CategoriesEmotion-filters-item">
+              <>
                 <div className="CategoriesEmotion-filters-item-title">{item.title}</div>
                 <div className="CategoriesEmotion-filters-item-list">
-                  <Row gutter={[15, 12]} wrap={false}>
+                  <Row gutter={[0, 12]} wrap={false}>
                     {item.list.map((list, listIdx) => (
                       <Col key={listIdx}>
                         <div
@@ -48,15 +50,9 @@ const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({
                     ))}
                   </Row>
                 </div>
-              </div>
+              </>
             ))}
           </div>
-
-          {showLoadMore && (
-            <div className={classNames('CategoriesEmotion-loadmore', { disabled: loading })} onClick={handleLoadMore}>
-              Xem thêm
-            </div>
-          )}
         </div>
       </div>
     </div>

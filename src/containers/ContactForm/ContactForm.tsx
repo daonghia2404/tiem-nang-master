@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { Col, Form, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import moment, { Moment } from 'moment';
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
@@ -47,6 +48,10 @@ const ContactForm: React.FC<TContactFormProps> = () => {
     form.resetFields();
   };
 
+  const disabledDate = (date: Moment): boolean => {
+    return date && date.valueOf() < moment().subtract(1, 'd').valueOf();
+  };
+
   const getAdvisoryIssues = useCallback(() => {
     const params = {
       page: DEFAULT_PAGE,
@@ -85,7 +90,7 @@ const ContactForm: React.FC<TContactFormProps> = () => {
               </Col>
               <Col span={24} sm={{ span: 12 }}>
                 <Form.Item name="appointmentDate" rules={[validationRules.required()]}>
-                  <DatePicker label="Đặt lịch tư vấn" placeholder="Thời gian" />
+                  <DatePicker label="Đặt lịch tư vấn" placeholder="Thời gian" disabledDate={disabledDate} />
                 </Form.Item>
               </Col>
               <Col span={24} sm={{ span: 12 }}>

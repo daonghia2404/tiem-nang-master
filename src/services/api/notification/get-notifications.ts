@@ -19,11 +19,11 @@ export type TGetNotificationsResponse = TCommonResponse & {
 };
 
 export type TNotification = {
+  _id: string;
   content: string;
   createdAt: string;
   description: string;
   featureImage: string;
-  id: string;
   title: string;
   isRead: boolean;
 };
@@ -31,6 +31,6 @@ export type TNotification = {
 // FUNCTION
 
 export const getNotifications = async ({ params }: TGetNotificationsMaterials): Promise<TGetNotificationsResponse> => {
-  const response = await ApiService.get(`/notification`, { params });
+  const response = await ApiService.get(`/notification/user`, { params });
   return response.data;
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -34,7 +35,7 @@ const Notifications: React.FC = () => {
 
   const handleClickNotifcation = (data: TNotification): void => {
     const body = {
-      id: data.id,
+      id: data._id,
     };
     dispatch(
       readNotificationAction.request({ body }, (): void => {
@@ -71,7 +72,7 @@ const Notifications: React.FC = () => {
             <div className="AccountDropdown-notification-body">
               {notifications?.map((item) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="AccountDropdown-notification-body-item flex items-start"
                   onClick={(): void => handleClickNotifcation(item)}
                 >

@@ -15,21 +15,20 @@
   }
 
   &-filters {
+    overflow: auto;
+
     &-item {
-      &:not(:last-child) {
-        margin-bottom: 1.5rem;
-      }
 
       &-title {
         font-size: 1.8rem;
         font-weight: 600;
         margin-bottom: 1.5rem;
+        position: sticky;
+        left: 0;
       }
 
       &-list {
-        & > .ant-row {
-          overflow: auto;
-        }
+        margin-bottom: 1.5rem;
 
         &-item {
           cursor: pointer;
@@ -37,6 +36,7 @@
           transition: $common-transition;
           background: $wild-sand;
           border-radius: .5rem;
+          margin-right: 1.5rem;
 
           &:hover,
           &.active {
@@ -68,7 +68,7 @@
   }
 
   &-loadmore {
-    margin-top: 1.8rem;
+    margin-top: 0.3rem;
     text-align: center;
     font-size: 1.8rem;
     cursor: pointer;

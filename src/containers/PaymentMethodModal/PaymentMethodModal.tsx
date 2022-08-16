@@ -5,7 +5,6 @@ import Modal from '@/components/Modal';
 import ImageVnPay from '@/assets/images/image-vn-pay.png';
 import ImageViettelPay from '@/assets/images/image-viettel-pay.png';
 import ImageMomo from '@/assets/images/image-momo.png';
-import Button from '@/components/Button';
 import { Paths } from '@/pages/routers';
 
 import { TPaymentMethodModalProps } from './PaymentMethodModal.types.d';
@@ -56,9 +55,9 @@ const PaymentMethodModal: React.FC<TPaymentMethodModalProps> = ({ visible, onClo
 
         <div className="PaymentMethodModal-text">Lưu ý: quy đổi 1.000 vnđ = 1 Bcoin </div>
 
-        <div className="PaymentMethodModal-btn">
+        {/* <div className="PaymentMethodModal-btn">
           <Button title="Nạp ngay" />
-        </div>
+        </div> */}
       </div>
     </Modal>
   );

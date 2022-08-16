@@ -15,6 +15,7 @@ import {
   EUnsaveProductAction,
   getProductAction,
   saveProductAction,
+  uiActions,
   unsaveProductAction,
 } from '@/redux/actions';
 import { TRootState } from '@/redux/reducers';
@@ -25,12 +26,15 @@ import { Paths } from '@/pages/routers';
 import { showNotification } from '@/utils/functions';
 import { ETypeNotification } from '@/common/enums';
 import { EIconColor, EIconName } from '@/components/Icon';
+import Helper from '@/services/helpers';
 
 import './BookDetail.scss';
+import { TProductVoice } from '@/common/models';
 
 const BookDetail: React.FC = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const atk = Helper.getAccessToken();
 
   const [visibleModalBuyBook, setVisibleModalBuyBook] = useState<boolean>(false);
 
@@ -41,6 +45,11 @@ const BookDetail: React.FC = () => {
   const isSavedBook = productState?.is_save;
   const isShowChapter = bookData?.voice && bookData?.voice?.length > 0;
 
+  const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
+  const voice = audioState?.voice;
+  const isAudioPlay = audioState?.isAudioPlay;
+  const isAudioLoading = audioState?.isAudioLoading;
+
   const saveProductLoading = useSelector((state: TRootState) => state.loadingReducer[ESaveProductAction.SAVE_PRODUCT]);
   const unsaveProductLoading = useSelector(
     (state: TRootState) => state.loadingReducer[EUnsaveProductAction.UNSAVE_PRODUCT],
@@ -48,7 +57,12 @@ const BookDetail: React.FC = () => {
   const savedProductLoading = saveProductLoading || unsaveProductLoading;
 
   const handleOpenBuyBookModal = (): void => {
-    setVisibleModalBuyBook(true);
+    if (atk) {
+      setVisibleModalBuyBook(true);
+    } else {
+      dispatch(uiActions.toggleModalAuth(true));
+      showNotification(ETypeNotification.ERROR, 'Bạn phải đăng nhập để thực hiện hành động này');
+    }
   };
 
   const handleCloseBuyBookModal = (): void => {
@@ -56,10 +70,15 @@ const BookDetail: React.FC = () => {
   };
 
   const handleSavedBook = (): void => {
-    if (isSavedBook) {
-      dispatch(unsaveProductAction.request({ paths: { id } }, handleSavedBookSuccess));
+    if (atk) {
+      if (isSavedBook) {
+        dispatch(unsaveProductAction.request({ paths: { id } }, handleSavedBookSuccess));
+      } else {
+        dispatch(saveProductAction.request({ paths: { id } }, handleSavedBookSuccess));
+      }
     } else {
-      dispatch(saveProductAction.request({ paths: { id } }, handleSavedBookSuccess));
+      dispatch(uiActions.toggleModalAuth(true));
+      showNotification(ETypeNotification.ERROR, 'Bạn phải đăng nhập để thực hiện hành động này');
     }
   };
 
@@ -68,8 +87,16 @@ const BookDetail: React.FC = () => {
     getProduct();
   };
 
+  const handleClickChapter = (data: TProductVoice): void => {
+    dispatch(uiActions.setAudio({ voice: data, visible: true, productState }));
+  };
+
   const getProduct = useCallback(() => {
     if (id) dispatch(getProductAction.request({ paths: { id } }));
+
+    if (productState) {
+      dispatch(uiActions.setAudio({ productState }));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, profileState, dispatch]);
 
@@ -155,7 +182,16 @@ const BookDetail: React.FC = () => {
                   <div className="BookDetail-card-body">
                     <div className="BookDetail-chapter">
                       {bookData?.voice?.map((item, index) => (
-                        <ChapterCard key={item._id} {...item} isActive={index === 0 || isBoughtBook} />
+                        <ChapterCard
+                          key={item._id}
+                          {...item}
+                          {...item}
+                          isActive={index === 0 || isBoughtBook}
+                          isAudioPlay={isAudioPlay && item._id === voice?._id}
+                          isAudioLoading={isAudioLoading && item._id === voice?._id}
+                          isPlayed={item._id === voice?._id}
+                          onClick={(): void => handleClickChapter?.(item)}
+                        />
                       ))}
                     </div>
                   </div>

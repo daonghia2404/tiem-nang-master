@@ -23,7 +23,7 @@ const HistoryBooks: React.FC<THistoryBooksProps> = ({ data = [], page, pageSize,
               <div className="HistoryBooks-item">
                 <div className="HistoryBooks-item-header flex">
                   <div className="HistoryBooks-item-image">
-                    <img src={item.image} alt="" />
+                    <img src={item.images?.[0]} alt="" />
                   </div>
 
                   <div className="HistoryBooks-item-info flex flex-col">

@@ -29,7 +29,7 @@ const BookShelf: React.FC = () => {
   const [keyBookShelfTab, setKeyBookShelfTab] = useState(EKeyBookShelfTab.BOUGHT);
   const [getMyProductParamsRequest, setGetMyProductParamsRequest] = useState<TGetMyProductParams>({
     page: DEFAULT_PAGE,
-    pageSize: DEFAULT_PAGE_SIZE,
+    pageSize: 9,
   });
   const isMyBookTab = keyBookShelfTab === EKeyBookShelfTab.BOUGHT;
 
@@ -127,7 +127,7 @@ const BookShelf: React.FC = () => {
                     </Row>
                   )}
 
-                  <div className="BookShelf-pagination">
+                  <div className="BookShelf-pagination flex justify-center">
                     <Pagination
                       page={getMyProductParamsRequest.page}
                       pageSize={getMyProductParamsRequest.pageSize}

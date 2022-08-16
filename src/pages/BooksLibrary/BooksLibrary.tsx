@@ -35,7 +35,7 @@ const BooksLibrary: React.FC = () => {
 
   const [getCategoryListParamsRequest, setGetCategoryListParamsRequest] = useState<TGetCategoryListParams>({
     page: DEFAULT_PAGE,
-    pageSize: DEFAULT_PAGE_SIZE * 2,
+    pageSize: DEFAULT_PAGE_SIZE * 5,
   });
   const [categoryList, setCategoryList] = useState<TCategory[][]>([]);
   const getCategoryListTotalState = useSelector(
@@ -157,7 +157,6 @@ const BooksLibrary: React.FC = () => {
       <Banner image={ImageBanner1} />
       <CategoriesEmotion
         data={dataCategoriesEmotion}
-        showLoadMore={isLoadMore}
         onLoadMore={handleLoadMore}
         ids={categoriesState}
         loading={getCategoryListLoading}

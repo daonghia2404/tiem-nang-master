@@ -57,11 +57,22 @@ const BookReader: React.FC = () => {
 
   useEffect(() => {
     if (productState) {
-      if (!productState?.is_buy) {
-        navigate(Paths.BookDetail(bookData?.slug, id));
-        showNotification(ETypeNotification.ERROR, 'Bạn chưa mua tâm sách này. Vui lòng mua tâm sách trước');
-      } else if (productState.book?.voice?.[0]) {
-        dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
+      dispatch(uiActions.setAudio({ productState }));
+
+      switch (true) {
+        case !productState?.is_buy: {
+          navigate(Paths.BookDetail(bookData?.slug, id));
+          showNotification(ETypeNotification.ERROR, 'Bạn chưa mua tâm sách này. Vui lòng mua tâm sách trước');
+          break;
+        }
+        case bookData?._id === audioState.productState?.book?._id:
+          break;
+        case Boolean(productState.book?.voice?.[0]):
+          dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
+          break;
+        default:
+          dispatch(uiActions.setAudio({ visible: false, isAudioPlay: false }));
+          break;
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

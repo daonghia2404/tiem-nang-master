@@ -1,4 +1,4 @@
-import { TProductVoice } from '@/common/models';
+import { TProduct, TProductVoice } from '@/common/models';
 import { EUIAction } from './constants';
 
 export type TSetAudioData = {
@@ -6,6 +6,7 @@ export type TSetAudioData = {
   isAudioLoading?: boolean;
   isAudioPlay?: boolean;
   visible?: boolean;
+  productState?: { book: TProduct; is_buy: boolean; is_save: boolean };
 };
 
 export type TSetDevice = { type: EUIAction.SET_DEVICE; payload: { deviceWidth: number } };

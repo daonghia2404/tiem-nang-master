@@ -1,6 +1,8 @@
 import React from 'react';
 import { DatePicker as AntdDatePicker } from 'antd';
 import classNames from 'classnames';
+import 'moment/locale/vi';
+import locale from 'antd/es/date-picker/locale/vi_VN';
 
 import { EFormat } from '@/common/enums';
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
@@ -22,6 +24,7 @@ const DatePicker: React.FC<TDatePickerProps> = ({
       {label && <div className="DatePicker-label">{label}</div>}
 
       <AntdDatePicker
+        locale={locale}
         format={EFormat.DATE}
         value={value}
         placeholder={placeholder}

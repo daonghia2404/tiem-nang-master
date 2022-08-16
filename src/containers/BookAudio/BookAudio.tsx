@@ -1,13 +1,16 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useRef, useState } from 'react';
 import TimeSlider from 'react-input-slider';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
+import { navigate } from '@reach/router';
 
 import Icon, { EIconColor, EIconName } from '@/components/Icon';
 import { TRootState } from '@/redux/reducers';
 import env from '@/env';
 import Loading from '@/components/Loading';
 import { uiActions } from '@/redux/actions';
+import { Paths } from '@/pages/routers';
 
 import { TBookAudioProps } from './BookAudio.types';
 import './BookAudio.scss';
@@ -25,16 +28,28 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
 
-  const isExistedVoices = productState?.book?.voice && productState?.book?.voice.length > 0;
-
-  const bookData = productState?.book;
+  const bookData = audioState?.productState?.book;
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  const indexArray = (audioState?.voice?.index || 0) - 1;
+  const nextChapter = bookData?.voice?.[indexArray + 1];
+  const prevChapter = bookData?.voice?.[indexArray - 1];
+  const disabledNextBtn = !productState?.is_buy || !nextChapter;
+  const disabledPrevBtn = !productState?.is_buy || !prevChapter;
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlay, setPlay] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [file, setFile] = useState<any>(undefined);
+
+  const handleBackPlayingBookPage = (): void => {
+    if (audioState?.productState?.is_buy) {
+      navigate(Paths.BookReader(bookData?.slug, bookData?._id));
+    } else {
+      navigate(Paths.BookDetail(bookData?.slug, bookData?._id));
+    }
+  };
 
   const getFileAudio = async (): Promise<void> => {
     if (source) {
@@ -137,17 +152,19 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   }, [isLoading]);
 
   return (
-    <div className={classNames('BookAudio', { visible: audioState.visible && isExistedVoices })}>
+    <div className={classNames('BookAudio', { visible: audioState.visible })}>
       <div className="BookAudio-close" onClick={handleCloseAudio}>
         <Icon name={EIconName.CloseSquare} />
       </div>
       <div className="container">
         <div className="BookAudio-wrapper flex items-center">
-          <div className="BookAudio-image">
-            <img src={bookData?.image} alt="" />
+          <div className="BookAudio-image" onClick={handleBackPlayingBookPage}>
+            <img src={bookData?.images?.[0]} alt="" />
           </div>
           <div className="BookAudio-info">
-            <div className="BookAudio-info-title">{bookData?.name}</div>
+            <div className="BookAudio-info-title" onClick={handleBackPlayingBookPage}>
+              {bookData?.name}
+            </div>
             <div className="BookAudio-info-author">{bookData?.author.name}</div>
           </div>
           <div
@@ -155,7 +172,9 @@ const BookAudio: React.FC<TBookAudioProps> = ({
               loading: isLoading,
             })}
           >
-            <div className="BookAudio-control-chapter">{source?.name || 'Tâm sách Audio'}</div>
+            <div className="BookAudio-control-chapter" onClick={handleBackPlayingBookPage}>
+              {source?.name || 'Tâm sách Audio'}
+            </div>
             <div className="BookAudio-control-bars">
               <TimeSlider
                 axis="x"
@@ -188,17 +207,22 @@ const BookAudio: React.FC<TBookAudioProps> = ({
           <div className="BookAudio-control-bars-total">{duration ? formatDuration(duration) : '00:00:00'}</div> */}
             </div>
             <div className="BookAudio-control-actions flex justify-around items-center">
-              <div className="BookAudio-control-actions-item .prev" onClick={handleClickAudioPrev}>
+              <div
+                className={classNames('BookAudio-control-actions-item prev', { disabled: disabledPrevBtn })}
+                onClick={(): void => {
+                  if (!disabledPrevBtn) handleClickAudioPrev();
+                }}
+              >
                 <Icon name={EIconName.Prev} color={EIconColor.WHITE} />
               </div>
               <div
-                className="BookAudio-control-actions-item .skip-prev flex items-center"
+                className="BookAudio-control-actions-item skip-prev flex items-center"
                 onClick={(): void => handleClickSkip('prev')}
               >
                 <Icon name={EIconName.TimePastPrev} color={EIconColor.WHITE} />
                 <span>10s</span>
               </div>
-              <div className="BookAudio-control-actions-item .play" onClick={handlePlayPauseClick}>
+              <div className="BookAudio-control-actions-item play" onClick={handlePlayPauseClick}>
                 {isLoading ? (
                   <Loading />
                 ) : (
@@ -206,13 +230,18 @@ const BookAudio: React.FC<TBookAudioProps> = ({
                 )}
               </div>
               <div
-                className="BookAudio-control-actions-item .skip-next flex items-center"
+                className="BookAudio-control-actions-item skip-next flex items-center"
                 onClick={(): void => handleClickSkip('next')}
               >
                 <Icon name={EIconName.TimePastNext} color={EIconColor.WHITE} />
                 <span>10s</span>
               </div>
-              <div className="BookAudio-control-actions-item .next" onClick={handleClickAudioNext}>
+              <div
+                className={classNames('BookAudio-control-actions-item next', { disabled: disabledNextBtn })}
+                onClick={(): void => {
+                  if (!disabledNextBtn) handleClickAudioNext();
+                }}
+              >
                 <Icon name={EIconName.Next} color={EIconColor.WHITE} />
               </div>
             </div>
