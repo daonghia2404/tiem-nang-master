@@ -18,7 +18,7 @@ const Radio: React.FC<TRadioProps> = ({ className, options = [], onChange, value
       <AntdRadio.Group onChange={handleRadioChange} value={options.find((item) => item.value === value?.value)?.value}>
         <Space direction="vertical">
           {options.map((item) => (
-            <AntdRadio key={item.value} value={item.value}>
+            <AntdRadio key={item.value} value={item.value} disabled={item.disabled}>
               {item.label}
             </AntdRadio>
           ))}

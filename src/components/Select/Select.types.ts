@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type TSelectProps = {
   className?: string;
   placeholder?: string;
@@ -20,7 +22,7 @@ export type TSelectProps = {
 };
 
 export type TSelectOption = {
-  label: string;
+  label: string | React.ReactNode;
   value: string;
   data?: any;
   disabled?: boolean;

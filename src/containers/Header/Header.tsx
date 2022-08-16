@@ -115,7 +115,7 @@ const Header: React.FC<THeaderProps> = () => {
   }, [isMobile]);
 
   useEffect(() => {
-    const pathnameArray = pathname?.split('/') || [];
+    const pathnameArray = pathname?.split('/').map((item) => decodeURI(item)) || [];
     const isSearchPage = pathnameArray.includes('tim-kiem');
     if (isSearchPage) {
       setKeyword(pathnameArray?.[pathnameArray.length - 1]);

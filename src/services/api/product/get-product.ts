@@ -1,6 +1,7 @@
 import { TProduct } from '@/common/models';
 import { TCommonResponse } from '@/common/types';
 import ApiService from '@/services/api';
+import Helpers from '@/services/helpers';
 
 // TYPES
 
@@ -25,6 +26,7 @@ export type TGetProductResponse = TCommonResponse & {
 // FUNCTION
 
 export const getProduct = async ({ paths, params }: TGetProductMaterials): Promise<TGetProductResponse> => {
-  const response = await ApiService.get(`/product/${paths?.id}`, { params });
+  const isLogged = Helpers.getAccessToken();
+  const response = await ApiService.get(isLogged ? `/product/${paths?.id}` : `/product/view/${paths?.id}`, { params });
   return response.data;
 };

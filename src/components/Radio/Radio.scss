@@ -1,3 +1,17 @@
 @import '../../assets/styles/global';
 
-.Radio {}
+.Radio {
+  .ant-radio-wrapper:hover .ant-radio, .ant-radio:hover .ant-radio-inner, .ant-radio-input:focus + .ant-radio-inner,
+  .ant-radio-checked .ant-radio-inner,
+  .ant-radio-checked::after {
+    border-color: $orange-peel;
+  }
+
+  span.ant-radio + * {
+    font-size: 1.8rem;
+  }
+
+  .ant-radio-inner::after {
+    background: $orange-peel;
+  }
+}

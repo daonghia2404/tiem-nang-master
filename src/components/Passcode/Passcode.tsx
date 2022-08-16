@@ -63,7 +63,7 @@ const Passcode: React.FC<TPasscodeProps> = ({ disabled, onChange, onSubmit }) =>
   }, []);
 
   return (
-    <div className="Passcode flex items-center">
+    <div className="Passcode flex items-center justify-aroun">
       {Object.keys(passcode).map((key) => (
         <div key={key} className={classNames('Passcode-item', { 'has-value': passcode[+key] })}>
           <input

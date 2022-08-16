@@ -25,6 +25,8 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
 
+  const isExistedVoices = productState?.book?.voice && productState?.book?.voice.length > 0;
+
   const bookData = productState?.book;
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -135,7 +137,7 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   }, [isLoading]);
 
   return (
-    <div className={classNames('BookAudio', { visible: audioState.visible })}>
+    <div className={classNames('BookAudio', { visible: audioState.visible && isExistedVoices })}>
       <div className="BookAudio-close" onClick={handleCloseAudio}>
         <Icon name={EIconName.CloseSquare} />
       </div>

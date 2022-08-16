@@ -159,8 +159,10 @@
           background: $white;
           border: 1px solid $mercury;
 
-          .ModalAuth-socials-item {
-            border-right: 1px solid $mercury;
+          .ModalAuth-form-socials-item {
+            &-icon {
+              border-right: 1px solid $mercury;
+            }
           }
         }
 

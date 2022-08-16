@@ -1,11 +1,50 @@
 @import '../../assets/styles/global';
 
 .BookReader {
-  overflow: hidden;
-
   &-wrapper {
     padding: 5rem 0;
   }
+
+  &-scroll-top {
+    position: fixed;
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    cursor: pointer;
+    z-index: 2;
+    right: 3rem;
+    border: 2px solid $black;
+    background: $orange-peel;
+    border-radius: .8rem;
+    transition: $common-transition;
+    bottom: 4rem;
+
+    @media (max-width: 991px) {
+      right: 2rem;
+    }
+
+    &.visible-audio {
+      bottom: 20rem;
+
+      @media (max-width: 991px) {
+        bottom: 23rem;
+      }
+    }
+
+    .Icon {
+      margin: auto;
+      width: 2.4rem;
+      height: 2.4rem;
+      transform: translate(0rem, -0.2rem) rotate(90deg);
+    }
+  }
+
+  // &-controls {
+  //   @media (min-width: 992px) {
+  //     position: sticky;
+  //     top: 1.6rem;
+  //   }
+  // }
 
   &-header {
     padding-bottom: 1.5rem;

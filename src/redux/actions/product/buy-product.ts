@@ -18,7 +18,7 @@ export type TBuyProductRequest = {
   payload: {
     materials: TBuyProductMaterials;
     successCallback?: (response: TBuyProductResponse) => void;
-    failedCallback?: (err: unknown) => void;
+    failedCallback?: (err: Error) => void;
   };
 };
 
@@ -38,7 +38,7 @@ export const buyProductAction = {
       (
         materials: TBuyProductMaterials,
         successCallback?: (response: TBuyProductResponse) => void,
-        failedCallback?: (err: unknown) => void,
+        failedCallback?: (err: Error) => void,
       ): TBuyProductRequest =>
         resolve({ materials, successCallback, failedCallback }),
   ),

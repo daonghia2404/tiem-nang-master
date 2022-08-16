@@ -65,7 +65,9 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
 
   const handleLoadSourceSuccess = (): void => {
     setLoading(false);
-    handleClick();
+    if (!isNotPlayAudioFile) {
+      setIsPlaying(true);
+    }
   };
 
   useEffect(() => {

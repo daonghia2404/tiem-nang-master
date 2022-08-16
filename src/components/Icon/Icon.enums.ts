@@ -30,4 +30,5 @@ export enum EIconColor {
   ORANGE_PEEL = '#FF9F00',
   SILVER = '#c4c4c4',
   GREEN_HAZE = '#01A358',
+  SCORPION = '#5F5E5E',
 }

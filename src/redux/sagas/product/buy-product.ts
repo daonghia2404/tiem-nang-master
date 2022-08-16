@@ -15,6 +15,6 @@ export function* buyProductSaga(action: ActionType<typeof buyProductAction.reque
     successCallback?.(buyProductResponse);
   } catch (err) {
     yield put(buyProductAction.failure(err));
-    failedCallback?.(err);
+    failedCallback?.(err as Error);
   }
 }

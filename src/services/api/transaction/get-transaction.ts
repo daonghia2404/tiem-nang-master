@@ -37,6 +37,10 @@ export type TPayment = {
   is_deleted: boolean;
   method: string;
   recharge_code: string;
+  bcoin_received: number;
+  note: string;
+  read_books: number;
+  trans_code: string;
   _id: string;
 };
 

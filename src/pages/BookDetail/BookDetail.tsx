@@ -22,11 +22,11 @@ import Carousels from '@/components/Carousels';
 import ChapterCard from '@/components/ChapterCard';
 import ModalBuyBook from '@/pages/BookDetail/ModalBuyBook';
 import { Paths } from '@/pages/routers';
-
-import './BookDetail.scss';
 import { showNotification } from '@/utils/functions';
 import { ETypeNotification } from '@/common/enums';
 import { EIconColor, EIconName } from '@/components/Icon';
+
+import './BookDetail.scss';
 
 const BookDetail: React.FC = () => {
   const { id } = useParams();
@@ -35,6 +35,7 @@ const BookDetail: React.FC = () => {
   const [visibleModalBuyBook, setVisibleModalBuyBook] = useState<boolean>(false);
 
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
+  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse?.data);
   const bookData = productState?.book;
   const isBoughtBook = productState?.is_buy;
   const isSavedBook = productState?.is_save;
@@ -69,7 +70,8 @@ const BookDetail: React.FC = () => {
 
   const getProduct = useCallback(() => {
     if (id) dispatch(getProductAction.request({ paths: { id } }));
-  }, [id, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, profileState, dispatch]);
 
   useEffect(() => {
     getProduct();
@@ -84,8 +86,10 @@ const BookDetail: React.FC = () => {
               <div className="BookDetail-image">
                 <Carousels arrows={false} dots={false} slidesToShow={1} infinite autoplay>
                   {bookData?.images?.map((item) => (
-                    <div key={item} className="BookDetail-image-item">
-                      <img src={item} alt="" />
+                    <div>
+                      <div key={item} className="BookDetail-image-item">
+                        <img src={item} alt="" />
+                      </div>
                     </div>
                   ))}
                 </Carousels>
