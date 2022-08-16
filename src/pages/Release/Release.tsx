@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Banner from '@/components/Banner';
@@ -9,18 +9,16 @@ import BooksList from '@/containers/BooksList';
 import { DEFAULT_PAGE } from '@/common/constants';
 import { getMoodListAction, getReasonListAction } from '@/redux/actions/mood';
 import { TRootState } from '@/redux/reducers';
-import { EGetMoodListType, TGetApophthganParams, TMoodList } from '@/services/api';
-import { getApophthganAction, getProductsByCategoriesAction } from '@/redux/actions';
+import { EGetMoodListType, TMoodList } from '@/services/api';
+import { getApophthganAction, getProductsByCategoriesAction, uiActions } from '@/redux/actions';
 
 const Release: React.FC = () => {
   const dispatch = useDispatch();
 
+  const moodsReasonsState = useSelector((state: TRootState) => state.uiReducer.moodsReasons);
   const getMoodListState = useSelector((state: TRootState) => state.moodReducer.getMoodListResponse?.data.records);
   const getReasonListState = useSelector((state: TRootState) => state.moodReducer.getReasonListResponse?.data.records);
-  const [getApophthganParamsRequest, setGetApophthganParamsRequest] = useState<TGetApophthganParams>({
-    page: DEFAULT_PAGE,
-    pageSize: 100,
-  });
+
   const getProductsByCategoriesState = useSelector(
     (state: TRootState) => state.productReducer.getProductsByCategoriesResponse?.data,
   );
@@ -40,10 +38,9 @@ const Release: React.FC = () => {
   ];
 
   const handleClickEmotion = (data: TMoodList): void => {
-    if (data.type === EGetMoodListType.MOOD)
-      setGetApophthganParamsRequest({ ...getApophthganParamsRequest, mood: data._id });
-    if (data.type === EGetMoodListType.REASON)
-      setGetApophthganParamsRequest({ ...getApophthganParamsRequest, reason: data._id });
+    const [mood, reason] = moodsReasonsState;
+    if (data.type === EGetMoodListType.MOOD) dispatch(uiActions.setMoodsReasons([data._id, reason]));
+    if (data.type === EGetMoodListType.REASON) dispatch(uiActions.setMoodsReasons([mood, data._id]));
   };
 
   const getMoodList = useCallback(() => {
@@ -63,17 +60,27 @@ const Release: React.FC = () => {
   }, [dispatch]);
 
   const getApophthganList = useCallback(() => {
-    if (getApophthganParamsRequest.mood && getApophthganParamsRequest.reason) {
-      dispatch(getApophthganAction.request({ params: getApophthganParamsRequest }));
+    const isAtLeastTwoCategories = moodsReasonsState?.filter((item) => Boolean(item?.trim()))?.length === 2;
+    if (isAtLeastTwoCategories) {
+      dispatch(
+        getApophthganAction.request({
+          params: {
+            page: DEFAULT_PAGE,
+            pageSize: 100,
+            mood: moodsReasonsState[0],
+            reason: moodsReasonsState[1],
+          },
+        }),
+      );
     }
-  }, [dispatch, getApophthganParamsRequest]);
+  }, [dispatch, moodsReasonsState]);
 
   const getProductsByMoodAndReasonList = useCallback(() => {
-    if (getApophthganParamsRequest.mood && getApophthganParamsRequest.reason) {
-      const body = [getApophthganParamsRequest.mood, getApophthganParamsRequest.reason];
-      dispatch(getProductsByCategoriesAction.request({ body }));
+    const isAtLeastTwoCategories = moodsReasonsState?.filter((item) => Boolean(item?.trim()))?.length === 2;
+    if (isAtLeastTwoCategories) {
+      dispatch(getProductsByCategoriesAction.request({ body: moodsReasonsState }));
     }
-  }, [dispatch, getApophthganParamsRequest]);
+  }, [dispatch, moodsReasonsState]);
 
   useEffect(() => {
     getApophthganList();
@@ -101,11 +108,7 @@ const Release: React.FC = () => {
   return (
     <div className="Release">
       <Banner image={ImageBanner1} />
-      <CategoriesEmotion
-        ids={[getApophthganParamsRequest?.mood, getApophthganParamsRequest?.reason]}
-        data={dataCategoriesEmotion}
-        onClickItem={handleClickEmotion}
-      />
+      <CategoriesEmotion ids={moodsReasonsState} data={dataCategoriesEmotion} onClickItem={handleClickEmotion} />
       <BooksList
         useCarousel
         title="Danh ngôn"

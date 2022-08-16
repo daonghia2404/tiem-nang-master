@@ -12,13 +12,9 @@ import {
   getCategoryListAction,
   getFilterProductListAction,
   getProductsByCategoriesAction,
+  uiActions,
 } from '@/redux/actions';
-import {
-  TFilterProductList,
-  TGetCategoryListParams,
-  TGetProductsByCategoriesBody,
-  TGetProductsByCategoriesPaths,
-} from '@/services/api';
+import { TFilterProductList, TGetCategoryListParams, TGetProductsByCategoriesPaths } from '@/services/api';
 import { TCategory } from '@/common/models';
 import { getTotalPage } from '@/utils/functions';
 import { TRootState } from '@/redux/reducers';
@@ -26,11 +22,11 @@ import { TRootState } from '@/redux/reducers';
 const BooksLibrary: React.FC = () => {
   const dispatch = useDispatch();
 
+  const categoriesState = useSelector((state: TRootState) => state.uiReducer.categories);
+
   const [getProductsParamsRequest, setGetProductsParamsRequest] = useState<{
-    body?: TGetProductsByCategoriesBody;
     paths?: TGetProductsByCategoriesPaths;
   }>({
-    body: ['', '', ''],
     paths: undefined,
   });
   const getProductsByCategoryState = useSelector(
@@ -74,19 +70,16 @@ const BooksLibrary: React.FC = () => {
 
   const handleClickCategory = (data: TCategory, indexArray?: number): void => {
     if (typeof indexArray === 'number') {
-      const isExisted = getProductsParamsRequest.body?.includes(data._id);
+      const isExisted = categoriesState?.includes(data._id);
 
       if (!isExisted) {
-        const newFilter = getProductsParamsRequest.body?.map((item, index) => {
+        const newFilter = categoriesState?.map((item, index) => {
           if (index === indexArray) return data._id;
 
           return item;
         });
 
-        setGetProductsParamsRequest({
-          ...getProductsParamsRequest,
-          body: newFilter,
-        });
+        dispatch(uiActions.setCategories(newFilter));
       }
     }
   };
@@ -134,13 +127,12 @@ const BooksLibrary: React.FC = () => {
   }, [dispatch]);
 
   const getProductsByCategory = useCallback(() => {
-    const isAtLeastThreeCategories =
-      getProductsParamsRequest.body?.filter((item) => Boolean(item?.trim()))?.length === 3;
+    const isAtLeastThreeCategories = categoriesState?.filter((item) => Boolean(item?.trim()))?.length === 3;
 
     if (isAtLeastThreeCategories) {
-      dispatch(getProductsByCategoriesAction.request({ ...getProductsParamsRequest }));
+      dispatch(getProductsByCategoriesAction.request({ ...getProductsParamsRequest, body: categoriesState }));
     }
-  }, [dispatch, getProductsParamsRequest]);
+  }, [dispatch, getProductsParamsRequest, categoriesState]);
 
   useEffect(() => {
     getProductsByCategory();
@@ -167,7 +159,7 @@ const BooksLibrary: React.FC = () => {
         data={dataCategoriesEmotion}
         showLoadMore={isLoadMore}
         onLoadMore={handleLoadMore}
-        ids={getProductsParamsRequest.body}
+        ids={categoriesState}
         loading={getCategoryListLoading}
         onClickItem={handleClickCategory}
       />

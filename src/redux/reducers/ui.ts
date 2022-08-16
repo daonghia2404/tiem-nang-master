@@ -15,6 +15,8 @@ export type TInitialState = {
   };
   audio: TSetAudioData;
   visibleModalAuth: boolean;
+  categories: string[];
+  moodsReasons: string[];
 };
 
 const initialState: TInitialState = {
@@ -30,6 +32,8 @@ const initialState: TInitialState = {
     visible: false,
   },
   visibleModalAuth: false,
+  categories: ['', '', ''],
+  moodsReasons: ['', ''],
 };
 
 const reducer = createReducer(initialState, (handleAction) => [
@@ -51,6 +55,14 @@ const reducer = createReducer(initialState, (handleAction) => [
   handleAction(uiActions.toggleModalAuth, (state, { payload }) => ({
     ...state,
     visibleModalAuth: payload.visible,
+  })),
+  handleAction(uiActions.setCategories, (state, { payload }) => ({
+    ...state,
+    categories: payload.data,
+  })),
+  handleAction(uiActions.setMoodsReasons, (state, { payload }) => ({
+    ...state,
+    moodsReasons: payload.data,
   })),
 ]);
 
