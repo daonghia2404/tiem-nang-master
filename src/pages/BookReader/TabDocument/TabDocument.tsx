@@ -12,9 +12,10 @@ import { EFormat } from '@/common/enums';
 import { TTabDocumentProps } from './TabDocument.types';
 import './TabDocument.scss';
 
-const TabDocument: React.FC<TTabDocumentProps> = ({ source, onClickDocument }) => {
+const TabDocument: React.FC<TTabDocumentProps> = ({ source, onClickDocument, onBuyBook }) => {
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const bookData = productState?.book;
+  const isBoughtBook = productState?.is_buy;
 
   // const handleDownloadFile = (data: TProductFile): void => {
   //   dispatch(
@@ -31,30 +32,40 @@ const TabDocument: React.FC<TTabDocumentProps> = ({ source, onClickDocument }) =
   return (
     <div className="TabDocument">
       <div className="TabDocument-list">
-        {bookData?.file?.map((item) => (
-          <div
-            key={item._id}
-            className={classNames('TabDocument-list-item flex', { active: item._id === source?._id })}
-            onClick={(): void => onClickDocument?.(item)}
-          >
-            <div className="TabDocument-list-item-icon">
-              <img src={IconPdf} alt="" />
-            </div>
-            <div className="TabDocument-list-item-info">
-              <div className="TabDocument-list-item-info-title">{item.name}</div>
-              <div className="TabDocument-list-item-info-description">
-                {formatISODateToDateTime(item.updatedAt, EFormat.DATE)}
+        {bookData?.file?.map((item, index) => {
+          const isEnable = index === 0 || isBoughtBook;
+
+          return (
+            <div
+              key={item._id}
+              className={classNames('TabDocument-list-item flex', {
+                active: item._id === source?._id,
+                disabled: !isEnable,
+              })}
+              onClick={(): void => {
+                if (isEnable) onClickDocument?.(item);
+                else onBuyBook?.();
+              }}
+            >
+              <div className="TabDocument-list-item-icon">
+                <img src={IconPdf} alt="" />
               </div>
-              {/* <div
+              <div className="TabDocument-list-item-info">
+                <div className="TabDocument-list-item-info-title">{item.name}</div>
+                <div className="TabDocument-list-item-info-description">
+                  {formatISODateToDateTime(item.updatedAt, EFormat.DATE)}
+                </div>
+                {/* <div
                 className="TabDocument-list-item-info-download flex items-center"
                 onClick={(): void => handleDownloadFile(item)}
               >
                 <img src={IconDownload} alt="" />
                 Tải xuống
               </div> */}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

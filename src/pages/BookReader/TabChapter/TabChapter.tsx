@@ -13,12 +13,15 @@ import { uiActions } from '@/redux/actions';
 import { TTabChapterProps } from './TabChapter.types';
 import './TabChapter.scss';
 
-const TabChapter: React.FC<TTabChapterProps> = ({ source, isAudioPlay, isAudioLoading }) => {
+const TabChapter: React.FC<TTabChapterProps> = ({ source, isAudioPlay, isAudioLoading, onBuyBook }) => {
   const dispatch = useDispatch();
 
   const [visibleBookRateFormModal, setVisibleBookRateFormModal] = useState<boolean>(false);
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
+  const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
   const bookData = productState?.book;
+
+  const isBoughtBook = productState?.is_buy;
   const isEmpty = bookData?.voice && bookData?.voice?.length === 0;
 
   const handleOpenBookRateFormModal = (): void => {
@@ -30,7 +33,12 @@ const TabChapter: React.FC<TTabChapterProps> = ({ source, isAudioPlay, isAudioLo
   };
 
   const handleClickChapter = (data: TProductVoice): void => {
-    dispatch(uiActions.setAudio({ voice: data, visible: true, productState }));
+    const isCurrentPlay = audioState?.voice?._id === data._id && audioState.isAudioPlay;
+    if (isCurrentPlay) {
+      dispatch(uiActions.setAudio({ isAudioPlay: false }));
+    } else {
+      dispatch(uiActions.setAudio({ voice: data, visible: true, productState, isAudioPlay: true }));
+    }
   };
 
   return (
@@ -39,15 +47,16 @@ const TabChapter: React.FC<TTabChapterProps> = ({ source, isAudioPlay, isAudioLo
         <Empty title="Không có dữ liệu danh sách chương" />
       ) : (
         <div className="TabChapter-chapter">
-          {bookData?.voice?.map((item) => (
+          {bookData?.voice?.map((item, index) => (
             <ChapterCard
               key={item._id}
               {...item}
-              isActive
+              isActive={index === 0 || isBoughtBook}
               isAudioPlay={isAudioPlay && item._id === source?._id}
               isAudioLoading={isAudioLoading && item._id === source?._id}
-              isPlayed={item._id === source?._id}
+              isPlayed={audioState.visible && item._id === source?._id}
               onClick={(): void => handleClickChapter?.(item)}
+              onBuyBook={onBuyBook}
             />
           ))}
         </div>

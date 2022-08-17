@@ -23,7 +23,6 @@ const BookAudio: React.FC<TBookAudioProps> = ({
   onChangeAudioIsPlay,
   onChangeAudioLoading,
 }) => {
-  const [isMounted, setIsMounted] = useState<boolean>(false);
   const dispatch = useDispatch();
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
@@ -59,26 +58,34 @@ const BookAudio: React.FC<TBookAudioProps> = ({
       }
       setPlay(false);
       setIsLoading(true);
-      const fileFetch = await fetch(`${env.api.baseUrl.service}/upload/get-voice/${source.src}`);
-      const fileBlob = await fileFetch.blob();
-      setFile(window.URL.createObjectURL(fileBlob));
+      setFile(`${env.api.baseUrl.service}/upload/get-voice/${source.src}`);
     }
   };
 
   const handleLoadedData = (): void => {
     setIsLoading(false);
     setDuration(audioRef?.current?.duration || 0);
-    if (isMounted) handlePlayPauseClick();
-    setIsMounted(true);
+    handlePlayPauseClick();
   };
 
   const handlePlayPauseClick = (): void => {
     if (audioRef?.current) {
       audioRef.current.muted = false;
+
       if (isPlay) {
         audioRef.current.pause();
+        setPlay(false);
       } else {
-        audioRef.current.play();
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setPlay(true);
+            })
+            .catch(() => {
+              setPlay(false);
+            });
+        }
       }
       setPlay(!isPlay);
     }
@@ -201,10 +208,6 @@ const BookAudio: React.FC<TBookAudioProps> = ({
                   },
                 }}
               />
-              {/* <div className="BookAudio-control-bars-current">
-            {audioRef?.current?.currentTime ? formatDuration(audioRef?.current?.currentTime) : '00:00:00'}
-          </div>
-          <div className="BookAudio-control-bars-total">{duration ? formatDuration(duration) : '00:00:00'}</div> */}
             </div>
             <div className="BookAudio-control-actions flex justify-around items-center">
               <div
@@ -252,10 +255,14 @@ const BookAudio: React.FC<TBookAudioProps> = ({
             <audio
               ref={audioRef}
               playsInline
+              crossOrigin="anonymous"
               src={file}
               onLoadedData={handleLoadedData}
               onTimeUpdate={(): void => setCurrentTime(audioRef?.current?.currentTime || 0)}
-              onEnded={(): void => handleClickAudioNext()}
+              onEnded={(): void => {
+                if (!disabledNextBtn) handleClickAudioNext();
+                else setPlay(false);
+              }}
             />
           )}
         </div>

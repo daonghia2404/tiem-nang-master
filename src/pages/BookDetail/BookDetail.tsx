@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
-import { useParams } from '@reach/router';
+import { navigate, useParams } from '@reach/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Rate from '@/components/Rate';
@@ -27,9 +27,11 @@ import { showNotification } from '@/utils/functions';
 import { ETypeNotification } from '@/common/enums';
 import { EIconColor, EIconName } from '@/components/Icon';
 import Helper from '@/services/helpers';
+import { TProductVoice } from '@/common/models';
+import ModalConfirmBuyBook from '@/pages/BookDetail/ModalConfirmBuyBook';
+import { ETransactionType } from '@/services/api';
 
 import './BookDetail.scss';
-import { TProductVoice } from '@/common/models';
 
 const BookDetail: React.FC = () => {
   const { id } = useParams();
@@ -37,6 +39,12 @@ const BookDetail: React.FC = () => {
   const atk = Helper.getAccessToken();
 
   const [visibleModalBuyBook, setVisibleModalBuyBook] = useState<boolean>(false);
+  const [modalConfirmBuyBook, setModalConfirmBuyBook] = useState<{
+    visible: boolean;
+    payment_type?: ETransactionType;
+  }>({
+    visible: false,
+  });
 
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse?.data);
@@ -69,6 +77,23 @@ const BookDetail: React.FC = () => {
     setVisibleModalBuyBook(false);
   };
 
+  const handleSubmitBuyBookModal = (values: { payment_type: ETransactionType }): void => {
+    handleOpenModalConfirmBuyBook(values.payment_type);
+  };
+
+  const handleOpenModalConfirmBuyBook = (payment_type: ETransactionType): void => {
+    setModalConfirmBuyBook({
+      visible: true,
+      payment_type,
+    });
+  };
+
+  const handleCloseModalConfirmBuyBook = (): void => {
+    setModalConfirmBuyBook({
+      visible: false,
+    });
+  };
+
   const handleSavedBook = (): void => {
     if (atk) {
       if (isSavedBook) {
@@ -88,7 +113,10 @@ const BookDetail: React.FC = () => {
   };
 
   const handleClickChapter = (data: TProductVoice): void => {
-    dispatch(uiActions.setAudio({ voice: data, visible: true, productState }));
+    if (voice?._id !== data._id) {
+      dispatch(uiActions.setAudio({ voice: data, visible: true, productState }));
+    }
+    navigate(Paths.BookReader(bookData?.slug, bookData?._id));
   };
 
   const getProduct = useCallback(() => {
@@ -189,8 +217,9 @@ const BookDetail: React.FC = () => {
                           isActive={index === 0 || isBoughtBook}
                           isAudioPlay={isAudioPlay && item._id === voice?._id}
                           isAudioLoading={isAudioLoading && item._id === voice?._id}
-                          isPlayed={item._id === voice?._id}
+                          isPlayed={audioState.visible && item._id === voice?._id}
                           onClick={(): void => handleClickChapter?.(item)}
+                          onBuyBook={handleOpenBuyBookModal}
                         />
                       ))}
                     </div>
@@ -215,7 +244,20 @@ const BookDetail: React.FC = () => {
         </div>
       </div>
 
-      <ModalBuyBook visible={visibleModalBuyBook} onClose={handleCloseBuyBookModal} onSubmit={getProduct} />
+      <ModalBuyBook
+        visible={visibleModalBuyBook}
+        onClose={handleCloseBuyBookModal}
+        onSubmit={handleSubmitBuyBookModal}
+      />
+
+      <ModalConfirmBuyBook
+        {...modalConfirmBuyBook}
+        onClose={handleCloseModalConfirmBuyBook}
+        onSubmit={(): void => {
+          getProduct();
+          handleCloseBuyBookModal();
+        }}
+      />
     </div>
   );
 };

@@ -16,8 +16,13 @@
       border-bottom: 1px solid $mercury;
       transition: $common-transition;
 
+      &.disabled {
+        cursor: not-allowed !important;
+        opacity: 0.6;
+      }
+
       &.active,
-      &:hover {
+      &:not(.disabled):hover {
         cursor: pointer;
         background: $wild-sand;
 

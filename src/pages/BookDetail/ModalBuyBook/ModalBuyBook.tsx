@@ -1,12 +1,8 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from '@reach/router';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Form } from 'antd';
 
 import { TRootState } from '@/redux/reducers';
-import { buyProductAction, EBuyProductAction, getProfileAction } from '@/redux/actions';
-import { showNotification } from '@/utils/functions';
-import { ETypeNotification } from '@/common/enums';
 import { ETransactionType } from '@/services/api';
 import Modal from '@/components/Modal';
 import Radio from '@/components/Radio';
@@ -17,15 +13,12 @@ import { TModalBuyBookProps } from './ModalBuyBook.types';
 import './ModalBuyBook.scss';
 
 const ModalBuyBook: React.FC<TModalBuyBookProps> = ({ visible, onClose, onSubmit }) => {
-  const dispatch = useDispatch();
-  const { id } = useParams();
   const [form] = Form.useForm();
 
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
   const membershipState = useSelector((state: TRootState) => state.membershipReducer.getMyMembershipResponse?.data);
   const bookData = productState?.book;
-  const buyProductLoading = useSelector((state: TRootState) => state.loadingReducer[EBuyProductAction.BUY_PRODUCT]);
 
   const dataPaymentTypeOptions = [
     {
@@ -57,19 +50,8 @@ const ModalBuyBook: React.FC<TModalBuyBookProps> = ({ visible, onClose, onSubmit
     const body = {
       payment_type: values?.payment_type?.value,
     };
-    dispatch(buyProductAction.request({ paths: { id }, body }, handleBuyBookSuccess));
+    onSubmit?.(body);
   };
-
-  const handleBuyBookSuccess = (): void => {
-    showNotification(ETypeNotification.SUCCESS, 'Mua tâm sách thành công');
-    getProfile();
-    onClose?.();
-    onSubmit?.();
-  };
-
-  const getProfile = useCallback(() => {
-    dispatch(getProfileAction.request({}));
-  }, [dispatch]);
 
   useEffect(() => {
     if (visible) {
@@ -95,7 +77,7 @@ const ModalBuyBook: React.FC<TModalBuyBookProps> = ({ visible, onClose, onSubmit
           </Form.Item>
 
           <div className="ModalBuyBook-submit">
-            <Button title="Thanh toán" htmlType="submit" loading={buyProductLoading} />
+            <Button title="Thanh toán" htmlType="submit" />
           </div>
         </Form>
       </div>

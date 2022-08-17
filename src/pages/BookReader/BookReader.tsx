@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { navigate, useParams } from '@reach/router';
+import { useParams } from '@reach/router';
 
 import Rate from '@/components/Rate';
 import Slider from '@/components/Slider';
@@ -13,22 +13,35 @@ import TabDocument from '@/pages/BookReader/TabDocument';
 import TabQuestion from '@/pages/BookReader/TabQuestion';
 import { getProductAction, uiActions } from '@/redux/actions';
 import { TRootState } from '@/redux/reducers';
-import { Paths } from '@/pages/routers';
-import { showNotification } from '@/utils/functions';
-import { ETypeNotification } from '@/common/enums';
 import { TProductFile } from '@/common/models';
 import BookPdf from '@/pages/BookReader/BookPdf';
 import { TSelectOption } from '@/components/Select';
+import Icon, { EIconName } from '@/components/Icon';
+import Helper from '@/services/helpers';
+import { ETypeNotification } from '@/common/enums';
+import ModalBuyBook from '@/pages/BookDetail/ModalBuyBook';
+import ModalConfirmBuyBook from '@/pages/BookDetail/ModalConfirmBuyBook';
+import { ETransactionType } from '@/services/api';
+import { showNotification } from '@/utils/functions';
 
 import { EKeyBookReaderTab } from './BookReader.enums';
 import { dataBackgroundSetting, dataBookReaderTabs } from './BookReader.data';
 import './BookReader.scss';
-import Icon, { EIconName } from '@/components/Icon';
 
 const BookReader: React.FC = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const atk = Helper.getAccessToken();
+
   const [keyTabBookReader, setKeyTabBookReader] = useState<EKeyBookReaderTab>(EKeyBookReaderTab.CHAPTERS);
+
+  const [visibleModalBuyBook, setVisibleModalBuyBook] = useState<boolean>(false);
+  const [modalConfirmBuyBook, setModalConfirmBuyBook] = useState<{
+    visible: boolean;
+    payment_type?: ETransactionType;
+  }>({
+    visible: false,
+  });
 
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const bookData = productState?.book;
@@ -47,6 +60,36 @@ const BookReader: React.FC = () => {
     fontSize: 16,
   });
 
+  const handleOpenBuyBookModal = (): void => {
+    if (atk) {
+      setVisibleModalBuyBook(true);
+    } else {
+      dispatch(uiActions.toggleModalAuth(true));
+      showNotification(ETypeNotification.ERROR, 'Bạn phải đăng nhập để thực hiện hành động này');
+    }
+  };
+
+  const handleCloseBuyBookModal = (): void => {
+    setVisibleModalBuyBook(false);
+  };
+
+  const handleSubmitBuyBookModal = (values: { payment_type: ETransactionType }): void => {
+    handleOpenModalConfirmBuyBook(values.payment_type);
+  };
+
+  const handleOpenModalConfirmBuyBook = (payment_type: ETransactionType): void => {
+    setModalConfirmBuyBook({
+      visible: true,
+      payment_type,
+    });
+  };
+
+  const handleCloseModalConfirmBuyBook = (): void => {
+    setModalConfirmBuyBook({
+      visible: false,
+    });
+  };
+
   const handleChangeKeyTabBookReader = (key: EKeyBookReaderTab): void => {
     setKeyTabBookReader(key);
   };
@@ -58,16 +101,12 @@ const BookReader: React.FC = () => {
   useEffect(() => {
     if (productState) {
       dispatch(uiActions.setAudio({ productState }));
+      const isCurrentBookPlay = audioState?.productState?.book?._id === productState?.book._id;
 
       switch (true) {
-        case !productState?.is_buy: {
-          navigate(Paths.BookDetail(bookData?.slug, id));
-          showNotification(ETypeNotification.ERROR, 'Bạn chưa mua tâm sách này. Vui lòng mua tâm sách trước');
-          break;
-        }
         case bookData?._id === audioState.productState?.book?._id:
           break;
-        case Boolean(productState.book?.voice?.[0]):
+        case Boolean(!isCurrentBookPlay && productState.book?.voice?.[0]):
           dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
           break;
         default:
@@ -135,11 +174,16 @@ const BookReader: React.FC = () => {
 
                   <div className="BookReader-tabs-body">
                     {keyTabBookReader === EKeyBookReaderTab.CHAPTERS && (
-                      <TabChapter source={voice} isAudioPlay={isAudioPlay} isAudioLoading={isAudioLoading} />
+                      <TabChapter
+                        source={voice}
+                        isAudioPlay={isAudioPlay}
+                        isAudioLoading={isAudioLoading}
+                        onBuyBook={handleOpenBuyBookModal}
+                      />
                     )}
                     {keyTabBookReader === EKeyBookReaderTab.QUESTIONS && <TabQuestion />}
                     {keyTabBookReader === EKeyBookReaderTab.DOCUMENTS && (
-                      <TabDocument source={file} onClickDocument={setFile} />
+                      <TabDocument source={file} onClickDocument={setFile} onBuyBook={handleOpenBuyBookModal} />
                     )}
                   </div>
                 </div>
@@ -189,6 +233,21 @@ const BookReader: React.FC = () => {
           </Row>
         </div>
       </div>
+
+      <ModalBuyBook
+        visible={visibleModalBuyBook}
+        onClose={handleCloseBuyBookModal}
+        onSubmit={handleSubmitBuyBookModal}
+      />
+
+      <ModalConfirmBuyBook
+        {...modalConfirmBuyBook}
+        onClose={handleCloseModalConfirmBuyBook}
+        onSubmit={(): void => {
+          getProduct();
+          handleCloseBuyBookModal();
+        }}
+      />
     </div>
   );
 };

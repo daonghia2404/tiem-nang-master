@@ -7,4 +7,5 @@ export type TChapterCardProps = {
   isPlayed?: boolean;
   onChangeAudioIsPlay?: (isPlay: boolean) => void;
   onClick?: () => void;
+  onBuyBook?: () => void;
 };

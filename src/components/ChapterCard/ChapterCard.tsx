@@ -17,6 +17,7 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
   isAudioPlay,
   isAudioLoading,
   isPlayed,
+  onBuyBook,
   onClick,
 }) => {
   const dispatch = useDispatch();
@@ -54,6 +55,8 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
       } else {
         onClick?.();
       }
+    } else {
+      onBuyBook?.();
     }
   };
 
