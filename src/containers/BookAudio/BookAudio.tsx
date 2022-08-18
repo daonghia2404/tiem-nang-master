@@ -38,7 +38,7 @@ const BookAudio: React.FC<TBookAudioProps> = ({
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isPlay, setPlay] = useState(false);
+  const [isPlay, setIsPlay] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [file, setFile] = useState<any>(undefined);
 
@@ -56,7 +56,8 @@ const BookAudio: React.FC<TBookAudioProps> = ({
         audioRef.current?.pause();
         audioRef.current.src = '';
       }
-      setPlay(false);
+      setDuration(0);
+      setIsPlay(false);
       setIsLoading(true);
       setFile(`${env.api.baseUrl.service}/upload/get-voice/${source.src}`);
     }
@@ -74,20 +75,22 @@ const BookAudio: React.FC<TBookAudioProps> = ({
 
       if (isPlay) {
         audioRef.current.pause();
-        setPlay(false);
+        setIsPlay(false);
       } else {
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise
             .then(() => {
-              setPlay(true);
+              setIsPlay(true);
             })
             .catch(() => {
-              setPlay(false);
+              setTimeout(() => {
+                setIsPlay(false);
+              }, 300);
             });
         }
       }
-      setPlay(!isPlay);
+      setIsPlay(!isPlay);
     }
   };
 
@@ -97,7 +100,7 @@ const BookAudio: React.FC<TBookAudioProps> = ({
       setCurrentTime(x);
 
       if (!isPlay) {
-        setPlay(true);
+        setIsPlay(true);
         audioRef.current.play();
       }
     }
@@ -113,29 +116,29 @@ const BookAudio: React.FC<TBookAudioProps> = ({
         audioRef.current.currentTime -= 10;
       }
       audioRef.current.play();
-      setPlay(true);
+      setIsPlay(true);
     }
   };
 
   const handleClickAudioPrev = (): void => {
     onClickPrev?.();
-    setPlay(false);
+    setIsPlay(false);
   };
 
   const handleClickAudioNext = (): void => {
     onClickNext?.();
-    setPlay(false);
+    setIsPlay(false);
   };
 
   const handleCloseAudio = (): void => {
     dispatch(uiActions.setAudio({ visible: false }));
     audioRef?.current?.pause();
-    setPlay(false);
+    setIsPlay(false);
   };
 
   useEffect(() => {
-    setDuration(0);
     getFileAudio();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source]);
 
@@ -150,7 +153,7 @@ const BookAudio: React.FC<TBookAudioProps> = ({
     } else {
       audioRef?.current?.pause();
     }
-    setPlay(Boolean(isAudioPlay));
+    setIsPlay(Boolean(isAudioPlay));
   }, [isAudioPlay]);
 
   useEffect(() => {
@@ -261,7 +264,7 @@ const BookAudio: React.FC<TBookAudioProps> = ({
               onTimeUpdate={(): void => setCurrentTime(audioRef?.current?.currentTime || 0)}
               onEnded={(): void => {
                 if (!disabledNextBtn) handleClickAudioNext();
-                else setPlay(false);
+                else setIsPlay(false);
               }}
             />
           )}

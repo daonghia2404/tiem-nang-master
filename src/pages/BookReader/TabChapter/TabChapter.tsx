@@ -63,7 +63,7 @@ const TabChapter: React.FC<TTabChapterProps> = ({ source, isAudioPlay, isAudioLo
       )}
 
       <div className="TabChapter-btn">
-        <Button title="Viết cảm nhận" onClick={handleOpenBookRateFormModal} />
+        <Button title="Viết cảm nhận" onClick={handleOpenBookRateFormModal} disabled={!productState?.is_buy} />
       </div>
 
       <BookRateForm visible={visibleBookRateFormModal} onClose={handleCloseBookRateFormModal} />

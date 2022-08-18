@@ -64,8 +64,9 @@ const BookDetail: React.FC = () => {
   );
   const savedProductLoading = saveProductLoading || unsaveProductLoading;
 
-  const handleOpenBuyBookModal = (): void => {
+  const handleOpenBuyBookModal = (forward?: boolean): void => {
     if (atk) {
+      if (!forward) showNotification(ETypeNotification.ERROR, 'Bạn phải thanh toán sách để thực hiện hành động này');
       setVisibleModalBuyBook(true);
     } else {
       dispatch(uiActions.toggleModalAuth(true));
@@ -78,6 +79,7 @@ const BookDetail: React.FC = () => {
   };
 
   const handleSubmitBuyBookModal = (values: { payment_type: ETransactionType }): void => {
+    handleCloseBuyBookModal();
     handleOpenModalConfirmBuyBook(values.payment_type);
   };
 
@@ -121,10 +123,6 @@ const BookDetail: React.FC = () => {
 
   const getProduct = useCallback(() => {
     if (id) dispatch(getProductAction.request({ paths: { id } }));
-
-    if (productState) {
-      dispatch(uiActions.setAudio({ productState }));
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, profileState, dispatch]);
 
@@ -186,7 +184,7 @@ const BookDetail: React.FC = () => {
                   {isBoughtBook ? (
                     <Button type="primary" title="Đọc sách" link={Paths.BookReader(bookData?.slug, bookData?._id)} />
                   ) : (
-                    <Button type="default" title="Thanh toán" onClick={handleOpenBuyBookModal} />
+                    <Button type="default" title="Thanh toán" onClick={(): void => handleOpenBuyBookModal(true)} />
                   )}
                   <Button
                     iconName={isSavedBook ? EIconName.Unsaved : EIconName.Saved}
@@ -219,7 +217,7 @@ const BookDetail: React.FC = () => {
                           isAudioLoading={isAudioLoading && item._id === voice?._id}
                           isPlayed={audioState.visible && item._id === voice?._id}
                           onClick={(): void => handleClickChapter?.(item)}
-                          onBuyBook={handleOpenBuyBookModal}
+                          onBuyBook={(): void => handleOpenBuyBookModal()}
                         />
                       ))}
                     </div>

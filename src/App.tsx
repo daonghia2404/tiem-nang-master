@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Redirect, Router, globalHistory } from '@reach/router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
 
 import { AuthRoute, LayoutPaths, Pages, Paths, ProtectedRoute, PublicRoute } from '@/pages/routers';
 import Guest from '@/layouts/Guest';
@@ -8,11 +9,40 @@ import Auth from '@/layouts/Auth';
 import Admin from '@/layouts/Admin';
 import { uiActions } from '@/redux/actions';
 import { scrollToTop } from '@/utils/functions';
+import BookAudio from '@/containers/BookAudio';
+import { TRootState } from '@/redux/reducers';
 
 import './App.scss';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
+
+  const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
+  const bookData = productState?.book;
+
+  const audioState = useSelector((state: TRootState) => state.uiReducer.audio);
+
+  const handleChangeAudio = (type: string): void => {
+    if (audioState?.voice) {
+      const indexArray = audioState?.voice.index - 1;
+      const nextChapter = bookData?.voice?.[indexArray + 1];
+      const prevChapter = bookData?.voice?.[indexArray - 1];
+
+      if (type === 'prev' && prevChapter) {
+        dispatch(uiActions.setAudio({ voice: prevChapter }));
+      }
+      if (type === 'next' && nextChapter) {
+        dispatch(uiActions.setAudio({ voice: nextChapter }));
+      }
+    }
+  };
+
+  const handleChangeAudioPlay = (status: boolean): void => {
+    dispatch(uiActions.setAudio({ isAudioPlay: status }));
+  };
+  const handleChangeAudioLoading = (status: boolean): void => {
+    dispatch(uiActions.setAudio({ isAudioLoading: status }));
+  };
 
   globalHistory.listen((): void => {
     scrollToTop();
@@ -27,7 +57,7 @@ const App: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="App">
+    <div className={classNames('App', { 'visible-audio': audioState.visible })}>
       <Router primary={false}>
         <Guest path={LayoutPaths.Guest}>
           <PublicRoute path={Paths.BooksLibrary} component={Pages.BooksLibrary} />
@@ -67,6 +97,15 @@ const App: React.FC = () => {
           <Redirect noThrow from={Paths.Rest} to={`${LayoutPaths.Guest}${Paths.BooksLibrary}`} />
         </Admin>
       </Router>
+
+      <BookAudio
+        source={audioState?.voice}
+        isAudioPlay={audioState?.isAudioPlay}
+        onClickPrev={(): void => handleChangeAudio('prev')}
+        onClickNext={(): void => handleChangeAudio('next')}
+        onChangeAudioIsPlay={handleChangeAudioPlay}
+        onChangeAudioLoading={handleChangeAudioLoading}
+      />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { navigate } from '@reach/router';
 
 import ModalConfirm from '@/containers/ModalConfirm';
 import Helpers from '@/services/helpers';
-import { authLogoutAction, EAuthLogoutAction, getProfileAction } from '@/redux/actions';
+import { authLogoutAction, EAuthLogoutAction, getProfileAction, uiActions } from '@/redux/actions';
 import { TRootState } from '@/redux/reducers';
 import { Paths } from '@/pages/routers';
 
@@ -23,6 +23,7 @@ const ModalLogout: React.FC<TModalLogoutProps> = ({ visible, onClose }) => {
   const handleAuthLogoutSuccess = (): void => {
     Helpers.clearTokens();
     dispatch(getProfileAction.success(undefined));
+    dispatch(uiActions.setAudio({ visible: false }));
     navigate(Paths.BooksLibrary);
     onClose?.();
   };

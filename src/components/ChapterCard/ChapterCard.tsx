@@ -42,21 +42,23 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
   };
 
   const handleClick = (): void => {
-    if (!loading && isActive) {
-      if (!isNotPlayAudioFile) {
-        if (isPlaying) {
-          setIsPlaying(false);
-        } else if (!source) {
-          setLoading(true);
-          setSource(`${env.api.baseUrl.service}/upload/get-voice/${src}`);
+    if (!loading) {
+      if (isActive) {
+        if (!isNotPlayAudioFile) {
+          if (isPlaying) {
+            setIsPlaying(false);
+          } else if (!source) {
+            setLoading(true);
+            setSource(`${env.api.baseUrl.service}/upload/get-voice/${src}`);
+          } else {
+            setIsPlaying(true);
+          }
         } else {
-          setIsPlaying(true);
+          onClick?.();
         }
       } else {
-        onClick?.();
+        onBuyBook?.();
       }
-    } else {
-      onBuyBook?.();
     }
   };
 

@@ -36,7 +36,7 @@ const AccountInformation: React.FC = () => {
   const [passwordValue, setPasswordValue] = useState('');
 
   const handleSubmitFormInformation = (values: any): void => {
-    const body = values;
+    const body = { ...values, avatar: values.avatar === profileState?.avatar ? undefined : values.avatar };
     dispatch(updateProfileAction.request({ body }, handleUpdateProfileSuccess));
   };
 

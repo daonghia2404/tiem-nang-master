@@ -43,6 +43,7 @@ const BookReader: React.FC = () => {
     visible: false,
   });
 
+  const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse?.data);
   const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
   const bookData = productState?.book;
 
@@ -60,8 +61,9 @@ const BookReader: React.FC = () => {
     fontSize: 16,
   });
 
-  const handleOpenBuyBookModal = (): void => {
+  const handleOpenBuyBookModal = (forward?: boolean): void => {
     if (atk) {
+      if (!forward) showNotification(ETypeNotification.ERROR, 'Bạn phải thanh toán sách để thực hiện hành động này');
       setVisibleModalBuyBook(true);
     } else {
       dispatch(uiActions.toggleModalAuth(true));
@@ -74,6 +76,7 @@ const BookReader: React.FC = () => {
   };
 
   const handleSubmitBuyBookModal = (values: { payment_type: ETransactionType }): void => {
+    handleCloseBuyBookModal();
     handleOpenModalConfirmBuyBook(values.payment_type);
   };
 
@@ -95,16 +98,23 @@ const BookReader: React.FC = () => {
   };
 
   const getProduct = useCallback(() => {
-    if (id) dispatch(getProductAction.request({ paths: { id } }));
-  }, [id, dispatch]);
+    if (id)
+      dispatch(
+        getProductAction.request({ paths: { id } }, (response): void => {
+          dispatch(uiActions.setAudio({ productState: response.data }));
+        }),
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, dispatch, profileState]);
 
   useEffect(() => {
     if (productState) {
-      dispatch(uiActions.setAudio({ productState }));
-      const isCurrentBookPlay = audioState?.productState?.book?._id === productState?.book._id;
+      const isCurrentBookPlay = audioState?.productState?.book?._id === id;
 
       switch (true) {
         case bookData?._id === audioState.productState?.book?._id:
+          break;
+        case isCurrentBookPlay:
           break;
         case Boolean(!isCurrentBookPlay && productState.book?.voice?.[0]):
           dispatch(uiActions.setAudio({ voice: productState.book?.voice?.[0], visible: true }));
@@ -178,12 +188,16 @@ const BookReader: React.FC = () => {
                         source={voice}
                         isAudioPlay={isAudioPlay}
                         isAudioLoading={isAudioLoading}
-                        onBuyBook={handleOpenBuyBookModal}
+                        onBuyBook={(): void => handleOpenBuyBookModal()}
                       />
                     )}
                     {keyTabBookReader === EKeyBookReaderTab.QUESTIONS && <TabQuestion />}
                     {keyTabBookReader === EKeyBookReaderTab.DOCUMENTS && (
-                      <TabDocument source={file} onClickDocument={setFile} onBuyBook={handleOpenBuyBookModal} />
+                      <TabDocument
+                        source={file}
+                        onClickDocument={setFile}
+                        onBuyBook={(): void => handleOpenBuyBookModal()}
+                      />
                     )}
                   </div>
                 </div>

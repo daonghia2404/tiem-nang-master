@@ -11,18 +11,21 @@ import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/common/constants';
 import { getProductQuestionsAction } from '@/redux/actions';
 import { formatISODateToDateTime, getTotalPage } from '@/utils/functions';
 import { TRootState } from '@/redux/reducers';
-
-import { TTabQuestionProps } from './TabQuestion.types';
-import './TabQuestion.scss';
 import Empty from '@/components/Empty';
 import WrapperLazyLoad from '@/components/WrapperLazyLoad';
 import { EFormat } from '@/common/enums';
+
+import { TTabQuestionProps } from './TabQuestion.types';
+import './TabQuestion.scss';
 
 const TabQuestion: React.FC<TTabQuestionProps> = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
   const [visibleBookQuestionFormModal, setVisibleBookQuestionFormModal] = useState<boolean>(false);
+
+  const productState = useSelector((state: TRootState) => state.productReducer.getProductResponse?.data);
+  const isBoughtBook = productState?.is_buy;
 
   const [questionsProduct, setQuestionsProduct] = useState<TProductQuestion[]>([]);
   const getProductQuestionsTotal = useSelector(
@@ -62,18 +65,21 @@ const TabQuestion: React.FC<TTabQuestionProps> = () => {
   };
 
   const getProductQuestions = useCallback(() => {
-    dispatch(
-      getProductQuestionsAction.request(
-        { paths: { id }, params: getProductQuestionsParamsRequest },
-        (response): void => {
-          const isFirstFetching = getProductQuestionsParamsRequest.page === DEFAULT_PAGE;
-          const data = response.data.records;
-          setQuestionsProduct(isFirstFetching ? data : [...questionsProduct, ...data]);
-        },
-      ),
-    );
+    if (isBoughtBook) {
+      dispatch(
+        getProductQuestionsAction.request(
+          { paths: { id }, params: getProductQuestionsParamsRequest },
+          (response): void => {
+            const isFirstFetching = getProductQuestionsParamsRequest.page === DEFAULT_PAGE;
+            const data = response.data.records;
+            setQuestionsProduct(isFirstFetching ? data : [...questionsProduct, ...data]);
+          },
+        ),
+      );
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, dispatch, getProductQuestionsParamsRequest]);
+  }, [id, dispatch, getProductQuestionsParamsRequest, isBoughtBook]);
 
   useEffect(() => {
     getProductQuestions();
@@ -114,7 +120,7 @@ const TabQuestion: React.FC<TTabQuestionProps> = () => {
       )}
 
       <div className="TabChapter-btn">
-        <Button title="Gửi câu hỏi" onClick={handleOpenBookQuestionFormModal} />
+        <Button title="Gửi câu hỏi" onClick={handleOpenBookQuestionFormModal} disabled={!isBoughtBook} />
       </div>
 
       <BookQuestionForm
