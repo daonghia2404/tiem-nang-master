@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { useDispatch } from 'react-redux';
 
 import Icon, { EIconName } from '@/components/Icon';
 import Loading from '@/components/Loading';
 import env from '@/env';
-import { uiActions } from '@/redux/actions';
 
 import { TChapterCardProps } from './ChapterCard.types.d';
 import './ChapterCard.scss';
@@ -20,7 +18,6 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
   onBuyBook,
   onClick,
 }) => {
-  const dispatch = useDispatch();
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [loading, setLoading] = useState(false);
@@ -62,12 +59,6 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
     }
   };
 
-  const handleClickChapterCardIcon = (): void => {
-    if (!loading) {
-      dispatch(uiActions.setAudio({ isAudioLoading: !isAudioPlay }));
-    }
-  };
-
   const handleLoadSourceSuccess = (): void => {
     setLoading(false);
     if (!isNotPlayAudioFile) {
@@ -96,9 +87,7 @@ const ChapterCard: React.FC<TChapterCardProps> = ({
       {source && <audio ref={audioRef} src={source} onLoadedData={handleLoadSourceSuccess} />}
 
       <div className="ChapterCard-title">{name}</div>
-      <div className="ChapterCard-icon" onClick={handleClickChapterCardIcon}>
-        {loading ? <Loading /> : <Icon name={showIconChapter()} />}
-      </div>
+      <div className="ChapterCard-icon">{loading ? <Loading /> : <Icon name={showIconChapter()} />}</div>
     </div>
   );
 };
