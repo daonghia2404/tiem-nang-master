@@ -16,7 +16,7 @@ import './BookPdf.scss';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const BookPdf: React.FC<TBookPdfProps> = ({ source, fontSize, background }) => {
+const BookPdf: React.FC<TBookPdfProps> = ({ source, fontSize }) => {
   const dispatch = useDispatch();
   const [file, setFile] = useState<string>();
   const [pageNumber, setPageNumber] = useState<{
@@ -68,11 +68,7 @@ const BookPdf: React.FC<TBookPdfProps> = ({ source, fontSize, background }) => {
         </Document>
       )}
 
-      <div
-        className="BookPdf-content"
-        style={{ fontSize, background: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-        dangerouslySetInnerHTML={{ __html: file }}
-      />
+      <div className="BookPdf-content" style={{ fontSize }} dangerouslySetInnerHTML={{ __html: file }} />
     </div>
   );
 };

@@ -48,10 +48,10 @@ const BookRateForm: React.FC<TBookRateFormProps> = ({ visible, onClose, onSubmit
       <div className="BookRateForm-wrapper">
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item name="voiceStar">
-            <Slider label="Giọng đọc" min={1} max={5} step={0.5} showValue bordered />
+            <Slider label="Giọng đọc" min={1} max={5} step={0.5} showValue />
           </Form.Item>
           <Form.Item name="contentStar">
-            <Slider label="Nội dung" min={1} max={5} step={0.5} showValue bordered />
+            <Slider label="Nội dung" min={1} max={5} step={0.5} showValue />
           </Form.Item>
           <Form.Item name="content" rules={[validationRules.required()]}>
             <TextArea label="Đánh giá của bạn" placeholder="Nhập nội dung" />

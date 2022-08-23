@@ -17,7 +17,7 @@ const HistoryPayment: React.FC<THistoryPaymentProps> = ({ data, page, pageSize, 
       {isEmpty ? (
         <Empty title="Không có dữ liệu lịch sử nạp tiền" />
       ) : (
-        <Row gutter={[40, 40]}>
+        <Row gutter={[20, 20]}>
           {data.map((item) => (
             <Col key={item._id} span={24} md={{ span: 12 }}>
               <div className="HistoryPayment-item">

@@ -171,7 +171,7 @@ const Header: React.FC<THeaderProps> = () => {
       <div className="Header-middle">
         <div className="container">
           <div className="Header-middle-wrapper">
-            <Row justify="space-between" gutter={16} align="middle">
+            <Row justify="space-between" gutter={16} align="middle" wrap={false}>
               <Col>
                 <Link to={Paths.BooksLibrary} className="Header-middle-logo">
                   <img src={Logo} alt="" />
@@ -180,7 +180,7 @@ const Header: React.FC<THeaderProps> = () => {
               {!isMobile && <Col flex={1}>{renderComponentSearch()}</Col>}
 
               <Col>
-                <Row align="middle">
+                <Row align="middle" wrap={false}>
                   <Col>
                     {!profileState ? (
                       <div className="Header-middle-account flex items-center">

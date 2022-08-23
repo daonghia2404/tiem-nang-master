@@ -3,7 +3,7 @@
 .HistoryBooks {
   &-item {
     background: $white;
-    box-shadow: $common-shadow;
+    border: 1px solid $alto;
 
     &-footer {
       border-top: 1px solid $alto;

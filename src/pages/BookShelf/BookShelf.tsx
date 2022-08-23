@@ -24,17 +24,17 @@ import './BookShelf.scss';
 const BookShelf: React.FC = () => {
   const dispatch = useDispatch();
 
-  const isMobile = useSelector((state: TRootState) => state.uiReducer.device.isMobile);
-
   const [keyBookShelfTab, setKeyBookShelfTab] = useState(EKeyBookShelfTab.BOUGHT);
   const [getMyProductParamsRequest, setGetMyProductParamsRequest] = useState<TGetMyProductParams>({
     page: DEFAULT_PAGE,
     pageSize: 9,
   });
   const isMyBookTab = keyBookShelfTab === EKeyBookShelfTab.BOUGHT;
+  const currentTab = dataBookShelfTabs.find((item) => item.value === keyBookShelfTab);
 
   const myProductsState = useSelector((state: TRootState) => state.productReducer.getMyProductResponse?.data);
   const myProductsSavedState = useSelector((state: TRootState) => state.productReducer.getProductsSavedResponse?.data);
+  const isMobile = useSelector((state: TRootState) => state.uiReducer.device.isMobile);
 
   const data = isMyBookTab
     ? myProductsState?.records?.map((item) => item.product)
@@ -90,16 +90,15 @@ const BookShelf: React.FC = () => {
     <div className="BookShelf">
       <div className="container">
         <div className="BookShelf-wrapper">
-          <Row gutter={[40, 24]}>
-            <Col span={24} lg={{ span: 8 }}>
-              <AccountReward />
-            </Col>
-            <Col span={24} lg={{ span: 16 }}>
-              <div className="BookShelf-tabs">
+          <div className="BookShelf-tabs">
+            <Row gutter={[40, 24]}>
+              <Col span={24} lg={{ span: 6 }}>
+                {isMobile && <AccountReward />}
+
                 <div className="BookShelf-tabs-header">
                   <Row>
                     {dataBookShelfTabs.map((item) => (
-                      <Col span={12}>
+                      <Col span={24}>
                         <div
                           key={item.value}
                           className={classNames('BookShelf-tabs-header-item', {
@@ -114,17 +113,31 @@ const BookShelf: React.FC = () => {
                   </Row>
                 </div>
 
+                {!isMobile && <AccountReward />}
+              </Col>
+              <Col span={24} lg={{ span: 18 }}>
+                <div className="BookShelf-title">Tất cả {currentTab?.label}</div>
+
                 <div className="BookShelf-tabs-body">
                   {isEmpty ? (
                     <Empty title="Không có dữ liệu sách đã mua" />
                   ) : (
-                    <Row gutter={isMobile ? [30, 30] : [80, 30]}>
-                      {data?.map((item) => (
-                        <Col key={item._id} span={12} sm={{ span: 8 }}>
-                          <BookBlock {...item} onClick={(): void => handleClickBookBlock(item)} />
-                        </Col>
-                      ))}
-                    </Row>
+                    <>
+                      <div className="BookShelf-list flex flex-wrap">
+                        {data?.map((item) => (
+                          <div key={item._id} className="BookShelf-list-item">
+                            <BookBlock {...item} onClick={(): void => handleClickBookBlock(item)} />
+                          </div>
+                        ))}
+                      </div>
+                      {/* <Row gutter={[16, 16]}>
+                        {data?.map((item) => (
+                          <Col key={item._id} span={12} sm={{ span: 8 }} lg={{ span: 6 }}>
+                            <BookBlock {...item} onClick={(): void => handleClickBookBlock(item)} />
+                          </Col>
+                        ))}
+                      </Row> */}
+                    </>
                   )}
 
                   <div className="BookShelf-pagination flex justify-center">
@@ -136,9 +149,9 @@ const BookShelf: React.FC = () => {
                     />
                   </div>
                 </div>
-              </div>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+          </div>
         </div>
       </div>
     </div>

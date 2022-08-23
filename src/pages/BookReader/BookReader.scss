@@ -5,6 +5,10 @@
     padding: 5rem 0;
   }
 
+  &-reader {
+    padding: 3rem 2.5rem;
+  }
+
   &-scroll-top {
     position: fixed;
     width: 5rem;
@@ -114,7 +118,7 @@
         width: 100%;
         font-size: 1.8rem;
         transition: $common-transition;
-        background: $alto;
+        background: $titan-white;
         cursor: pointer;
         white-space: nowrap;
         text-align: center;

@@ -1,0 +1,11 @@
+@import '@/assets/styles/_global.scss';
+
+.Contact {
+  padding: 5rem 0;
+
+  &-image {
+    img {
+      width: 100%;
+    }
+  }
+}

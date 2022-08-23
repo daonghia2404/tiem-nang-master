@@ -146,25 +146,35 @@ const BookReader: React.FC = () => {
       </a>
       <div className="container">
         <div className="BookReader-wrapper">
-          <div className="BookReader-header">
-            <div className="BookReader-header-title">{bookData?.name}</div>
-            <Row justify="space-between" align="middle">
-              <Col>
-                <div className="BookReader-header-author">{bookData?.author?.name}</div>
-              </Col>
-
-              <Col>
-                <div className="BookReader-header-rate flex items-center">
-                  {(((bookData?.avgContentRate || 0) + (bookData?.avgVoiceRate || 0)) / 2)?.toFixed(1)}
-                  <Rate value={((bookData?.avgContentRate || 0) + (bookData?.avgVoiceRate || 0)) / 2} disabled />
-                </div>
-              </Col>
-            </Row>
-          </div>
-          <Row gutter={[40, 24]}>
+          <Row gutter={[20, 24]}>
             <Col span={24} lg={{ span: 16 }}>
-              <BookPdf source={file} fontSize={config.fontSize} background={config.background?.value} />
+              <div
+                className="BookReader-reader"
+                style={{
+                  background: `url(${config?.background?.value})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="BookReader-header">
+                  <div className="BookReader-header-title">{bookData?.name}</div>
+                  <Row justify="space-between" align="middle">
+                    <Col>
+                      <div className="BookReader-header-author">{bookData?.author?.name}</div>
+                    </Col>
+
+                    <Col>
+                      <div className="BookReader-header-rate flex items-center">
+                        {(((bookData?.avgContentRate || 0) + (bookData?.avgVoiceRate || 0)) / 2)?.toFixed(1)}
+                        <Rate value={((bookData?.avgContentRate || 0) + (bookData?.avgVoiceRate || 0)) / 2} disabled />
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+                <BookPdf source={file} fontSize={config.fontSize} background={config.background?.value} />
+              </div>
             </Col>
+
             <Col span={24} lg={{ span: 8 }}>
               <div className="BookReader-controls">
                 <div className="BookReader-tabs">

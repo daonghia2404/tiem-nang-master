@@ -1,46 +1,88 @@
 @import '../../assets/styles/global';
 
 .BookShelf {
+  overflow: hidden;
+
   &-wrapper {
     padding: 5rem 0;
+  }
+
+  &-title {
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+
+    @media (min-width: 1301px) {
+      margin-bottom: 0;
+    }
   }
 
   &-tabs {
     &-header {
       margin-bottom: 2rem;
 
-      .ant-col {
-        &:first-child .BookShelf-tabs-header-item {
-          border-left: none;
-        }
+      @media (max-width: 991px) {
+        margin-top: 2rem;
+        margin-bottom: 0;
+      }
 
-        &:last-child .BookShelf-tabs-header-item {
-          border-right: none;
+      .ant-col {
+        &:not(:first-child) {
+          .BookShelf-tabs-header {
+            &-item {
+              border-top: none;
+            }
+          }
         }
       }
 
       &-item {
         color: $boulder;
-        padding: .8rem;
+        padding: 1rem 1.4rem;
         transition: $common-transition;
         cursor: pointer;
         background: $white;
         border: 1px solid $mercury;
-        border-top: none;
-        text-align: center;
         font-size: 1.6rem;
         font-weight: 400;
+        text-transform: uppercase;
 
         &:not(.active):hover {
           color: $orange-peel;
         }
 
         &.active {
-          font-weight: 600;
+          font-weight: 500;
           color: $white;
           background: $orange-peel;
-          border-bottom-color: $flamingo;
         }
+      }
+    }
+  }
+
+  &-list {
+    margin: 0 -.8rem;
+
+    &-item {
+      padding: 0 .8rem;
+      margin-bottom: 2rem;
+      flex: 0 0 calc(100% / 5);
+      max-width: calc(100% / 5);
+
+      @media (max-width: 1300px) {
+        flex: 0 0 calc(100% / 4);
+        max-width: calc(100% / 4);
+      }
+
+      @media (max-width: 768px) {
+        flex: 0 0 calc(100% / 3);
+        max-width: calc(100% / 3);
+      }
+
+      @media (max-width: 575px) {
+        flex: 0 0 calc(100% / 2);
+        max-width: calc(100% / 2);
       }
     }
   }

@@ -116,8 +116,9 @@ const BookDetail: React.FC = () => {
 
   const handleClickChapter = (data: TProductVoice): void => {
     if (voice?._id !== data._id) {
-      dispatch(uiActions.setAudio({ voice: data, visible: true, productState }));
+      dispatch(uiActions.setAudio({ voice: data }));
     }
+    dispatch(uiActions.setAudio({ visible: true, productState, isAudioPlay: true }));
     navigate(Paths.BookReader(bookData?.slug, bookData?._id));
   };
 
@@ -181,22 +182,39 @@ const BookDetail: React.FC = () => {
 
                 <div className="BookDetail-info-content">{bookData?.description}</div>
                 <div className="BookDetail-info-btn">
-                  {isBoughtBook ? (
-                    <Button type="primary" title="Đọc sách" link={Paths.BookReader(bookData?.slug, bookData?._id)} />
-                  ) : (
-                    <Button type="default" title="Thanh toán" onClick={(): void => handleOpenBuyBookModal(true)} />
-                  )}
-                  <Button
-                    iconName={isSavedBook ? EIconName.Unsaved : EIconName.Saved}
-                    iconColor={isSavedBook ? EIconColor.BLACK : EIconColor.WHITE}
-                    type={isSavedBook ? 'default' : 'primary'}
-                    title={isSavedBook ? 'Bỏ lưu tâm sách' : 'Lưu tâm sách'}
-                    onClick={handleSavedBook}
-                    loading={savedProductLoading}
-                  />
+                  <Row gutter={[12, 12]}>
+                    <Col span={12}>
+                      {isBoughtBook ? (
+                        <Button
+                          type="primary"
+                          title="Đọc sách"
+                          link={Paths.BookReader(bookData?.slug, bookData?._id)}
+                        />
+                      ) : (
+                        <Button type="default" title="Thanh toán" onClick={(): void => handleOpenBuyBookModal(true)} />
+                      )}
+                    </Col>
+                    <Col span={12}>
+                      <Button
+                        iconName={isSavedBook ? EIconName.Unsaved : EIconName.Saved}
+                        iconColor={isSavedBook ? EIconColor.BLACK : EIconColor.WHITE}
+                        type={isSavedBook ? 'default' : 'primary'}
+                        title={isSavedBook ? 'Bỏ lưu tâm sách' : 'Lưu tâm sách'}
+                        onClick={handleSavedBook}
+                        loading={savedProductLoading}
+                      />
+                    </Col>
+                  </Row>
                 </div>
               </div>
             </Col>
+          </Row>
+        </div>
+      </div>
+
+      <div className="BookDetail-wrapper-content">
+        <div className="container">
+          <Row>
             {isShowChapter && (
               <Col span={24}>
                 <div className="BookDetail-card">

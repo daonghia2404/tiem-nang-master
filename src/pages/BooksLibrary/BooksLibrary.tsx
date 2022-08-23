@@ -2,10 +2,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Banner from '@/components/Banner';
 import CategoriesEmotion from '@/containers/CategoriesEmotion';
-import ImageBanner1 from '@/assets/images/image-banner-1.png';
 import BooksList from '@/containers/BooksList';
+import Introduction from '@/containers/Introduction';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/common/constants';
 import {
   EGetCategoryListAction,
@@ -154,7 +153,7 @@ const BooksLibrary: React.FC = () => {
 
   return (
     <div className="BooksLibrary">
-      <Banner image={ImageBanner1} />
+      <Introduction />
       <CategoriesEmotion
         data={dataCategoriesEmotion}
         onLoadMore={handleLoadMore}

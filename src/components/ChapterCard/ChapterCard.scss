@@ -1,10 +1,10 @@
 @import '@/assets/styles/_global.scss';
 
 .ChapterCard {
-  border: 1px solid $nobel;
-  border-radius: 1rem;
   padding: 1rem;
   transition: $common-transition;
+  background: $white;
+  box-shadow: $common-shadow;
 
   audio {
     display: none;
@@ -12,9 +12,26 @@
 
   &.played,
   &:hover {
-    border-color: $orange-peel;
-    background: $mercury;
+    background: $orange-peel;
     cursor: pointer;
+
+    .ChapterCard {
+      &-title {
+        color: $white;
+      }
+
+      &-icon {
+        .Icon {
+          .fill {
+            fill: $white;
+          }
+
+          .stroke {
+            stroke: $white;
+          }
+        }
+      }
+    }
   }
 
   &:not(:last-child) {
@@ -30,9 +47,22 @@
   &-icon {
     margin-left: 1.2rem;
 
+    .ant-spin {
+      &-dot {
+        &-item {
+          background-color: $white;
+        }
+      }
+    }
+
     .Icon {
       width: 1.6rem;
       height: 1.6rem;
+
+      .fill,
+      .stroke {
+        transition: $common-transition;
+      }
     }
   }
 }

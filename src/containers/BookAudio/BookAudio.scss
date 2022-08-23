@@ -111,6 +111,7 @@
       text-align: center;
       margin-bottom: 10px;
       cursor: pointer;
+      @include ellipsis(1);
     }
 
     &-bars {

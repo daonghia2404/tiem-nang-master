@@ -2,6 +2,59 @@
 
 .BookRateForm {
   &-wrapper {
-    padding: 5.2rem 3.2rem 2.4rem
+    background: $alabaster;
+    padding: 5.2rem 3.2rem 2.4rem;
+
+    .Slider {
+      padding: 1.8rem 1.5rem;
+      background: $white;
+      box-shadow: $common-shadow;
+
+      .ant-slider-rail {
+        height: .8rem;
+        background: $moon-raker;
+        border-radius: 1rem;
+      }
+
+      .ant-slider:hover .ant-slider-track,
+      .ant-slider-track {
+        background: linear-gradient(90.01deg, #EE4D2C 0%, #FF9F00 96.05%);
+        height: .8rem;
+        border-radius: 1rem;
+      }
+
+
+      .ant-slider-handle {
+        width: 1.6rem;
+        height: 1.6rem;
+      }
+
+      &-label {
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+
+      .Slider-value {
+        top: 1.8rem;
+        right: 1.5rem;
+      }
+    }
+
+    .TextArea {
+      &-label {
+        position: relative;
+        background: transparent;
+        transform: none;
+        left: 0;
+        margin-bottom: 2rem;
+      }
+
+      .ant-input {
+        border-radius: 0;
+        border: none;
+        background: $white;
+        box-shadow: $common-shadow;
+      }
+    }
   }
 }

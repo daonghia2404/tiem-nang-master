@@ -46,18 +46,14 @@ const Member: React.FC = () => {
     (state: TRootState) => state.loadingReducer[EGetMembershipListAction.GET_MEMBERSHIP_LIST],
   );
   const currentLevel = myMembershipState?.level || 0;
-
-  const handleOpenLevelUpRankModal = (data: TMembershipList): void => {
-    setLevelUpRankModalState({ visible: true, data });
-  };
+  const nextLevel = getMembershipListState?.find((item) => item.level === currentLevel + 1);
 
   const handleCloseLevelUpRankModal = (): void => {
     setLevelUpRankModalState({ visible: false });
   };
 
   const handleClickLeveUpBtn = (): void => {
-    const data = getMembershipListState?.find((item) => item.level === currentLevel + 1);
-    setLevelUpRankModalState({ visible: true, data });
+    setLevelUpRankModalState({ visible: true, data: nextLevel });
   };
 
   const handleSubmitLevelUpRankModal = (): void => {
@@ -75,10 +71,6 @@ const Member: React.FC = () => {
     handleCloseLevelUpRankModal();
   };
 
-  const checkHideBtnLevelupRank = (data: TMembershipList): boolean => {
-    return data.level <= currentLevel || data.level !== currentLevel + 1;
-  };
-
   const renderDefaultActiveKey = (): number => {
     switch (true) {
       case !currentLevel:
@@ -94,7 +86,7 @@ const Member: React.FC = () => {
     dispatch(getMyMembershipAction.request({}));
   }, [dispatch]);
 
-  const renderListRewards = (data: React.ReactNode[], membership: TMembershipList): React.ReactElement => {
+  const renderListRewards = (data: React.ReactNode[]): React.ReactElement => {
     return (
       <div className="Member-list-wrapper">
         {data.map((item, index) => (
@@ -106,15 +98,6 @@ const Member: React.FC = () => {
             <div className="Member-list-item-label">{item}</div>
           </div>
         ))}
-
-        {!checkHideBtnLevelupRank(membership) && (
-          <div className="Member-list-level-up-btn">
-            <Button
-              title={`Thăng hạng ngay (${membership.bcoin} Bcoin)`}
-              onClick={(): void => handleOpenLevelUpRankModal(membership)}
-            />
-          </div>
-        )}
       </div>
     );
   };
@@ -123,14 +106,11 @@ const Member: React.FC = () => {
     key: item.level,
     title: item.name,
     remain: '',
-    description: renderListRewards(
-      [
-        <>
-          Thăng bậc <strong>{item.name}</strong> nhận FREE {item.book_for_free} tâm sách!
-        </>,
-      ],
-      item,
-    ),
+    description: renderListRewards([
+      <>
+        Thăng bậc <strong>{item.name}</strong> nhận FREE {item.book_for_free} tâm sách!
+      </>,
+    ]),
   }));
 
   const getProfile = useCallback(() => {
@@ -157,7 +137,20 @@ const Member: React.FC = () => {
         <div className="Member-wrapper">
           <Row gutter={[40, 40]}>
             <Col span={24} lg={{ span: 8 }}>
-              <MemberCard onClickLevelUpBtn={handleClickLeveUpBtn} />
+              <MemberCard nextLevel={nextLevel} onClickLevelUpBtn={handleClickLeveUpBtn} />
+
+              {nextLevel && (
+                <div className="Member-level-up">
+                  <div className="Member-level-up-title">Phí thăng hạng thành viên {nextLevel.name}</div>
+                  <div className="Member-level-up-price">
+                    {nextLevel.bcoin}
+                    <small>BCoin</small>
+                  </div>
+                  <div className="Member-level-up-btn">
+                    <Button title="Thăng hạng ngay" onClick={handleClickLeveUpBtn} />
+                  </div>
+                </div>
+              )}
             </Col>
             <Col span={24} lg={{ span: 16 }}>
               {!getMembershipListLoading && (

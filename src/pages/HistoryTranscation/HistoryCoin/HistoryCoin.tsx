@@ -17,7 +17,7 @@ const HistoryCoin: React.FC<THistoryCoinProps> = ({ data, page, pageSize, total,
       {isEmpty ? (
         <Empty title="Không có dữ liệu lịch sử nhận coin" />
       ) : (
-        <Row gutter={[40, 40]}>
+        <Row gutter={[20, 20]}>
           {data.map((item) => (
             <Col key={item._id} span={24} md={{ span: 12 }}>
               <div className="HistoryCoin-item">

@@ -34,7 +34,7 @@
       border: none;
       border-radius: .0;
       background: $white;
-      box-shadow: $common-shadow;
+      border: 1px solid $mercury;
 
       &:not(:last-child) {
         margin-bottom: 2rem;

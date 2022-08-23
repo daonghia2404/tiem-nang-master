@@ -3,8 +3,10 @@
 .BookRate {
   &-comments {
     &-item {
-      padding: 2.5rem 0;
-      border-bottom: 1px solid $mercury;
+      margin-top: 1rem;
+      background: $white;
+      box-shadow: $common-shadow;
+      padding: 3rem 4rem;
 
       &-avatar {
         margin-right: 1.5rem;
@@ -59,6 +61,7 @@
   }
 
   &-rate {
+    background: $white;
     border: 1px solid $mercury;
 
     .ant-col {

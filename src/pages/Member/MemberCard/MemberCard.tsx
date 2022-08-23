@@ -9,7 +9,7 @@ import { TRootState } from '@/redux/reducers';
 import { TMemberCardProps } from './MemberCard.types.d';
 import './MemberCard.scss';
 
-const MemberCard: React.FC<TMemberCardProps> = ({ onClickLevelUpBtn }) => {
+const MemberCard: React.FC<TMemberCardProps> = ({ nextLevel, onClickLevelUpBtn }) => {
   const profileState = useSelector((state: TRootState) => state.profileReducer.getProfileResponse)?.data;
   const myMembershipState = useSelector((state: TRootState) => state.membershipReducer.getMyMembershipResponse?.data);
 
@@ -37,7 +37,7 @@ const MemberCard: React.FC<TMemberCardProps> = ({ onClickLevelUpBtn }) => {
           <div className="MemberCard-rank">{myMembershipState?.name}</div>
         </div>
         <div className="MemberCard-row-item">
-          <Button title="Thăng hạng" onClick={onClickLevelUpBtn} />
+          {nextLevel && <Button title="Thăng hạng" onClick={onClickLevelUpBtn} />}
         </div>
       </div>
     </div>

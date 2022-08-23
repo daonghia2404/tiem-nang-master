@@ -144,6 +144,12 @@ export const validationRules = {
       return Promise.reject(message || 'Xác nhận lại mật khẩu không khớp !');
     },
   }),
+  emailOrPhoneNumber: (message?: string): Rule => ({
+    validator: (rule: any, value: string): Promise<void> => {
+      if (!value || regex.emailOrPhoneNumber.test(value)) return Promise.resolve();
+      return Promise.reject(message || 'Vui lòng nhập email hoặc số điện thoại hợp lệ !');
+    },
+  }),
 };
 
 export const formatAbbreviationsName = (value: string): string => {

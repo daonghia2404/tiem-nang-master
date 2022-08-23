@@ -2,41 +2,41 @@
 
 .CategoriesEmotion {
   position: relative;
-  z-index: 2;
-  transform: translateY(-10rem);
-  margin-bottom: -10rem;
-
-  &-wrapper {
-    background: $white;
-    border-radius: 1rem;
-    box-shadow: $common-shadow;
-    padding: 1.8rem 2rem;
-    min-height: 20rem;
-  }
+  background: linear-gradient(91.37deg, rgba(2, 62, 119, 0.483) 0.43%, rgba(2, 62, 119, 0.7) 100%);
+  box-shadow: $common-shadow;
+  padding: 3.6rem 0;
 
   &-filters {
-    overflow: auto;
-
     &-item {
 
       &-title {
-        font-size: 1.8rem;
+        font-size: 2.8rem;
         font-weight: 600;
-        margin-bottom: 1.5rem;
+        color: $white;
+        margin-bottom: 2rem;
+        text-align: center;
+        text-transform: uppercase;
         position: sticky;
         left: 0;
+        width: 100%;
+
+        &.sticky {
+          width: unset;
+          text-align: left;
+        }
       }
 
       &-list {
-        margin-bottom: 1.5rem;
+        &:not(:last-child) {
+          margin-bottom: 2rem;
+        }
 
         &-item {
           cursor: pointer;
           padding: .4rem 1rem;
           transition: $common-transition;
-          background: $wild-sand;
-          border-radius: .5rem;
-          margin-right: 1.5rem;
+          background: $white;
+          margin-right: 1.2rem;
 
           &:hover,
           &.active {
@@ -45,11 +45,11 @@
           }
 
           &-icon {
-            flex: 0 0 1.6rem;
-            max-width: 1.6rem;
-            width: 1.6rem;
-            height: 1.6rem;
-            margin-right: 1rem;
+            flex: 0 0 2rem;
+            max-width: 2rem;
+            width: 2rem;
+            height: 2rem;
+            margin-right: 1.2rem;
             @include centerScaleImage;
 
             img {

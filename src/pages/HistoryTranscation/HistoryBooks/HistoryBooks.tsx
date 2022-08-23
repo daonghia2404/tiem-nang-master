@@ -17,7 +17,7 @@ const HistoryBooks: React.FC<THistoryBooksProps> = ({ data = [], page, pageSize,
       {isEmpty ? (
         <Empty title="Không có dữ liệu lịch sử mua sách" />
       ) : (
-        <Row gutter={[40, 40]}>
+        <Row gutter={[20, 20]}>
           {data.map((item) => (
             <Col key={item._id} span={24} md={{ span: 12 }}>
               <div className="HistoryBooks-item">

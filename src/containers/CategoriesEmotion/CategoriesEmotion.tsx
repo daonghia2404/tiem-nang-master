@@ -11,6 +11,7 @@ import './CategoriesEmotion.scss';
 
 const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({
   loading,
+  titleSticky,
   ids = [],
   data = [],
   onClickItem,
@@ -27,11 +28,20 @@ const CategoriesEmotion: React.FC<TCategoriesEmotionProps> = ({
     <div className="CategoriesEmotion">
       <div className="container">
         <div className="CategoriesEmotion-wrapper">
-          <div className="CategoriesEmotion-filters" onScroll={handleScroll}>
+          <div
+            className="CategoriesEmotion-filters"
+            style={{ overflow: titleSticky ? undefined : 'auto' }}
+            onScroll={handleScroll}
+          >
             {data.map((item, index) => (
               <>
-                <div className="CategoriesEmotion-filters-item-title">{item.title}</div>
-                <div className="CategoriesEmotion-filters-item-list">
+                <div className={classNames('CategoriesEmotion-filters-item-title', { sticky: titleSticky })}>
+                  {item.title}
+                </div>
+                <div
+                  className="CategoriesEmotion-filters-item-list"
+                  style={{ overflow: !titleSticky ? undefined : 'auto' }}
+                >
                   <Row gutter={[0, 12]} wrap={false}>
                     {item.list.map((list, listIdx) => (
                       <Col key={listIdx}>

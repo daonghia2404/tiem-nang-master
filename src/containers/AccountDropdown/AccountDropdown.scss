@@ -145,13 +145,10 @@
     &-item {
       padding: 2.2rem 1.8rem;
       cursor: pointer;
+      transition: $common-transition;
 
       &:hover {
-        .AccountDropdown-list-item {
-          &-label {
-            color: $orange-peel;
-          }
-        }
+        background: $moon-raker;
       }
 
       &-icon {
@@ -211,13 +208,13 @@
     }
 
     &-body {
-      padding: 0 1.6rem;
       background: $white;
 
       &-item {
         position: relative;
-        padding: 1.8rem 0;
+        padding: 1.8rem 1.6rem;
         cursor: pointer;
+        transition: $common-transition;
 
         &-unread {
           position: absolute;
@@ -230,15 +227,20 @@
         }
 
         &:not(:last-child) {
-          border-bottom: 1px solid $iron;
+          &::before {
+            position: absolute;
+            content: '';
+            width: 90%;
+            background-color: $iron;
+            height: 1px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+          }
         }
 
         &:hover {
-          .AccountDropdown-notification-body-item-info {
-            &-title {
-              color: $orange-peel;
-            }
-          }
+          background: rgba(238, 77, 44, 0.05);
         }
 
         &-icon {

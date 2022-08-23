@@ -8,6 +8,7 @@ export const regex = {
   alphanumerial: /^[a-z0-9\s]+$/i,
   numeric: /^\d+$/i,
   onlySpecialKey: /[$&+,:;=?@#|'<>.^*()%`~_!\-"\]\[\\}{'/]/g,
+  emailOrPhoneNumber: /^([_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,5}))|\d+$/g,
 };
 
 export const DEFAULT_PAGE = 1;

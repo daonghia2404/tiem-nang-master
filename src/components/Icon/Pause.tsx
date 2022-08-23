@@ -7,7 +7,7 @@ const Svg: React.FC<TIconProps> = ({ color = EIconColor.BLACK }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="icon icon-tabler icon-tabler-player-pause"
+      className="icon icon-tabler icon-tabler-player-pause fill stroke"
       width="44"
       height="44"
       viewBox="0 0 24 24"

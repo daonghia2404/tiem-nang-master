@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from '@reach/router';
 
 import { TRootState } from '@/redux/reducers';
-import { buyProductAction, EBuyProductAction, getProfileAction } from '@/redux/actions';
+import { buyProductAction, EBuyProductAction, getMyMembershipAction, getProfileAction } from '@/redux/actions';
 import { showNotification } from '@/utils/functions';
 import { ETypeNotification } from '@/common/enums';
 import ModalConfirm from '@/containers/ModalConfirm';
@@ -30,9 +30,14 @@ const ModalConfirmBuyBook: React.FC<TModalConfirmBuyBookProps> = ({ visible, pay
   const handleBuyBookSuccess = (): void => {
     showNotification(ETypeNotification.SUCCESS, 'Mua tâm sách thành công');
     getProfile();
+    getMyMembership();
     onClose?.();
     onSubmit?.();
   };
+
+  const getMyMembership = useCallback(() => {
+    dispatch(getMyMembershipAction.request({}));
+  }, [dispatch]);
 
   const getProfile = useCallback(() => {
     dispatch(getProfileAction.request({}));
@@ -40,7 +45,6 @@ const ModalConfirmBuyBook: React.FC<TModalConfirmBuyBookProps> = ({ visible, pay
 
   return (
     <ModalConfirm
-      width={765}
       visible={visible}
       onClose={onClose}
       onSubmit={handleBuyBook}

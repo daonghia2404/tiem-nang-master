@@ -1,18 +1,20 @@
 @import '@/assets/styles/_global.scss';
 
 .BooksList {
+  overflow: hidden;
   padding: 2.4rem 0 4.8rem;
 
   &-title {
     margin-bottom: 2.5rem;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 600;
+    text-transform: uppercase;
   }
 
   &-filters {
     margin-bottom: 2.5rem;
 
-    & > .ant-row {
+    &>.ant-row {
       overflow: auto;
     }
 
@@ -21,12 +23,17 @@
       transition: $common-transition;
       cursor: pointer;
       white-space: nowrap;
+      padding: 1rem 2rem;
+      background: $alabaster;
 
       &:not(.active):hover {
-        color: $orange-peel;
+        color: $white;
+        background: $orange-peel;
       }
 
       &.active {
+        background: $orange-peel;
+        color: $white;
         font-weight: 600;
       }
     }

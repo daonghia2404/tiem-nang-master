@@ -1,19 +1,20 @@
 @import '../../../assets/styles/global';
 
 .TabDocument {
-  padding-top: 1.5rem;
-  padding-bottom: 5rem;
-  border: 1px solid $mercury;
-  border-top: none;
+  border-left: 1px solid $mercury;
+  border-right: 1px solid $mercury;
+  background: $alabaster;
 
   &-list {
-    padding: 0 1.5rem;
+    padding: 1.5rem;
     max-height: 53rem;
     overflow: auto;
 
     &-item {
-      padding: 1.5rem 0;
-      border-bottom: 1px solid $mercury;
+      padding: 1.5rem 1rem;
+      margin-bottom: 1rem;
+      background: $white;
+      box-shadow: $common-shadow;
       transition: $common-transition;
 
       &.disabled {
@@ -24,7 +25,6 @@
       &.active,
       &:not(.disabled):hover {
         cursor: pointer;
-        background: $wild-sand;
 
         .TabDocument-list-item {
           &-info {

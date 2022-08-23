@@ -4,30 +4,21 @@
   &-tabs {
     background: $white;
     box-shadow: $common-shadow;
+    padding: 2rem 2.4rem;
+
 
     &-header {
-      margin-bottom: 2rem;
-
-      .ant-col {
-        &:first-child .HistoryTranscation-tabs-header-item {
-          border-left: none;
-        }
-
-        &:last-child .HistoryTranscation-tabs-header-item {
-          border-right: none;
-        }
-      }
+      margin-bottom: 2.4rem;
 
       &-item {
-        color: $boulder;
-        padding: .8rem;
+        color: $black;
+        padding: .8rem 4rem;
         transition: $common-transition;
         cursor: pointer;
-        background: $white;
-        border: 1px solid $mercury;
-        border-top: none;
+        background: $concrete;
         text-align: center;
         font-size: 1.6rem;
+        border-radius: 4rem;
         font-weight: 400;
 
         &:not(.active):hover {
@@ -38,13 +29,8 @@
           font-weight: 600;
           color: $white;
           background: $orange-peel;
-          border-bottom-color: $flamingo;
         }
       }
-    }
-
-    &-body {
-      padding: 1.5rem;
     }
   }
 }

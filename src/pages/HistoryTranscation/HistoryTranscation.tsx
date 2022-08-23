@@ -17,6 +17,7 @@ import './HistoryTranscation.scss';
 const HistoryTranscation: React.FC = () => {
   const dispatch = useDispatch();
 
+  const isMobile = useSelector((state: TRootState) => state.uiReducer.device.isMobile);
   const getTransactionState = useSelector((state: TRootState) => state.transactionReducer.getTransactionResponse?.data);
   const [getTransactionParamsRequest, setGetTransactionParamsRequest] = useState<TGetTransactionParams>({
     page: DEFAULT_PAGE,
@@ -53,9 +54,9 @@ const HistoryTranscation: React.FC = () => {
       <div className="HistoryTranscation-wrapper">
         <div className="HistoryTranscation-tabs">
           <div className="HistoryTranscation-tabs-header">
-            <Row>
+            <Row gutter={[20, 20]}>
               {dataHistoryTranscationTabs.map((item) => (
-                <Col span={8}>
+                <Col span={isMobile ? 24 : undefined}>
                   <div
                     key={item.value}
                     className={classNames('HistoryTranscation-tabs-header-item', {

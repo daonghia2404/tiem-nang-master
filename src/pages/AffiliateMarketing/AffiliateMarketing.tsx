@@ -78,21 +78,26 @@ const AffiliateMarketing: React.FC = () => {
 
         <div className="AffiliateMarketing-tabs">
           <div className="AffiliateMarketing-tabs-header">
-            <Row>
-              {dataAffiliateMarketingTabs.map((item) => (
-                <Col span={12}>
-                  <div
-                    key={item.value}
-                    className={classNames('AffiliateMarketing-tabs-header-item', {
-                      active: getTransactionParamsRequest.type === item.value,
-                    })}
-                    onClick={(): void => handleChangeHistoryTranscationTab(item.value)}
-                  >
-                    {item.label}
-                  </div>
-                </Col>
-              ))}
-            </Row>
+            {/* eslint-disable-next-line no-constant-condition */}
+            {true ? (
+              <div className="AffiliateMarketing-tabs-header-title">Lịch sử nhận coin</div>
+            ) : (
+              <Row>
+                {dataAffiliateMarketingTabs.map((item) => (
+                  <Col span={12}>
+                    <div
+                      key={item.value}
+                      className={classNames('AffiliateMarketing-tabs-header-item', {
+                        active: getTransactionParamsRequest.type === item.value,
+                      })}
+                      onClick={(): void => handleChangeHistoryTranscationTab(item.value)}
+                    >
+                      {item.label}
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+            )}
           </div>
 
           <div className="AffiliateMarketing-tabs-body">

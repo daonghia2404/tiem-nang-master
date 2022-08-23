@@ -1,0 +1,63 @@
+@import '@/assets/styles/_global.scss';
+
+.Introduction {
+  background: rgba($orange-peel, 0.2);
+  padding: 8rem 0 2rem;
+
+  @media (max-width: 991px) {
+    padding: 6rem 0;
+  }
+
+  &-wrapper {
+    &-item {
+      flex: 0 0 calc(50% - 2rem);
+      max-width: calc(50% - 2rem);
+      text-align: center;
+
+      @media (max-width: 991px) {
+        flex: 0 0 100%;
+        max-width: 100%;
+
+        &:not(:last-child) {
+          margin-bottom: 3rem;
+        }
+      }
+    }
+  }
+
+  &-image {
+    @media (max-width: 991px) {
+      max-width: 60rem;
+      margin: 0 auto;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &-title {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: $razzmatazz;
+    margin-bottom: 2rem;
+    font-size: 4.8rem;
+    position: relative;
+
+    &::before {
+      position: absolute;
+      content: '';
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 2px;
+      width: 5.5rem;
+      background: $black;
+      border-radius: 5rem;
+    }
+  }
+
+  &-description {
+    font-size: 1.6rem;
+  }
+}

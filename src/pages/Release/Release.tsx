@@ -29,7 +29,23 @@ const Release: React.FC = () => {
   const dataCategoriesEmotion = [
     {
       title: 'Tâm trạng hiện tại',
-      list: getMoodListState || [],
+      list: [
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+        ...(getMoodListState || []),
+      ],
     },
     {
       title: 'Căn nguyên',
@@ -108,7 +124,12 @@ const Release: React.FC = () => {
   return (
     <div className="Release">
       <Banner image={ImageBanner1} />
-      <CategoriesEmotion ids={moodsReasonsState} data={dataCategoriesEmotion} onClickItem={handleClickEmotion} />
+      <CategoriesEmotion
+        titleSticky
+        ids={moodsReasonsState}
+        data={dataCategoriesEmotion}
+        onClickItem={handleClickEmotion}
+      />
       <BooksList
         useCarousel
         title="Danh ngôn"
