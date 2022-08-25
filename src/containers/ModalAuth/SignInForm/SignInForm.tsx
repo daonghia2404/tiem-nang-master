@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
+import FacebookLogin, { RenderProps } from 'react-facebook-login/dist/facebook-login-render-props';
+import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import classNames from 'classnames';
 
 import Input from '@/components/Input';
 import { showNotification, validationRules } from '@/utils/functions';
@@ -12,6 +16,7 @@ import ImageGoogle from '@/assets/images/image-google.png';
 import { TRootState } from '@/redux/reducers';
 import {
   authLoginAction,
+  authLoginFacebookAction,
   authRegisterResendOtpAction,
   EAuthLoginAction,
   EAuthRegisterResendOtpAction,
@@ -40,6 +45,25 @@ const SignInForm: React.FC<TSignInFormProps> = ({
   const handleSubmit = (values: any): void => {
     const body = values;
     dispatch(authLoginAction.request({ body }, handleAuthLoginSuccess));
+  };
+
+  const handleResponseFacebook = (response: ReactFacebookLoginInfo | ReactFacebookFailureResponse): void => {
+    console.log(response);
+    // const body = {
+    //   token: '',
+    //   token_device: '',
+    // };
+    // dispatch(authLoginFacebookAction.request({ body }, handleLoginFacebookSuccess));
+  };
+
+  const handleLoginFacebookSuccess = (): void => {};
+
+  const handleResponseGoogleSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
+    console.log(response);
+  };
+
+  const handleResponseGoogleFailed = (response: any): void => {
+    console.log('Login Google Error: ', response);
   };
 
   const handleAuthLoginSuccess = (response: TAuthLoginResponse): void => {
@@ -96,19 +120,42 @@ const SignInForm: React.FC<TSignInFormProps> = ({
         <div className="ModalAuth-form-another-text">Hoặc</div>
 
         <div className="ModalAuth-form-socials">
-          <div className="ModalAuth-form-socials-item flex items-center facebook">
-            <div className="ModalAuth-form-socials-item-icon">
-              <img src={ImageFacebook} alt="" />
-            </div>
-            <div className="ModalAuth-form-socials-item-label">Đăng nhập với Facebook</div>
-          </div>
-
-          <div className="ModalAuth-form-socials-item flex items-center google">
-            <div className="ModalAuth-form-socials-item-icon">
-              <img src={ImageGoogle} alt="" />
-            </div>
-            <div className="ModalAuth-form-socials-item-label">Đăng nhập với Google</div>
-          </div>
+          <FacebookLogin
+            appId="471842248090696"
+            callback={handleResponseFacebook}
+            render={(renderProps: RenderProps): React.ReactElement => (
+              <div
+                onClick={renderProps.onClick}
+                className={classNames('ModalAuth-form-socials-item flex items-center facebook', {
+                  disabled: renderProps.isDisabled,
+                })}
+              >
+                <div className="ModalAuth-form-socials-item-icon">
+                  <img src={ImageFacebook} alt="" />
+                </div>
+                <div className="ModalAuth-form-socials-item-label">Đăng nhập với Facebook</div>
+              </div>
+            )}
+          />
+          <GoogleLogin
+            clientId="524450476556-nj9tafjckki88i8lc32lso5e9lu2r325.apps.googleusercontent.com"
+            render={(renderProps): React.ReactElement => (
+              <div
+                onClick={renderProps.onClick}
+                className={classNames('ModalAuth-form-socials-item flex items-center google', {
+                  disabled: renderProps.disabled,
+                })}
+              >
+                <div className="ModalAuth-form-socials-item-icon">
+                  <img src={ImageGoogle} alt="" />
+                </div>
+                <div className="ModalAuth-form-socials-item-label">Đăng nhập với Google</div>
+              </div>
+            )}
+            onSuccess={handleResponseGoogleSuccess}
+            onFailure={handleResponseGoogleFailed}
+            cookiePolicy="single_host_origin"
+          />
         </div>
 
         <div className="ModalAuth-form-register">

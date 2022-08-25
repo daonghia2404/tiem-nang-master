@@ -2,6 +2,8 @@ export * from './auth-forgot-resend-otp';
 export * from './auth-forgot-reset';
 export * from './auth-forgot-verify';
 export * from './auth-forgot';
+export * from './auth-login-facebook';
+export * from './auth-login-google';
 export * from './auth-login';
 export * from './auth-logout';
 export * from './auth-register-resend-otp';

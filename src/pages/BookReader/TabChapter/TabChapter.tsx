@@ -33,9 +33,10 @@ const TabChapter: React.FC<TTabChapterProps> = ({ source, isAudioPlay, isAudioLo
   };
 
   const handleClickChapter = (data: TProductVoice): void => {
-    const isCurrentPlay = audioState?.voice?._id === data._id && audioState.isAudioPlay;
+    const isCurrentPlay = audioState?.voice?._id === data._id;
     if (isCurrentPlay) {
-      dispatch(uiActions.setAudio({ isAudioPlay: false }));
+      if (audioState.isAudioPlay) dispatch(uiActions.setAudio({ isAudioPlay: false }));
+      else dispatch(uiActions.setAudio({ isAudioPlay: true }));
     } else {
       dispatch(uiActions.setAudio({ voice: data, visible: true, productState, isAudioPlay: true }));
     }

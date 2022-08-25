@@ -5,6 +5,8 @@ import {
   TAuthForgotResetResponse,
   TAuthForgotVerifyResponse,
   TAuthForgotResponse,
+  TAuthLoginFacebookResponse,
+  TAuthLoginGoogleResponse,
   TAuthLoginResponse,
   TAuthLogoutResponse,
   TAuthRegisterResendOtpResponse,
@@ -16,6 +18,8 @@ import {
   authForgotResetAction,
   authForgotVerifyAction,
   authForgotAction,
+  authLoginFacebookAction,
+  authLoginGoogleAction,
   authLoginAction,
   authLogoutAction,
   authRegisterResendOtpAction,
@@ -26,6 +30,8 @@ import { authForgotResendOtpUpdateState } from './auth-forgot-resend-otp';
 import { authForgotResetUpdateState } from './auth-forgot-reset';
 import { authForgotVerifyUpdateState } from './auth-forgot-verify';
 import { authForgotUpdateState } from './auth-forgot';
+import { authLoginFacebookUpdateState } from './auth-login-facebook';
+import { authLoginGoogleUpdateState } from './auth-login-google';
 import { authLoginUpdateState } from './auth-login';
 import { authLogoutUpdateState } from './auth-logout';
 import { authRegisterResendOtpUpdateState } from './auth-register-resend-otp';
@@ -37,6 +43,8 @@ export type TAuthState = {
   authForgotResetResponse?: TAuthForgotResetResponse;
   authForgotVerifyResponse?: TAuthForgotVerifyResponse;
   authForgotResponse?: TAuthForgotResponse;
+  authLoginFacebookResponse?: TAuthLoginFacebookResponse;
+  authLoginGoogleResponse?: TAuthLoginGoogleResponse;
   authLoginResponse?: TAuthLoginResponse;
   authLogoutResponse?: TAuthLogoutResponse;
   authRegisterResendOtpResponse?: TAuthRegisterResendOtpResponse;
@@ -49,6 +57,8 @@ const initialState: TAuthState = {
   authForgotResetResponse: undefined,
   authForgotVerifyResponse: undefined,
   authForgotResponse: undefined,
+  authLoginFacebookResponse: undefined,
+  authLoginGoogleResponse: undefined,
   authLoginResponse: undefined,
   authLogoutResponse: undefined,
   authRegisterResendOtpResponse: undefined,
@@ -61,6 +71,8 @@ const AuthReducer = createReducer(initialState, (handleAction) => [
   handleAction(authForgotResetAction.success, authForgotResetUpdateState),
   handleAction(authForgotVerifyAction.success, authForgotVerifyUpdateState),
   handleAction(authForgotAction.success, authForgotUpdateState),
+  handleAction(authLoginFacebookAction.success, authLoginFacebookUpdateState),
+  handleAction(authLoginGoogleAction.success, authLoginGoogleUpdateState),
   handleAction(authLoginAction.success, authLoginUpdateState),
   handleAction(authLogoutAction.success, authLogoutUpdateState),
   handleAction(authRegisterResendOtpAction.success, authRegisterResendOtpUpdateState),

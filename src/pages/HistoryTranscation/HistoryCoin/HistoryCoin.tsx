@@ -9,8 +9,8 @@ import Empty from '@/components/Empty';
 import { THistoryCoinProps } from './HistoryCoin.types';
 import './HistoryCoin.scss';
 
-const HistoryCoin: React.FC<THistoryCoinProps> = ({ data, page, pageSize, total, onPaginateChange }) => {
-  const isEmpty = data.length === 0;
+const HistoryCoin: React.FC<THistoryCoinProps> = ({ data = [], page, pageSize, total, onPaginateChange }) => {
+  const isEmpty = data?.length === 0;
 
   return (
     <div className="HistoryCoin">

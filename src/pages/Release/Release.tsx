@@ -29,23 +29,7 @@ const Release: React.FC = () => {
   const dataCategoriesEmotion = [
     {
       title: 'Tâm trạng hiện tại',
-      list: [
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-        ...(getMoodListState || []),
-      ],
+      list: getMoodListState || [],
     },
     {
       title: 'Căn nguyên',

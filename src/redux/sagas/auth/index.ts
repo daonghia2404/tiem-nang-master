@@ -5,6 +5,8 @@ import {
   authForgotResetAction,
   authForgotVerifyAction,
   authForgotAction,
+  authLoginFacebookAction,
+  authLoginGoogleAction,
   authLoginAction,
   authLogoutAction,
   authRegisterResendOtpAction,
@@ -16,6 +18,8 @@ import { authForgotResendOtpSaga } from './auth-forgot-resend-otp';
 import { authForgotResetSaga } from './auth-forgot-reset';
 import { authForgotVerifySaga } from './auth-forgot-verify';
 import { authForgotSaga } from './auth-forgot';
+import { authLoginFacebookSaga } from './auth-login-facebook';
+import { authLoginGoogleSaga } from './auth-login-google';
 import { authLoginSaga } from './auth-login';
 import { authLogoutSaga } from './auth-logout';
 import { authRegisterResendOtpSaga } from './auth-register-resend-otp';
@@ -28,6 +32,8 @@ export default function* root(): Generator {
     takeLatest(authForgotResetAction.request.type, authForgotResetSaga),
     takeLatest(authForgotVerifyAction.request.type, authForgotVerifySaga),
     takeLatest(authForgotAction.request.type, authForgotSaga),
+    takeLatest(authLoginFacebookAction.request.type, authLoginFacebookSaga),
+    takeLatest(authLoginGoogleAction.request.type, authLoginGoogleSaga),
     takeLatest(authLoginAction.request.type, authLoginSaga),
     takeLatest(authLogoutAction.request.type, authLogoutSaga),
     takeLatest(authRegisterResendOtpAction.request.type, authRegisterResendOtpSaga),
