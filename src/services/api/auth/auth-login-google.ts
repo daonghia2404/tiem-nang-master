@@ -5,7 +5,6 @@ import ApiService from '@/services/api';
 export type TAuthLoginGoogleParams = unknown;
 export type TAuthLoginGoogleBody = {
   token: string;
-  token_device: string;
 };
 
 export type TAuthLoginGoogleMaterials = {

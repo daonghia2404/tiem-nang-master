@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
+import { ReactFacebookLoginInfo } from 'react-facebook-login';
 import FacebookLogin, { RenderProps } from 'react-facebook-login/dist/facebook-login-render-props';
-import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import GoogleLogin, { GoogleLoginResponse } from 'react-google-login';
 import classNames from 'classnames';
 
 import Input from '@/components/Input';
@@ -17,8 +17,11 @@ import { TRootState } from '@/redux/reducers';
 import {
   authLoginAction,
   authLoginFacebookAction,
+  authLoginGoogleAction,
   authRegisterResendOtpAction,
   EAuthLoginAction,
+  EAuthLoginFacebookAction,
+  EAuthLoginGoogleAction,
   EAuthRegisterResendOtpAction,
 } from '@/redux/actions';
 import { EResponseCode, ETypeNotification } from '@/common/enums';
@@ -40,6 +43,13 @@ const SignInForm: React.FC<TSignInFormProps> = ({
     (state: TRootState) => state.loadingReducer[EAuthRegisterResendOtpAction.AUTH_REGISTER_RESEND_OTP],
   );
 
+  const authLoginFacebookLoading = useSelector(
+    (state: TRootState) => state.loadingReducer[EAuthLoginFacebookAction.AUTH_LOGIN_FACEBOOK],
+  );
+  const authLoginGoogleLoading = useSelector(
+    (state: TRootState) => state.loadingReducer[EAuthLoginGoogleAction.AUTH_LOGIN_GOOGLE],
+  );
+
   const loginLoading = authLoginLoading || authRegisterResendOtpLoading;
 
   const handleSubmit = (values: any): void => {
@@ -47,22 +57,32 @@ const SignInForm: React.FC<TSignInFormProps> = ({
     dispatch(authLoginAction.request({ body }, handleAuthLoginSuccess));
   };
 
-  const handleResponseFacebook = (response: ReactFacebookLoginInfo | ReactFacebookFailureResponse): void => {
-    console.log(response);
-    // const body = {
-    //   token: '',
-    //   token_device: '',
-    // };
-    // dispatch(authLoginFacebookAction.request({ body }, handleLoginFacebookSuccess));
+  const handleResponseFacebook = (response: ReactFacebookLoginInfo): void => {
+    const body = {
+      token: response?.accessToken,
+    };
+    dispatch(authLoginFacebookAction.request({ body }, handleLoginFacebookSuccess));
   };
 
-  const handleLoginFacebookSuccess = (): void => {};
+  const handleLoginFacebookSuccess = (): void => {
+    showNotification(ETypeNotification.SUCCESS, 'Đăng nhập thành công');
+    onLoginSuccess?.();
+  };
 
-  const handleResponseGoogleSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline): void => {
-    console.log(response);
+  const handleResponseGoogleSuccess = (response: GoogleLoginResponse | any): void => {
+    const body = {
+      token: response?.accessToken,
+    };
+    dispatch(authLoginGoogleAction.request({ body }, handleLoginGoogleSuccess));
+  };
+
+  const handleLoginGoogleSuccess = (): void => {
+    showNotification(ETypeNotification.SUCCESS, 'Đăng nhập thành công');
+    onLoginSuccess?.();
   };
 
   const handleResponseGoogleFailed = (response: any): void => {
+    // eslint-disable-next-line no-console
     console.log('Login Google Error: ', response);
   };
 
@@ -127,7 +147,7 @@ const SignInForm: React.FC<TSignInFormProps> = ({
               <div
                 onClick={renderProps.onClick}
                 className={classNames('ModalAuth-form-socials-item flex items-center facebook', {
-                  disabled: renderProps.isDisabled,
+                  disabled: renderProps.isDisabled || authLoginFacebookLoading,
                 })}
               >
                 <div className="ModalAuth-form-socials-item-icon">
@@ -138,12 +158,12 @@ const SignInForm: React.FC<TSignInFormProps> = ({
             )}
           />
           <GoogleLogin
-            clientId="524450476556-nj9tafjckki88i8lc32lso5e9lu2r325.apps.googleusercontent.com"
+            clientId="524450476556-6kd1muci2bekrc0cbimmlkkjee68laa9.apps.googleusercontent.com"
             render={(renderProps): React.ReactElement => (
               <div
                 onClick={renderProps.onClick}
                 className={classNames('ModalAuth-form-socials-item flex items-center google', {
-                  disabled: renderProps.disabled,
+                  disabled: renderProps.disabled || authLoginGoogleLoading,
                 })}
               >
                 <div className="ModalAuth-form-socials-item-icon">

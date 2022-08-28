@@ -5,7 +5,6 @@ import ApiService from '@/services/api';
 export type TAuthLoginFacebookParams = unknown;
 export type TAuthLoginFacebookBody = {
   token: string;
-  token_device: string;
 };
 
 export type TAuthLoginFacebookMaterials = {
