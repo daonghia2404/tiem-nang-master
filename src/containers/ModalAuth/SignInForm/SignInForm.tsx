@@ -3,7 +3,7 @@ import { Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactFacebookLoginInfo } from 'react-facebook-login';
 import FacebookLogin, { RenderProps } from 'react-facebook-login/dist/facebook-login-render-props';
-import GoogleLogin, { GoogleLoginResponse } from 'react-google-login';
+import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import classNames from 'classnames';
 
 import Input from '@/components/Input';
@@ -69,9 +69,13 @@ const SignInForm: React.FC<TSignInFormProps> = ({
     onLoginSuccess?.();
   };
 
-  const handleResponseGoogleSuccess = (response: GoogleLoginResponse | any): void => {
+  const handleLoginGoogle = useGoogleLogin({
+    onSuccess: (codeResponse) => handleResponseGoogleSuccess(codeResponse),
+  });
+
+  const handleResponseGoogleSuccess = (response: TokenResponse): void => {
     const body = {
-      token: response?.accessToken,
+      token: response?.access_token,
     };
     dispatch(authLoginGoogleAction.request({ body }, handleLoginGoogleSuccess));
   };
@@ -79,11 +83,6 @@ const SignInForm: React.FC<TSignInFormProps> = ({
   const handleLoginGoogleSuccess = (): void => {
     showNotification(ETypeNotification.SUCCESS, 'Đăng nhập thành công');
     onLoginSuccess?.();
-  };
-
-  const handleResponseGoogleFailed = (response: any): void => {
-    // eslint-disable-next-line no-console
-    console.log('Login Google Error: ', response);
   };
 
   const handleAuthLoginSuccess = (response: TAuthLoginResponse): void => {
@@ -157,25 +156,18 @@ const SignInForm: React.FC<TSignInFormProps> = ({
               </div>
             )}
           />
-          <GoogleLogin
-            clientId="524450476556-6kd1muci2bekrc0cbimmlkkjee68laa9.apps.googleusercontent.com"
-            render={(renderProps): React.ReactElement => (
-              <div
-                onClick={renderProps.onClick}
-                className={classNames('ModalAuth-form-socials-item flex items-center google', {
-                  disabled: renderProps.disabled || authLoginGoogleLoading,
-                })}
-              >
-                <div className="ModalAuth-form-socials-item-icon">
-                  <img src={ImageGoogle} alt="" />
-                </div>
-                <div className="ModalAuth-form-socials-item-label">Đăng nhập với Google</div>
-              </div>
-            )}
-            onSuccess={handleResponseGoogleSuccess}
-            onFailure={handleResponseGoogleFailed}
-            cookiePolicy="single_host_origin"
-          />
+
+          <div
+            onClick={(): void => handleLoginGoogle()}
+            className={classNames('ModalAuth-form-socials-item flex items-center google', {
+              disabled: authLoginGoogleLoading,
+            })}
+          >
+            <div className="ModalAuth-form-socials-item-icon">
+              <img src={ImageGoogle} alt="" />
+            </div>
+            <div className="ModalAuth-form-socials-item-label">Đăng nhập với Google</div>
+          </div>
         </div>
 
         <div className="ModalAuth-form-register">

@@ -1,3 +1,4 @@
+import { TCommonResponse } from '@/common/types';
 import ApiService from '@/services/api';
 
 // TYPES
@@ -12,7 +13,9 @@ export type TAuthLoginFacebookMaterials = {
   body?: TAuthLoginFacebookBody;
 };
 
-export type TAuthLoginFacebookResponse = unknown;
+export type TAuthLoginFacebookResponse = TCommonResponse & {
+  data: { token: string };
+};
 
 // FUNCTION
 
